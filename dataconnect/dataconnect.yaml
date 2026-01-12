@@ -1,0 +1,12 @@
+specVersion: "v1"
+serviceId: "hw-npi-planning-service"
+location: "us-west2"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "hw-npi-planning-database"
+      cloudSql:
+        instanceId: "hw-npi-planning-instance"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
