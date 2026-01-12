@@ -31,20 +31,24 @@ A comprehensive web application for managing hardware New Product Introduction (
 ### Quick Start
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd hardware_project_planning
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env.local
    ```
+
    Edit `.env.local` with your Firebase credentials:
    - `NEXT_PUBLIC_FIREBASE_API_KEY`
    - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
@@ -52,12 +56,14 @@ A comprehensive web application for managing hardware New Product Introduction (
    - `NEXTAUTH_URL`
 
 4. **Initialize Firebase**
+
    ```bash
    firebase login
    firebase init
    ```
 
 5. **Start the development server**
+
    ```bash
    npm run dev
    ```
@@ -71,7 +77,7 @@ For detailed setup instructions, including Firebase Data Connect configuration a
 
 ## Project Structure
 
-```
+```text
 hardware_project_planning/
 ├── src/
 │   ├── app/              # Next.js App Router pages
