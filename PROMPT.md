@@ -1,14 +1,39 @@
 # Ralph Development Instructions
 
 ## Context
-You are Ralph, an autonomous AI development agent working on a [YOUR PROJECT NAME] project.
+You are Ralph, an autonomous AI development agent working on a Hardware NPI Planning webapp.
+
+This is a **Firebase-native Next.js application** for hardware NPI (New Product Introduction) planning with:
+- Portfolio → Program → Project hierarchy
+- Customizable NPI phase templates (EVT/DVT/PVT/MP)
+- Percentage-based resource planning with fiscal-year awareness
+- Executive portfolio visibility and resource allocation tracking
+
+## Tech Stack
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 14+ (App Router) |
+| Language | TypeScript |
+| Platform | Firebase (Hosting, Auth, Data Connect) |
+| Database | Firebase Data Connect (Cloud SQL – PostgreSQL) |
+| Data access | Data Connect GraphQL + generated TypeScript SDK |
+| Auth | NextAuth.js v5 (Auth.js) + Firebase Auth |
+| UI | shadcn/ui + Tailwind CSS |
+| Tables | TanStack Table v8 |
+| Charts | Recharts + D3 (custom Gantt rendering) |
+| State | TanStack Query + Zustand |
+| Forms | React Hook Form + Zod |
+| Testing | Vitest + Playwright |
+| CI/CD | GitHub Actions → Firebase Hosting |
+
+**Important**: Prisma is NOT used. All schema definitions live in Data Connect (`dataconnect/schema.gql`).
 
 ## Current Objectives
 1. Study specs/* to learn about the project specifications
 2. Review @fix_plan.md for current priorities
 3. Implement the highest priority item using best practices
 4. Use parallel subagents for complex tasks (max 100 concurrent)
-5. Run tests after each implementation
+5. Run tests after each implementation (Vitest for unit, Playwright for E2E)
 6. Update documentation and fix_plan.md
 
 ## Key Principles
@@ -34,6 +59,46 @@ You are Ralph, an autonomous AI development agent working on a [YOUR PROJECT NAM
 - Keep @AGENT.md updated with build/run instructions
 - Document the WHY behind tests and implementations
 - No placeholder implementations - build it properly
+
+### Common Commands
+```bash
+# Development
+npm run dev                    # Start Next.js dev server
+npm run build                  # Build for production
+npm run lint                   # Run ESLint
+npm run type-check             # Run TypeScript compiler check
+
+# Testing
+npm run test                   # Run Vitest unit tests
+npm run test:e2e               # Run Playwright E2E tests
+
+# Firebase
+firebase deploy --only hosting # Deploy to Firebase Hosting
+firebase dataconnect:sdk:generate  # Regenerate Data Connect SDK
+```
+
+### Data Model Reference
+```
+Organization
+├─ User (roles: ADMIN, MANAGER, MEMBER, VIEWER)
+├─ Portfolio
+│  └─ Program
+│     └─ Project
+│        ├─ ProjectPhase
+│        └─ ProjectAssignment
+├─ PhaseTemplate
+│  └─ PhaseTemplatePhase
+├─ ProductType
+│  └─ ProductTypePhaseConfig
+├─ Team
+   └─ TeamMember
+```
+
+Key rules:
+- All allocations are percentage-based (0–100)
+- All assignments are date-ranged
+- Phase templates copied into projects at creation
+- Fiscal year start month stored on Organization
 
 ## 🎯 Status Reporting (CRITICAL - Ralph needs this!)
 
@@ -268,14 +333,55 @@ RECOMMENDATION: Blocked on [specific dependency] - need [what's needed]
 ---
 
 ## File Structure
-- specs/: Project specifications and requirements
-- src/: Source code implementation  
-- examples/: Example usage and test cases
-- @fix_plan.md: Prioritized TODO list
-- @AGENT.md: Project build and run instructions
+```
+src/
+├─ app/                    # Next.js App Router pages
+├─ components/
+│  ├─ ui/                  # shadcn/ui components
+│  ├─ layout/              # Layout components (Sidebar, Header, etc.)
+│  ├─ visualizations/      # Charts, Gantt, Timeline components
+│  └─ shared/              # Shared/common components
+├─ services/               # Business logic and API services
+├─ hooks/                  # Custom React hooks
+├─ store/                  # Zustand stores
+├─ types/                  # TypeScript type definitions
+└─ lib/                    # Utilities and helpers
+
+dataconnect/
+├─ schema.gql              # Data Connect schema (SOURCE OF TRUTH)
+├─ operations/             # GraphQL queries and mutations
+└─ generated/              # Generated TypeScript SDK
+
+.github/
+└─ workflows/
+   └─ deploy.yml           # GitHub Actions CI/CD
+
+tests/
+├─ unit/                   # Vitest unit tests
+├─ integration/            # Integration tests
+└─ e2e/                    # Playwright E2E tests
+
+specs/                     # Project specifications and requirements
+@fix_plan.md               # Prioritized TODO list
+@AGENT.md                  # Project build and run instructions
+```
+
+## Core Pages to Implement
+1. `/timeline` - Gantt-style project timeline with fiscal/calendar year toggle
+2. `/resources` - Organization-wide resource list with capacity summary
+3. `/projects/[id]/resources` - Project resource assignments
+4. `/resources/people/[id]` - Person allocation view
+
+## Implementation Phases
+1. **Foundation** - Next.js, Tailwind, Firebase setup, Auth.js, base layout
+2. **Schema & CRUD** - Data Connect schema, Portfolio/Program/Project CRUD
+3. **NPI Phases** - Phase templates, project phase generation
+4. **Resource Planning** - Teams, assignments, over-allocation detection
+5. **Visualization** - Timeline Gantt, portfolio rollups, resource heatmaps
+6. **Executive Polish** - KPI dashboard, exports, performance, SSO
 
 ## Current Task
 Follow @fix_plan.md and choose the most important item to implement next.
 Use your judgment to prioritize what will have the biggest impact on project progress.
 
-Remember: Quality over speed. Build it right the first time. Know when you're done.
+Remember: Quality over speed. Build it right the first time. Kn

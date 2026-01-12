@@ -1,1 +1,1 @@
-# hardware_project_planning
+# Hardware NPI Planning App
