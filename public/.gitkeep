@@ -1,0 +1,14 @@
+# Public Directory
+#
+# This directory contains static assets served at the root URL.
+# Files in this directory can be referenced with a leading slash, e.g. /favicon.ico
+#
+# Common files:
+# - favicon.ico / favicon.png - Site icon
+# - robots.txt - Search engine crawler instructions
+# - manifest.json / site.webmanifest - PWA manifest
+# - apple-touch-icon.png - iOS home screen icon
+# - og-image.png - Open Graph image for social sharing
+#
+# Note: Next.js serves files from this directory at the root path.
+# For example, public/icon.png is accessible at /icon.png
