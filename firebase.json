@@ -4,6 +4,9 @@
     "rules": "rules/firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "storage": {
+    "rules": "rules/storage.rules"
+  },
   "emulators": {
     "dataconnect": {
       "dataDir": "dataconnect/.dataconnect/pgliteData"

@@ -1,9 +1,11 @@
 connectorId: default
-operations:
-  - path: ./operations
 generate:
   javascriptSdk:
-    outputDir: ../../dataconnect-generated/js/default-connector
+    outputDir: ../../src/dataconnect-generated/js/default-connector
     package: "@firebasegen/default-connector"
     packageJsonDir: ../..
     react: true
+emulator:
+  securityRulesEnforced: false
+  host: localhost
+  port: 9399
