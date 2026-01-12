@@ -1,0 +1,56 @@
+# Organization Operations
+
+# Query an organization by ID
+query GetOrganization($id: UUID!) @auth(level: USER) {
+  organization(id: $id) {
+    id
+    name
+    fiscalYearStartMonth
+    createdAt
+    updatedAt
+    users {
+      id
+      name
+      email
+      role
+    }
+    portfolios {
+      id
+      name
+      description
+    }
+    teams {
+      id
+      name
+      description
+    }
+  }
+}
+
+# Create a new organization
+mutation CreateOrganization(
+  $name: String!
+  $fiscalYearStartMonth: Int
+) @auth(level: USER) {
+  organization_insert(
+    data: {
+      name: $name
+      fiscalYearStartMonth: $fiscalYearStartMonth
+    }
+  )
+}
+
+# Update an organization
+mutation UpdateOrganization(
+  $id: UUID!
+  $name: String
+  $fiscalYearStartMonth: Int
+) @auth(level: USER) {
+  organization_update(
+    id: $id
+    data: {
+      name: $name
+      fiscalYearStartMonth: $fiscalYearStartMonth
+    }
+  )
+}

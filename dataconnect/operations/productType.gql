@@ -1,0 +1,107 @@
+# Product Type Operations
+
+# Query all product types for an organization
+query ListProductTypes($organizationId: UUID!) @auth(level: USER) {
+  productTypes(where: { organizationId: { eq: $organizationId } }) {
+    id
+    name
+    description
+    createdAt
+    updatedAt
+    phaseConfigs {
+      id
+      phaseTemplateId
+      phaseTemplate {
+        id
+        name
+      }
+    }
+  }
+}
+
+# Query a single product type by ID
+query GetProductType($id: UUID!) @auth(level: USER) {
+  productType(id: $id) {
+    id
+    organizationId
+    name
+    description
+    createdAt
+    updatedAt
+    phaseConfigs {
+      id
+      phaseTemplateId
+      createdAt
+      phaseTemplate {
+        id
+        name
+        description
+        phases {
+          id
+          name
+          description
+          durationWeeks
+          order
+        }
+      }
+    }
+    projects {
+      id
+      name
+      status
+    }
+  }
+}
+
+# Create a new product type
+mutation CreateProductType(
+  $organizationId: UUID!
+  $name: String!
+  $description: String
+) @auth(level: USER) {
+  productType_insert(
+    data: {
+      organizationId: $organizationId
+      name: $name
+      description: $description
+    }
+  )
+}
+
+# Update a product type
+mutation UpdateProductType(
+  $id: UUID!
+  $name: String
+  $description: String
+) @auth(level: USER) {
+  productType_update(
+    id: $id
+    data: {
+      name: $name
+      description: $description
+    }
+  )
+}
+
+# Delete a product type
+mutation DeleteProductType($id: UUID!) @auth(level: USER) {
+  productType_delete(id: $id)
+}
+
+# Link a phase template to a product type
+mutation CreateProductTypePhaseConfig(
+  $productTypeId: UUID!
+  $phaseTemplateId: UUID!
+) @auth(level: USER) {
+  productTypePhaseConfig_insert(
+    data: {
+      productTypeId: $productTypeId
+      phaseTemplateId: $phaseTemplateId
+    }
+  )
+}
+
+# Unlink a phase template from a product type
+mutation DeleteProductTypePhaseConfig($id: UUID!) @auth(level: USER) {
+  productTypePhaseConfig_delete(id: $id)
+}

@@ -330,3 +330,4 @@ tests/
 4. Set up GitHub Actions deployment
 5. Implement auth + base layout
 6. Build Timeline and Resources MVP
+7. Update README.md with top level getting started and brief description with screen shots. Update more detailed documentation as .md files under the docs/ directory.

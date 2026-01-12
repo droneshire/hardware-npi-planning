@@ -1,0 +1,120 @@
+# Project Assignment Operations
+
+# Query all assignments for a project
+query ListProjectAssignments($projectId: UUID!) @auth(level: USER) {
+  projectAssignments(where: { projectId: { eq: $projectId } }) {
+    id
+    userId
+    allocationPercent
+    startDate
+    endDate
+    notes
+    createdAt
+    updatedAt
+    user {
+      id
+      name
+      email
+      role
+    }
+  }
+}
+
+# Query all assignments for a user
+query ListUserAssignments($userId: UUID!) @auth(level: USER) {
+  projectAssignments(where: { userId: { eq: $userId } }) {
+    id
+    projectId
+    allocationPercent
+    startDate
+    endDate
+    notes
+    createdAt
+    updatedAt
+    project {
+      id
+      name
+      status
+      program {
+        id
+        name
+        portfolio {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+
+# Query assignments by date range
+query ListAssignmentsByDateRange(
+  $userId: UUID!
+  $startDate: Date!
+  $endDate: Date!
+) @auth(level: USER) {
+  projectAssignments(
+    where: {
+      userId: { eq: $userId }
+      startDate: { lte: $endDate }
+      endDate: { gte: $startDate }
+    }
+  ) {
+    id
+    projectId
+    allocationPercent
+    startDate
+    endDate
+    notes
+    project {
+      id
+      name
+      status
+    }
+  }
+}
+
+# Create a new project assignment
+mutation CreateProjectAssignment(
+  $projectId: UUID!
+  $userId: UUID!
+  $allocationPercent: Int!
+  $startDate: Date!
+  $endDate: Date
+  $notes: String
+) @auth(level: USER) {
+  projectAssignment_insert(
+    data: {
+      projectId: $projectId
+      userId: $userId
+      allocationPercent: $allocationPercent
+      startDate: $startDate
+      endDate: $endDate
+      notes: $notes
+    }
+  )
+}
+
+# Update a project assignment
+mutation UpdateProjectAssignment(
+  $id: UUID!
+  $allocationPercent: Int
+  $startDate: Date
+  $endDate: Date
+  $notes: String
+) @auth(level: USER) {
+  projectAssignment_update(
+    id: $id
+    data: {
+      allocationPercent: $allocationPercent
+      startDate: $startDate
+      endDate: $endDate
+      notes: $notes
+    }
+  )
+}
+
+# Delete a project assignment
+mutation DeleteProjectAssignment($id: UUID!) @auth(level: USER) {
+  projectAssignment_delete(id: $id)
+}

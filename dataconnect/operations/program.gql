@@ -1,0 +1,92 @@
+# Program Operations
+
+# Query all programs for a portfolio
+query ListPrograms($portfolioId: UUID!) @auth(level: USER) {
+  programs(where: { portfolioId: { eq: $portfolioId } }) {
+    id
+    name
+    description
+    ownerId
+    createdAt
+    updatedAt
+    owner {
+      id
+      name
+      email
+    }
+  }
+}
+
+# Query a single program by ID
+query GetProgram($id: UUID!) @auth(level: USER) {
+  program(id: $id) {
+    id
+    portfolioId
+    name
+    description
+    ownerId
+    createdAt
+    updatedAt
+    owner {
+      id
+      name
+      email
+      role
+    }
+    portfolio {
+      id
+      name
+      organizationId
+    }
+    projects {
+      id
+      name
+      description
+      status
+      startDate
+      targetCompletionDate
+      actualCompletionDate
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+# Create a new program
+mutation CreateProgram(
+  $portfolioId: UUID!
+  $name: String!
+  $description: String
+  $ownerId: UUID
+) @auth(level: USER) {
+  program_insert(
+    data: {
+      portfolioId: $portfolioId
+      name: $name
+      description: $description
+      ownerId: $ownerId
+    }
+  )
+}
+
+# Update an existing program
+mutation UpdateProgram(
+  $id: UUID!
+  $name: String
+  $description: String
+  $ownerId: UUID
+) @auth(level: USER) {
+  program_update(
+    id: $id
+    data: {
+      name: $name
+      description: $description
+      ownerId: $ownerId
+    }
+  )
+}
+
+# Delete a program
+mutation DeleteProgram($id: UUID!) @auth(level: USER) {
+  program_delete(id: $id)
+}

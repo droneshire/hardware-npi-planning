@@ -1,0 +1,114 @@
+# User Operations
+
+# Query all users for an organization
+query ListUsers($organizationId: UUID!) @auth(level: USER) {
+  users(where: { organizationId: { eq: $organizationId } }) {
+    id
+    name
+    email
+    role
+    createdAt
+    updatedAt
+  }
+}
+
+# Query a single user by ID
+query GetUser($id: UUID!) @auth(level: USER) {
+  user(id: $id) {
+    id
+    organizationId
+    name
+    email
+    role
+    firebaseUid
+    createdAt
+    updatedAt
+    teamMemberships {
+      id
+      teamId
+      role
+      team {
+        id
+        name
+      }
+    }
+    projectAssignments {
+      id
+      projectId
+      allocationPercent
+      startDate
+      endDate
+      project {
+        id
+        name
+        status
+      }
+    }
+  }
+}
+
+# Query user by email
+query GetUserByEmail($email: String!) @auth(level: USER) {
+  users(where: { email: { eq: $email } }, limit: 1) {
+    id
+    organizationId
+    name
+    email
+    role
+    firebaseUid
+    createdAt
+    updatedAt
+  }
+}
+
+# Query user by Firebase UID
+query GetUserByFirebaseUid($firebaseUid: String!) @auth(level: USER) {
+  users(where: { firebaseUid: { eq: $firebaseUid } }, limit: 1) {
+    id
+    organizationId
+    name
+    email
+    role
+    createdAt
+    updatedAt
+  }
+}
+
+# Create a new user
+mutation CreateUser(
+  $organizationId: UUID!
+  $email: String!
+  $name: String!
+  $role: UserRole
+  $firebaseUid: String!
+) @auth(level: USER) {
+  user_insert(
+    data: {
+      organizationId: $organizationId
+      email: $email
+      name: $name
+      role: $role
+      firebaseUid: $firebaseUid
+    }
+  )
+}
+
+# Update a user
+mutation UpdateUser(
+  $id: UUID!
+  $name: String
+  $role: UserRole
+) @auth(level: USER) {
+  user_update(
+    id: $id
+    data: {
+      name: $name
+      role: $role
+    }
+  )
+}
+
+# Delete a user
+mutation DeleteUser($id: UUID!) @auth(level: USER) {
+  user_delete(id: $id)
+}

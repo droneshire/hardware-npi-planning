@@ -1,0 +1,108 @@
+# Project Phase Operations
+
+# Query all phases for a project
+query ListProjectPhases($projectId: UUID!) @auth(level: USER) {
+  projectPhases(
+    where: { projectId: { eq: $projectId } }
+    orderBy: { order: ASC }
+  ) {
+    id
+    name
+    description
+    status
+    startDate
+    targetEndDate
+    actualEndDate
+    order
+    percentComplete
+    createdAt
+    updatedAt
+  }
+}
+
+# Query a single project phase
+query GetProjectPhase($id: UUID!) @auth(level: USER) {
+  projectPhase(id: $id) {
+    id
+    projectId
+    name
+    description
+    status
+    startDate
+    targetEndDate
+    actualEndDate
+    order
+    percentComplete
+    createdAt
+    updatedAt
+    project {
+      id
+      name
+      status
+    }
+  }
+}
+
+# Create a new project phase
+mutation CreateProjectPhase(
+  $projectId: UUID!
+  $name: String!
+  $description: String
+  $status: PhaseStatus
+  $startDate: Date
+  $targetEndDate: Date
+  $order: Int!
+  $percentComplete: Int
+) @auth(level: USER) {
+  projectPhase_insert(
+    data: {
+      projectId: $projectId
+      name: $name
+      description: $description
+      status: $status
+      startDate: $startDate
+      targetEndDate: $targetEndDate
+      order: $order
+      percentComplete: $percentComplete
+    }
+  )
+}
+
+# Update a project phase
+mutation UpdateProjectPhase(
+  $id: UUID!
+  $name: String
+  $description: String
+  $status: PhaseStatus
+  $startDate: Date
+  $targetEndDate: Date
+  $actualEndDate: Date
+  $percentComplete: Int
+) @auth(level: USER) {
+  projectPhase_update(
+    id: $id
+    data: {
+      name: $name
+      description: $description
+      status: $status
+      startDate: $startDate
+      targetEndDate: $targetEndDate
+      actualEndDate: $actualEndDate
+      percentComplete: $percentComplete
+    }
+  )
+}
+
+# Delete a project phase
+mutation DeleteProjectPhase($id: UUID!) @auth(level: USER) {
+  projectPhase_delete(id: $id)
+}
+
+# Bulk create phases from template
+mutation CreatePhasesFromTemplate(
+  $projectId: UUID!
+  $templateId: UUID!
+) @auth(level: USER) {
+  # This would be implemented as a server-side function
+  # For now, phases will be created individually in the service layer
+}

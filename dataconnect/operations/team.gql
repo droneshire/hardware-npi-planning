@@ -1,0 +1,129 @@
+# Team Operations
+
+# Query all teams for an organization
+query ListTeams($organizationId: UUID!) @auth(level: USER) {
+  teams(where: { organizationId: { eq: $organizationId } }) {
+    id
+    name
+    description
+    parentTeamId
+    createdAt
+    updatedAt
+    members {
+      id
+      userId
+      role
+      user {
+        id
+        name
+        email
+      }
+    }
+  }
+}
+
+# Query a single team by ID
+query GetTeam($id: UUID!) @auth(level: USER) {
+  team(id: $id) {
+    id
+    organizationId
+    parentTeamId
+    name
+    description
+    createdAt
+    updatedAt
+    parentTeam {
+      id
+      name
+    }
+    childTeams {
+      id
+      name
+      description
+    }
+    members {
+      id
+      userId
+      role
+      createdAt
+      user {
+        id
+        name
+        email
+        role
+      }
+    }
+  }
+}
+
+# Create a new team
+mutation CreateTeam(
+  $organizationId: UUID!
+  $name: String!
+  $description: String
+  $parentTeamId: UUID
+) @auth(level: USER) {
+  team_insert(
+    data: {
+      organizationId: $organizationId
+      name: $name
+      description: $description
+      parentTeamId: $parentTeamId
+    }
+  )
+}
+
+# Update a team
+mutation UpdateTeam(
+  $id: UUID!
+  $name: String
+  $description: String
+  $parentTeamId: UUID
+) @auth(level: USER) {
+  team_update(
+    id: $id
+    data: {
+      name: $name
+      description: $description
+      parentTeamId: $parentTeamId
+    }
+  )
+}
+
+# Delete a team
+mutation DeleteTeam($id: UUID!) @auth(level: USER) {
+  team_delete(id: $id)
+}
+
+# Add a member to a team
+mutation AddTeamMember(
+  $teamId: UUID!
+  $userId: UUID!
+  $role: String
+) @auth(level: USER) {
+  teamMember_insert(
+    data: {
+      teamId: $teamId
+      userId: $userId
+      role: $role
+    }
+  )
+}
+
+# Remove a member from a team
+mutation RemoveTeamMember($id: UUID!) @auth(level: USER) {
+  teamMember_delete(id: $id)
+}
+
+# Update team member role
+mutation UpdateTeamMemberRole(
+  $id: UUID!
+  $role: String
+) @auth(level: USER) {
+  teamMember_update(
+    id: $id
+    data: {
+      role: $role
+    }
+  )
+}

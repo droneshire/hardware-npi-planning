@@ -1,0 +1,218 @@
+# Hardware NPI Planning - Firebase Data Connect Schema
+# This is the single source of truth for the database schema
+
+# Enums
+enum UserRole {
+  ADMIN
+  MANAGER
+  MEMBER
+  VIEWER
+}
+
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum PhaseStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  BLOCKED
+}
+
+# Core Organization & User Management
+type Organization @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  name: String!
+  fiscalYearStartMonth: Int! @default(value: 1) # 1-12, where 1 = January
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  users: [User!]! @ref
+  portfolios: [Portfolio!]! @ref
+  phaseTemplates: [PhaseTemplate!]! @ref
+  productTypes: [ProductType!]! @ref
+  teams: [Team!]! @ref
+}
+
+type User @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  organizationId: UUID!
+  email: String! @unique
+  name: String!
+  role: UserRole! @default(value: "MEMBER")
+  firebaseUid: String! @unique
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  organization: Organization! @ref(fields: "organizationId")
+  teamMemberships: [TeamMember!]! @ref
+  projectAssignments: [ProjectAssignment!]! @ref
+}
+
+# Hierarchy: Portfolio → Program → Project
+type Portfolio @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  organizationId: UUID!
+  name: String!
+  description: String
+  ownerId: UUID
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  organization: Organization! @ref(fields: "organizationId")
+  owner: User @ref(fields: "ownerId")
+  programs: [Program!]! @ref
+}
+
+type Program @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  portfolioId: UUID!
+  name: String!
+  description: String
+  ownerId: UUID
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  portfolio: Portfolio! @ref(fields: "portfolioId")
+  owner: User @ref(fields: "ownerId")
+  projects: [Project!]! @ref
+}
+
+type Project @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  programId: UUID!
+  productTypeId: UUID
+  name: String!
+  description: String
+  status: ProjectStatus! @default(value: "PLANNING")
+  startDate: Date
+  targetCompletionDate: Date
+  actualCompletionDate: Date
+  ownerId: UUID
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  program: Program! @ref(fields: "programId")
+  productType: ProductType @ref(fields: "productTypeId")
+  owner: User @ref(fields: "ownerId")
+  phases: [ProjectPhase!]! @ref
+  assignments: [ProjectAssignment!]! @ref
+}
+
+# NPI Phase Templates
+type PhaseTemplate @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  organizationId: UUID!
+  name: String!
+  description: String
+  isDefault: Boolean! @default(value: false)
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  organization: Organization! @ref(fields: "organizationId")
+  phases: [PhaseTemplatePhase!]! @ref
+  productTypeConfigs: [ProductTypePhaseConfig!]! @ref
+}
+
+type PhaseTemplatePhase @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  templateId: UUID!
+  name: String!
+  description: String
+  durationWeeks: Int # Expected duration in weeks
+  order: Int! # Display order within template
+  createdAt: Timestamp! @default(expr: "request.time")
+
+  template: PhaseTemplate! @ref(fields: "templateId")
+}
+
+# Product Types (e.g., "Laptop", "Phone", "Tablet")
+type ProductType @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  organizationId: UUID!
+  name: String!
+  description: String
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  organization: Organization! @ref(fields: "organizationId")
+  phaseConfigs: [ProductTypePhaseConfig!]! @ref
+  projects: [Project!]! @ref
+}
+
+# Links ProductType to default PhaseTemplate
+type ProductTypePhaseConfig @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  productTypeId: UUID!
+  phaseTemplateId: UUID!
+  createdAt: Timestamp! @default(expr: "request.time")
+
+  productType: ProductType! @ref(fields: "productTypeId")
+  phaseTemplate: PhaseTemplate! @ref(fields: "phaseTemplateId")
+}
+
+# Project Phases (copied from template at project creation)
+type ProjectPhase @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  projectId: UUID!
+  name: String!
+  description: String
+  status: PhaseStatus! @default(value: "NOT_STARTED")
+  startDate: Date
+  targetEndDate: Date
+  actualEndDate: Date
+  order: Int! # Display order within project
+  percentComplete: Int @default(value: 0) # 0-100
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  project: Project! @ref(fields: "projectId")
+}
+
+# Teams & Team Members
+type Team @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  organizationId: UUID!
+  parentTeamId: UUID # For hierarchical teams
+  name: String!
+  description: String
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  organization: Organization! @ref(fields: "organizationId")
+  parentTeam: Team @ref(fields: "parentTeamId")
+  childTeams: [Team!]! @ref
+  members: [TeamMember!]! @ref
+}
+
+type TeamMember @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  teamId: UUID!
+  userId: UUID!
+  role: String # Team-specific role (e.g., "Tech Lead", "Designer")
+  createdAt: Timestamp! @default(expr: "request.time")
+
+  team: Team! @ref(fields: "teamId")
+  user: User! @ref(fields: "userId")
+}
+
+# Resource Assignments (Percentage-based)
+type ProjectAssignment @table {
+  id: UUID! @default(expr: "uuidGenerate()")
+  projectId: UUID!
+  userId: UUID!
+  allocationPercent: Int! # 0-100
+  startDate: Date!
+  endDate: Date
+  notes: String
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  project: Project! @ref(fields: "projectId")
+  user: User! @ref(fields: "userId")
+}

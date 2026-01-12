@@ -1,0 +1,144 @@
+# Phase Template Operations
+
+# Query all phase templates for an organization
+query ListPhaseTemplates($organizationId: UUID!) @auth(level: USER) {
+  phaseTemplates(where: { organizationId: { eq: $organizationId } }) {
+    id
+    name
+    description
+    isDefault
+    createdAt
+    updatedAt
+    phases {
+      id
+      name
+      description
+      durationWeeks
+      order
+    }
+  }
+}
+
+# Query a single phase template by ID
+query GetPhaseTemplate($id: UUID!) @auth(level: USER) {
+  phaseTemplate(id: $id) {
+    id
+    organizationId
+    name
+    description
+    isDefault
+    createdAt
+    updatedAt
+    phases {
+      id
+      name
+      description
+      durationWeeks
+      order
+      createdAt
+    }
+  }
+}
+
+# Query default templates
+query GetDefaultTemplates($organizationId: UUID!) @auth(level: USER) {
+  phaseTemplates(
+    where: {
+      organizationId: { eq: $organizationId }
+      isDefault: { eq: true }
+    }
+  ) {
+    id
+    name
+    description
+    phases {
+      id
+      name
+      description
+      durationWeeks
+      order
+    }
+  }
+}
+
+# Create a new phase template
+mutation CreatePhaseTemplate(
+  $organizationId: UUID!
+  $name: String!
+  $description: String
+  $isDefault: Boolean
+) @auth(level: USER) {
+  phaseTemplate_insert(
+    data: {
+      organizationId: $organizationId
+      name: $name
+      description: $description
+      isDefault: $isDefault
+    }
+  )
+}
+
+# Update a phase template
+mutation UpdatePhaseTemplate(
+  $id: UUID!
+  $name: String
+  $description: String
+  $isDefault: Boolean
+) @auth(level: USER) {
+  phaseTemplate_update(
+    id: $id
+    data: {
+      name: $name
+      description: $description
+      isDefault: $isDefault
+    }
+  )
+}
+
+# Delete a phase template
+mutation DeletePhaseTemplate($id: UUID!) @auth(level: USER) {
+  phaseTemplate_delete(id: $id)
+}
+
+# Create a template phase
+mutation CreatePhaseTemplatePhase(
+  $templateId: UUID!
+  $name: String!
+  $description: String
+  $durationWeeks: Int
+  $order: Int!
+) @auth(level: USER) {
+  phaseTemplatePhase_insert(
+    data: {
+      templateId: $templateId
+      name: $name
+      description: $description
+      durationWeeks: $durationWeeks
+      order: $order
+    }
+  )
+}
+
+# Update a template phase
+mutation UpdatePhaseTemplatePhase(
+  $id: UUID!
+  $name: String
+  $description: String
+  $durationWeeks: Int
+  $order: Int
+) @auth(level: USER) {
+  phaseTemplatePhase_update(
+    id: $id
+    data: {
+      name: $name
+      description: $description
+      durationWeeks: $durationWeeks
+      order: $order
+    }
+  )
+}
+
+# Delete a template phase
+mutation DeletePhaseTemplatePhase($id: UUID!) @auth(level: USER) {
+  phaseTemplatePhase_delete(id: $id)
+}

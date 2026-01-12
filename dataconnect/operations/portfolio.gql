@@ -1,0 +1,84 @@
+# Portfolio Operations
+
+# Query all portfolios for an organization
+query ListPortfolios($organizationId: UUID!) @auth(level: USER) {
+  portfolios(where: { organizationId: { eq: $organizationId } }) {
+    id
+    name
+    description
+    ownerId
+    createdAt
+    updatedAt
+    owner {
+      id
+      name
+      email
+    }
+  }
+}
+
+# Query a single portfolio by ID
+query GetPortfolio($id: UUID!) @auth(level: USER) {
+  portfolio(id: $id) {
+    id
+    organizationId
+    name
+    description
+    ownerId
+    createdAt
+    updatedAt
+    owner {
+      id
+      name
+      email
+      role
+    }
+    programs {
+      id
+      name
+      description
+      ownerId
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+# Create a new portfolio
+mutation CreatePortfolio(
+  $organizationId: UUID!
+  $name: String!
+  $description: String
+  $ownerId: UUID
+) @auth(level: USER) {
+  portfolio_insert(
+    data: {
+      organizationId: $organizationId
+      name: $name
+      description: $description
+      ownerId: $ownerId
+    }
+  )
+}
+
+# Update an existing portfolio
+mutation UpdatePortfolio(
+  $id: UUID!
+  $name: String
+  $description: String
+  $ownerId: UUID
+) @auth(level: USER) {
+  portfolio_update(
+    id: $id
+    data: {
+      name: $name
+      description: $description
+      ownerId: $ownerId
+    }
+  )
+}
+
+# Delete a portfolio
+mutation DeletePortfolio($id: UUID!) @auth(level: USER) {
+  portfolio_delete(id: $id)
+}
