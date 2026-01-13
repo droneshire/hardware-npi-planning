@@ -28,16 +28,11 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
             {index > 0 && <ChevronRight className="mx-2 h-4 w-4" />}
 
             {item.href && !isLast ? (
-              <Link
-                href={item.href}
-                className="hover:text-foreground transition-colors"
-              >
+              <Link href={item.href} className="transition-colors hover:text-foreground">
                 {item.label}
               </Link>
             ) : (
-              <span className={cn(isLast && "text-foreground font-medium")}>
-                {item.label}
-              </span>
+              <span className={cn(isLast && "font-medium text-foreground")}>{item.label}</span>
             )}
           </div>
         )

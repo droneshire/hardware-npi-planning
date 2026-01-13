@@ -14,14 +14,9 @@
   },
   "hosting": {
     "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   },
   "dataconnect": {
-    "source": "dataconnect",
-    "schema": "schema.gql"
+    "source": "dataconnect"
   }
 }

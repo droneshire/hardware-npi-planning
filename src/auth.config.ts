@@ -26,9 +26,10 @@ export const authConfig: NextAuthConfig = {
       if (user) {
         token.id = user.id
         token.role = user.role
+        token.firebaseUid = user.firebaseUid || user.id
       }
       if (account?.provider === "google") {
-        token.firebaseUid = user.id
+        token.firebaseUid = user.firebaseUid || user.id
       }
       return token
     },
@@ -48,13 +49,51 @@ export const authConfig: NextAuthConfig = {
     }),
     Credentials({
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        idToken: { label: "ID Token", type: "text" },
       },
       async authorize(credentials) {
-        // TODO: Implement Firebase Auth credentials verification
-        // This will be implemented when we connect to Firebase Auth
-        return null
+        if (!credentials?.idToken) {
+          return null
+        }
+
+        try {
+          // Verify the Firebase ID token
+          // Note: For production, use Firebase Admin SDK to verify the token server-side
+          // For now, we trust the client-provided token (not secure for production)
+          // TODO: Implement Firebase Admin SDK verification
+          const response = await fetch(
+            `https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ idToken: credentials.idToken }),
+            }
+          )
+
+          if (!response.ok) {
+            return null
+          }
+
+          const data = await response.json()
+          const user = data.users?.[0]
+
+          if (!user) {
+            return null
+          }
+
+          // TODO: Fetch user from Data Connect to get role and organization
+          // For now, return basic user info
+          return {
+            id: user.localId,
+            email: user.email || "",
+            name: user.displayName || user.email?.split("@")[0] || "User",
+            firebaseUid: user.localId,
+            role: "MEMBER", // Default role, should be fetched from database
+          }
+        } catch (error) {
+          console.error("Auth verification error:", error)
+          return null
+        }
       },
     }),
   ],

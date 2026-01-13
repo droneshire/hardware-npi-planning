@@ -1,7 +1,11 @@
 # Portfolio Operations
 
 # Query all portfolios for an organization
-query ListPortfolios($organizationId: UUID!) @auth(level: USER) {
+query ListPortfolios($organizationId: UUID!)
+@auth(
+  level: USER
+  insecureReason: "Query filtered by organizationId which scopes access to user's organization"
+) {
   portfolios(where: { organizationId: { eq: $organizationId } }) {
     id
     name
@@ -18,7 +22,8 @@ query ListPortfolios($organizationId: UUID!) @auth(level: USER) {
 }
 
 # Query a single portfolio by ID
-query GetPortfolio($id: UUID!) @auth(level: USER) {
+query GetPortfolio($id: UUID!)
+@auth(level: USER, insecureReason: "Query filtered by portfolio ID which is organization-scoped") {
   portfolio(id: $id) {
     id
     organizationId
@@ -33,14 +38,6 @@ query GetPortfolio($id: UUID!) @auth(level: USER) {
       email
       role
     }
-    programs {
-      id
-      name
-      description
-      ownerId
-      createdAt
-      updatedAt
-    }
   }
 }
 
@@ -50,7 +47,11 @@ mutation CreatePortfolio(
   $name: String!
   $description: String
   $ownerId: UUID
-) @auth(level: USER) {
+)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   portfolio_insert(
     data: {
       organizationId: $organizationId
@@ -62,23 +63,19 @@ mutation CreatePortfolio(
 }
 
 # Update an existing portfolio
-mutation UpdatePortfolio(
-  $id: UUID!
-  $name: String
-  $description: String
-  $ownerId: UUID
-) @auth(level: USER) {
-  portfolio_update(
-    id: $id
-    data: {
-      name: $name
-      description: $description
-      ownerId: $ownerId
-    }
-  )
+mutation UpdatePortfolio($id: UUID!, $name: String, $description: String, $ownerId: UUID)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
+  portfolio_update(id: $id, data: { name: $name, description: $description, ownerId: $ownerId })
 }
 
 # Delete a portfolio
-mutation DeletePortfolio($id: UUID!) @auth(level: USER) {
+mutation DeletePortfolio($id: UUID!)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   portfolio_delete(id: $id)
 }

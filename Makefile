@@ -24,10 +24,16 @@ hosting_deploy:
 lint:
 	npm run lint
 
+format:
+	npx prettier --write "src/**/*.{ts,tsx,js,jsx,json}" "dataconnect/**/*.{gql,graphql,yaml,yml}" "*.{json,md,yml,yaml}" "docs/**/*.md" --ignore-path .gitignore --ignore-path .prettierignore
+
+format-check:
+	npx prettier --check "src/**/*.{ts,tsx,js,jsx,json}" "dataconnect/**/*.{gql,graphql,yaml,yml}" "*.{json,md,yml,yaml}" "docs/**/*.md" --ignore-path .gitignore --ignore-path .prettierignore
+
 clean:
 	rm -rf $(DATACONNECT_DIR)
 	rm -rf node_modules
 	rm -rf dist
 	rm -rf .vite
 
-.PHONY: update_sdk deploy_schema lint clean create_sdk
+.PHONY: update_sdk deploy_schema lint format format-check clean create_sdk

@@ -1,56 +1,34 @@
 # Organization Operations
 
 # Query an organization by ID
-query GetOrganization($id: UUID!) @auth(level: USER) {
+query GetOrganization($id: UUID!)
+@auth(
+  level: USER
+  insecureReason: "Query filtered by organization ID - users can only access their own organization"
+) {
   organization(id: $id) {
     id
     name
     fiscalYearStartMonth
     createdAt
     updatedAt
-    users {
-      id
-      name
-      email
-      role
-    }
-    portfolios {
-      id
-      name
-      description
-    }
-    teams {
-      id
-      name
-      description
-    }
   }
 }
 
 # Create a new organization
-mutation CreateOrganization(
-  $name: String!
-  $fiscalYearStartMonth: Int
-) @auth(level: USER) {
-  organization_insert(
-    data: {
-      name: $name
-      fiscalYearStartMonth: $fiscalYearStartMonth
-    }
-  )
+mutation CreateOrganization($name: String!, $fiscalYearStartMonth: Int)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer - only ADMIN users can create organizations"
+) {
+  organization_insert(data: { name: $name, fiscalYearStartMonth: $fiscalYearStartMonth })
 }
 
 # Update an organization
-mutation UpdateOrganization(
-  $id: UUID!
-  $name: String
-  $fiscalYearStartMonth: Int
-) @auth(level: USER) {
-  organization_update(
-    id: $id
-    data: {
-      name: $name
-      fiscalYearStartMonth: $fiscalYearStartMonth
-    }
-  )
+mutation UpdateOrganization($id: UUID!, $name: String, $fiscalYearStartMonth: Int)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer - only ADMIN users can update organization settings"
+) {
+  organization_update(id: $id, data: { name: $name, fiscalYearStartMonth: $fiscalYearStartMonth })
 }

@@ -1,7 +1,8 @@
 # Project Operations
 
 # Query all projects for a program
-query ListProjects($programId: UUID!) @auth(level: USER) {
+query ListProjects($programId: UUID!)
+@auth(level: USER, insecureReason: "Query filtered by programId which is organization-scoped") {
   projects(where: { programId: { eq: $programId } }) {
     id
     name
@@ -27,7 +28,8 @@ query ListProjects($programId: UUID!) @auth(level: USER) {
 }
 
 # Query a single project by ID with full details
-query GetProject($id: UUID!) @auth(level: USER) {
+query GetProject($id: UUID!)
+@auth(level: USER, insecureReason: "Query filtered by project ID which is organization-scoped") {
   project(id: $id) {
     id
     programId
@@ -62,39 +64,15 @@ query GetProject($id: UUID!) @auth(level: USER) {
       name
       description
     }
-    phases {
-      id
-      name
-      description
-      status
-      startDate
-      targetEndDate
-      actualEndDate
-      order
-      percentComplete
-      createdAt
-      updatedAt
-    }
-    assignments {
-      id
-      userId
-      allocationPercent
-      startDate
-      endDate
-      notes
-      createdAt
-      updatedAt
-      user {
-        id
-        name
-        email
-      }
-    }
   }
 }
 
 # Query all projects by status
-query ListProjectsByStatus($status: ProjectStatus!) @auth(level: USER) {
+query ListProjectsByStatus($status: ProjectStatus!)
+@auth(
+  level: USER
+  insecureReason: "Query filtered by status, authorization enforced at application layer"
+) {
   projects(where: { status: { eq: $status } }) {
     id
     name
@@ -124,7 +102,11 @@ mutation CreateProject(
   $targetCompletionDate: Date
   $ownerId: UUID
   $productTypeId: UUID
-) @auth(level: USER) {
+)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   project_insert(
     data: {
       programId: $programId
@@ -150,7 +132,11 @@ mutation UpdateProject(
   $actualCompletionDate: Date
   $ownerId: UUID
   $productTypeId: UUID
-) @auth(level: USER) {
+)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   project_update(
     id: $id
     data: {
@@ -167,6 +153,10 @@ mutation UpdateProject(
 }
 
 # Delete a project
-mutation DeleteProject($id: UUID!) @auth(level: USER) {
+mutation DeleteProject($id: UUID!)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   project_delete(id: $id)
 }

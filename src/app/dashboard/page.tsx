@@ -34,7 +34,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle>Over-allocated</CardTitle>
-            <CardDescription>Team members at >100%</CardDescription>
+            <CardDescription>Team members at &gt;100%</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold text-destructive">3</p>

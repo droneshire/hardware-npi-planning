@@ -169,16 +169,10 @@ export class ProjectService {
   /**
    * Validate project name uniqueness within a program
    */
-  async isNameAvailable(
-    programId: UUID,
-    name: string,
-    excludeId?: UUID
-  ): Promise<boolean> {
+  async isNameAvailable(programId: UUID, name: string, excludeId?: UUID): Promise<boolean> {
     const projects = await this.listProjects(programId)
 
-    return !projects.some(
-      (p) => p.name.toLowerCase() === name.toLowerCase() && p.id !== excludeId
-    )
+    return !projects.some((p) => p.name.toLowerCase() === name.toLowerCase() && p.id !== excludeId)
   }
 
   /**
@@ -187,10 +181,7 @@ export class ProjectService {
   calculateProjectCompletion(phases: ProjectPhase[]): number {
     if (phases.length === 0) return 0
 
-    const totalCompletion = phases.reduce(
-      (sum, phase) => sum + (phase.percentComplete || 0),
-      0
-    )
+    const totalCompletion = phases.reduce((sum, phase) => sum + (phase.percentComplete || 0), 0)
 
     return Math.round(totalCompletion / phases.length)
   }

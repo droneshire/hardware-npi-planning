@@ -72,12 +72,12 @@ tests/
 
 ```typescript
 // Good
-import type { Project } from '@/types';
-import { getProjects } from '@/services/project.service';
+import type { Project } from "@/types"
+import { getProjects } from "@/services/project.service"
 
 // Bad
-import { Project } from '@/types';  // Should be type-only
-const data: any = {};  // Use proper type
+import { Project } from "@/types" // Should be type-only
+const data: any = {} // Use proper type
 ```
 
 ### React Components
@@ -114,15 +114,15 @@ export default function ProjectsPage() {
 
 ```typescript
 // External imports
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 
 // Internal imports
-import { getProjects } from '@/services/project.service';
-import { ProjectCard } from '@/components/shared/ProjectCard';
+import { getProjects } from "@/services/project.service"
+import { ProjectCard } from "@/components/shared/ProjectCard"
 
 // Types
-import type { Project } from '@/types';
+import type { Project } from "@/types"
 
 export function ProjectsList() {
   // Component logic
@@ -137,15 +137,15 @@ All data access goes through service files:
 
 ```typescript
 // src/services/project.service.ts
-import { executeQuery } from '@/dataconnect/generated';
-import { GetProjectsDocument } from '@/dataconnect/generated/queries';
+import { executeQuery } from "@/dataconnect/generated"
+import { GetProjectsDocument } from "@/dataconnect/generated/queries"
 
 export async function getProjects(programId: string): Promise<Project[]> {
   const result = await executeQuery({
     query: GetProjectsDocument,
     variables: { programId },
-  });
-  return result.data?.projects || [];
+  })
+  return result.data?.projects || []
 }
 ```
 
@@ -154,14 +154,14 @@ export async function getProjects(programId: string): Promise<Project[]> {
 Use TanStack Query for data fetching:
 
 ```typescript
-import { useQuery } from '@tanstack/react-query';
-import { getProjects } from '@/services/project.service';
+import { useQuery } from "@tanstack/react-query"
+import { getProjects } from "@/services/project.service"
 
 export function useProjects(programId: string) {
   return useQuery({
-    queryKey: ['projects', programId],
+    queryKey: ["projects", programId],
     queryFn: () => getProjects(programId),
-  });
+  })
 }
 ```
 
@@ -186,18 +186,19 @@ Use Vitest for unit tests:
 
 ```typescript
 // tests/unit/lib/phaseCalculations.test.ts
-import { describe, it, expect } from 'vitest';
-import { calculatePhaseDuration } from '@/lib/phaseCalculations';
+import { describe, it, expect } from "vitest"
+import { calculatePhaseDuration } from "@/lib/phaseCalculations"
 
-describe('calculatePhaseDuration', () => {
-  it('calculates duration correctly', () => {
-    const result = calculatePhaseDuration(startDate, endDate);
-    expect(result).toBe(30);
-  });
-});
+describe("calculatePhaseDuration", () => {
+  it("calculates duration correctly", () => {
+    const result = calculatePhaseDuration(startDate, endDate)
+    expect(result).toBe(30)
+  })
+})
 ```
 
 Run tests:
+
 ```bash
 npm test              # Run all tests
 npm run test:ui       # Run with UI
@@ -210,18 +211,19 @@ Use Playwright for end-to-end tests:
 
 ```typescript
 // tests/e2e/projects.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test"
 
-test('creates a project', async ({ page }) => {
-  await page.goto('/projects');
-  await page.click('text=New Project');
-  await page.fill('input[name="name"]', 'Test Project');
-  await page.click('button:has-text("Create")');
-  await expect(page.locator('text=Test Project')).toBeVisible();
-});
+test("creates a project", async ({ page }) => {
+  await page.goto("/projects")
+  await page.click("text=New Project")
+  await page.fill('input[name="name"]', "Test Project")
+  await page.click('button:has-text("Create")')
+  await expect(page.locator("text=Test Project")).toBeVisible()
+})
 ```
 
 Run E2E tests:
+
 ```bash
 npm run test:e2e      # Run E2E tests
 npm run test:e2e:ui   # Run with UI
@@ -312,6 +314,7 @@ firebase deploy --only hosting
 ### Environment Variables
 
 Production environment variables are set in:
+
 - Firebase Console → Project Settings → Environment Config
 - GitHub Secrets (for CI/CD)
 
@@ -333,6 +336,7 @@ Production environment variables are set in:
 ### Common Issues
 
 **Build fails:**
+
 ```bash
 rm -rf .next node_modules
 npm install
@@ -340,12 +344,14 @@ npm run build
 ```
 
 **Type errors:**
+
 ```bash
 npm run type-check
 # Fix errors, regenerate SDK if schema changed
 ```
 
 **Data Connect errors:**
+
 - Verify schema is deployed
 - Check environment variables
 - Review Firebase Console logs

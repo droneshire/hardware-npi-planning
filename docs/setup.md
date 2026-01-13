@@ -64,6 +64,7 @@ firebase init
 ```
 
 When prompted:
+
 - Select **Hosting** and **Data Connect**
 - Choose your Firebase project
 - For Hosting:
@@ -77,6 +78,7 @@ When prompted:
 ## Step 6: Configure Environment Variables
 
 1. Copy the example environment file:
+
    ```bash
    cp .env.example .env.local
    ```
@@ -122,6 +124,7 @@ firebase deploy --only dataconnect
 ```
 
 This will:
+
 - Generate the TypeScript SDK from your GraphQL schema
 - Deploy the schema to Firebase Data Connect
 
@@ -173,6 +176,7 @@ npm install -g firebase-tools
 ### Data Connect SDK Generation Fails
 
 Ensure you've:
+
 - Deployed the Data Connect schema first
 - Set the correct `NEXT_PUBLIC_FIREBASE_DATACONNECT_ENDPOINT` in `.env.local`
 - Run `firebase login` to authenticate

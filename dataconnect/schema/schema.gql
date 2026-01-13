@@ -1,0 +1,200 @@
+# Hardware NPI Planning - Firebase Data Connect Schema
+# This is the single source of truth for the database schema
+
+# Enums
+enum UserRole {
+  ADMIN
+  MANAGER
+  MEMBER
+  VIEWER
+}
+
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum PhaseStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  BLOCKED
+}
+
+# Core Organization & User Management
+type Organization @table {
+  id: UUID! @default(expr: "uuidV4()")
+  name: String!
+  fiscalYearStartMonth: Int! @default(value: 1) # 1-12, where 1 = January
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+type User @table {
+  id: UUID! @default(expr: "uuidV4()")
+  organizationId: UUID!
+  email: String! @unique
+  name: String!
+  role: UserRole! @default(value: "MEMBER")
+  firebaseUid: String! @unique
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  organization: Organization! @ref(fields: ["organizationId"], references: ["id"])
+}
+
+# Hierarchy: Portfolio → Program → Project
+type Portfolio @table {
+  id: UUID! @default(expr: "uuidV4()")
+  organizationId: UUID!
+  name: String!
+  description: String
+  ownerId: UUID
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  organization: Organization! @ref(fields: ["organizationId"], references: ["id"])
+  owner: User @ref(fields: ["ownerId"], references: ["id"])
+}
+
+type Program @table {
+  id: UUID! @default(expr: "uuidV4()")
+  portfolioId: UUID!
+  name: String!
+  description: String
+  ownerId: UUID
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  portfolio: Portfolio! @ref(fields: ["portfolioId"], references: ["id"])
+  owner: User @ref(fields: ["ownerId"], references: ["id"])
+}
+
+type Project @table {
+  id: UUID! @default(expr: "uuidV4()")
+  programId: UUID!
+  productTypeId: UUID
+  name: String!
+  description: String
+  status: ProjectStatus! @default(value: "PLANNING")
+  startDate: Date
+  targetCompletionDate: Date
+  actualCompletionDate: Date
+  ownerId: UUID
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  program: Program! @ref(fields: ["programId"], references: ["id"])
+  productType: ProductType @ref(fields: ["productTypeId"], references: ["id"])
+  owner: User @ref(fields: ["ownerId"], references: ["id"])
+}
+
+# NPI Phase Templates
+type PhaseTemplate @table {
+  id: UUID! @default(expr: "uuidV4()")
+  organizationId: UUID!
+  name: String!
+  description: String
+  isDefault: Boolean! @default(value: false)
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  organization: Organization! @ref(fields: ["organizationId"], references: ["id"])
+}
+
+type PhaseTemplatePhase @table {
+  id: UUID! @default(expr: "uuidV4()")
+  templateId: UUID!
+  name: String!
+  description: String
+  durationWeeks: Int # Expected duration in weeks
+  order: Int! # Display order within template
+  createdAt: Timestamp! @default(expr: "request.time")
+
+  template: PhaseTemplate! @ref(fields: ["templateId"], references: ["id"])
+}
+
+# Product Types (e.g., "Laptop", "Phone", "Tablet")
+type ProductType @table {
+  id: UUID! @default(expr: "uuidV4()")
+  organizationId: UUID!
+  name: String!
+  description: String
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  organization: Organization! @ref(fields: ["organizationId"], references: ["id"])
+}
+
+# Links ProductType to default PhaseTemplate
+type ProductTypePhaseConfig @table {
+  id: UUID! @default(expr: "uuidV4()")
+  productTypeId: UUID!
+  phaseTemplateId: UUID!
+  createdAt: Timestamp! @default(expr: "request.time")
+
+  productType: ProductType! @ref(fields: ["productTypeId"], references: ["id"])
+  phaseTemplate: PhaseTemplate! @ref(fields: ["phaseTemplateId"], references: ["id"])
+}
+
+# Project Phases (copied from template at project creation)
+type ProjectPhase @table {
+  id: UUID! @default(expr: "uuidV4()")
+  projectId: UUID!
+  name: String!
+  description: String
+  status: PhaseStatus! @default(value: "NOT_STARTED")
+  startDate: Date
+  targetEndDate: Date
+  actualEndDate: Date
+  order: Int! # Display order within project
+  percentComplete: Int @default(value: 0) # 0-100
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  project: Project! @ref(fields: ["projectId"], references: ["id"])
+}
+
+# Teams & Team Members
+type Team @table {
+  id: UUID! @default(expr: "uuidV4()")
+  organizationId: UUID!
+  parentTeamId: UUID # For hierarchical teams
+  name: String!
+  description: String
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  organization: Organization! @ref(fields: ["organizationId"], references: ["id"])
+  parentTeam: Team @ref(fields: ["parentTeamId"], references: ["id"])
+}
+
+type TeamMember @table {
+  id: UUID! @default(expr: "uuidV4()")
+  teamId: UUID!
+  userId: UUID!
+  role: String # Team-specific role (e.g., "Tech Lead", "Designer")
+  createdAt: Timestamp! @default(expr: "request.time")
+
+  team: Team! @ref(fields: ["teamId"], references: ["id"])
+  user: User! @ref(fields: ["userId"], references: ["id"])
+}
+
+# Resource Assignments (Percentage-based)
+type ProjectAssignment @table {
+  id: UUID! @default(expr: "uuidV4()")
+  projectId: UUID!
+  userId: UUID!
+  allocationPercent: Int! # 0-100
+  startDate: Date!
+  endDate: Date
+  notes: String
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+
+  project: Project! @ref(fields: ["projectId"], references: ["id"])
+  user: User! @ref(fields: ["userId"], references: ["id"])
+}

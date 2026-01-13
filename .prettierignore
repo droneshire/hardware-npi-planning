@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Generated files
+src/dataconnect-generated/
+dataconnect/generated/
+dataconnect/.dataconnect/
+dataconnect/connector/.firebase/
+dataconnect/connector/.metadata/
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+coverage/
+
+# Firebase
+.firebase/
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+.env*.local
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Package manager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

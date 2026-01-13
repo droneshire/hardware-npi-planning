@@ -3,14 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import {
-  LayoutDashboard,
-  FolderKanban,
-  Users,
-  Calendar,
-  Settings,
-  ChevronLeft,
-} from "lucide-react"
+import { LayoutDashboard, FolderKanban, Users, Calendar, Settings, ChevronLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useState } from "react"
@@ -47,12 +40,7 @@ export function Sidebar() {
           onClick={() => setCollapsed(!collapsed)}
           className={cn("ml-auto", collapsed && "mx-auto")}
         >
-          <ChevronLeft
-            className={cn(
-              "h-4 w-4 transition-transform",
-              collapsed && "rotate-180"
-            )}
-          />
+          <ChevronLeft className={cn("h-4 w-4 transition-transform", collapsed && "rotate-180")} />
         </Button>
       </div>
 

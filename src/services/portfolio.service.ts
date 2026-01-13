@@ -132,11 +132,7 @@ export class PortfolioService {
    *
    * @returns true if name is available, false if already taken
    */
-  async isNameAvailable(
-    organizationId: UUID,
-    name: string,
-    excludeId?: UUID
-  ): Promise<boolean> {
+  async isNameAvailable(organizationId: UUID, name: string, excludeId?: UUID): Promise<boolean> {
     const portfolios = await this.listPortfolios(organizationId)
 
     return !portfolios.some(

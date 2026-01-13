@@ -40,8 +40,7 @@ export const STANDARD_NPI_TEMPLATE: DefaultTemplate = {
     },
     {
       name: "DVT",
-      description:
-        "Design Validation Test - Verify design meets specifications and requirements",
+      description: "Design Validation Test - Verify design meets specifications and requirements",
       durationWeeks: 10,
       order: 2,
     },

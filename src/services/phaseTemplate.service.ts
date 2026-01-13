@@ -295,16 +295,10 @@ export class PhaseTemplateService {
   /**
    * Validate template name uniqueness
    */
-  async isNameAvailable(
-    organizationId: UUID,
-    name: string,
-    excludeId?: UUID
-  ): Promise<boolean> {
+  async isNameAvailable(organizationId: UUID, name: string, excludeId?: UUID): Promise<boolean> {
     const templates = await this.listTemplates(organizationId)
 
-    return !templates.some(
-      (t) => t.name.toLowerCase() === name.toLowerCase() && t.id !== excludeId
-    )
+    return !templates.some((t) => t.name.toLowerCase() === name.toLowerCase() && t.id !== excludeId)
   }
 
   /**

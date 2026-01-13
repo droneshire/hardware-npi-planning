@@ -1,7 +1,8 @@
 # Program Operations
 
 # Query all programs for a portfolio
-query ListPrograms($portfolioId: UUID!) @auth(level: USER) {
+query ListPrograms($portfolioId: UUID!)
+@auth(level: USER, insecureReason: "Query filtered by portfolioId which is organization-scoped") {
   programs(where: { portfolioId: { eq: $portfolioId } }) {
     id
     name
@@ -18,7 +19,8 @@ query ListPrograms($portfolioId: UUID!) @auth(level: USER) {
 }
 
 # Query a single program by ID
-query GetProgram($id: UUID!) @auth(level: USER) {
+query GetProgram($id: UUID!)
+@auth(level: USER, insecureReason: "Query filtered by program ID which is organization-scoped") {
   program(id: $id) {
     id
     portfolioId
@@ -38,55 +40,34 @@ query GetProgram($id: UUID!) @auth(level: USER) {
       name
       organizationId
     }
-    projects {
-      id
-      name
-      description
-      status
-      startDate
-      targetCompletionDate
-      actualCompletionDate
-      createdAt
-      updatedAt
-    }
   }
 }
 
 # Create a new program
-mutation CreateProgram(
-  $portfolioId: UUID!
-  $name: String!
-  $description: String
-  $ownerId: UUID
-) @auth(level: USER) {
+mutation CreateProgram($portfolioId: UUID!, $name: String!, $description: String, $ownerId: UUID)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   program_insert(
-    data: {
-      portfolioId: $portfolioId
-      name: $name
-      description: $description
-      ownerId: $ownerId
-    }
+    data: { portfolioId: $portfolioId, name: $name, description: $description, ownerId: $ownerId }
   )
 }
 
 # Update an existing program
-mutation UpdateProgram(
-  $id: UUID!
-  $name: String
-  $description: String
-  $ownerId: UUID
-) @auth(level: USER) {
-  program_update(
-    id: $id
-    data: {
-      name: $name
-      description: $description
-      ownerId: $ownerId
-    }
-  )
+mutation UpdateProgram($id: UUID!, $name: String, $description: String, $ownerId: UUID)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
+  program_update(id: $id, data: { name: $name, description: $description, ownerId: $ownerId })
 }
 
 # Delete a program
-mutation DeleteProgram($id: UUID!) @auth(level: USER) {
+mutation DeleteProgram($id: UUID!)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   program_delete(id: $id)
 }

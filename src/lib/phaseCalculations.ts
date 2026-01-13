@@ -140,16 +140,12 @@ export function validatePhaseSchedule(phases: PhaseSchedule[]): {
 
     // Check for gaps
     if (nextStart > currentEnd) {
-      issues.push(
-        `Gap detected between ${currentPhase.name} and ${nextPhase.name}`
-      )
+      issues.push(`Gap detected between ${currentPhase.name} and ${nextPhase.name}`)
     }
 
     // Check for overlaps
     if (nextStart < currentEnd) {
-      issues.push(
-        `Overlap detected between ${currentPhase.name} and ${nextPhase.name}`
-      )
+      issues.push(`Overlap detected between ${currentPhase.name} and ${nextPhase.name}`)
     }
   }
 

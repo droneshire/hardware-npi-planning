@@ -20,7 +20,7 @@ The root entity that scopes all data. Multi-tenant ready.
 type Organization {
   id: ID!
   name: String!
-  fiscalYearStartMonth: Int!  # 1-12
+  fiscalYearStartMonth: Int! # 1-12
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -36,7 +36,7 @@ type User {
   organizationId: ID!
   email: String!
   name: String
-  role: UserRole!  # ADMIN, MANAGER, MEMBER, VIEWER
+  role: UserRole! # ADMIN, MANAGER, MEMBER, VIEWER
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -90,7 +90,7 @@ type Project {
   productTypeId: ID
   name: String!
   description: String
-  status: ProjectStatus!  # PLANNING, ACTIVE, ON_HOLD, COMPLETED, CANCELLED
+  status: ProjectStatus! # PLANNING, ACTIVE, ON_HOLD, COMPLETED, CANCELLED
   startDate: Date
   endDate: Date
   createdAt: DateTime!
@@ -144,7 +144,7 @@ type ProjectPhase {
   name: String!
   description: String
   order: Int!
-  status: PhaseStatus!  # NOT_STARTED, IN_PROGRESS, COMPLETED, BLOCKED
+  status: PhaseStatus! # NOT_STARTED, IN_PROGRESS, COMPLETED, BLOCKED
   startDate: Date
   endDate: Date
   actualDurationDays: Int
@@ -217,7 +217,7 @@ type ProjectAssignment {
   id: ID!
   projectId: ID!
   userId: ID!
-  allocationPercentage: Float!  # 0-100
+  allocationPercentage: Float! # 0-100
   startDate: Date!
   endDate: Date!
   createdAt: DateTime!
@@ -291,23 +291,23 @@ mutation AssignResource($input: CreateProjectAssignmentInput!) {
 The TypeScript SDK is auto-generated from the GraphQL schema. After running `firebase dataconnect:sdk:generate`, you can import types and operations:
 
 ```typescript
-import { executeQuery, executeMutation } from '@/dataconnect/generated';
-import { GetProjectsQuery, CreateProjectMutation } from '@/dataconnect/generated/queries';
+import { executeQuery, executeMutation } from "@/dataconnect/generated"
+import { GetProjectsQuery, CreateProjectMutation } from "@/dataconnect/generated/queries"
 ```
 
 ### Usage Example
 
 ```typescript
 // In a service file
-import { executeQuery } from '@/dataconnect/generated';
-import { GetProjectsDocument } from '@/dataconnect/generated/queries';
+import { executeQuery } from "@/dataconnect/generated"
+import { GetProjectsDocument } from "@/dataconnect/generated/queries"
 
 export async function getProjects(programId: string) {
   const result = await executeQuery({
     query: GetProjectsDocument,
     variables: { programId },
-  });
-  return result.data?.projects || [];
+  })
+  return result.data?.projects || []
 }
 ```
 
@@ -357,6 +357,7 @@ GraphQL operations return errors in the standard format:
 ```
 
 Common error codes:
+
 - `UNAUTHORIZED` - User lacks permission
 - `NOT_FOUND` - Entity doesn't exist
 - `VALIDATION_ERROR` - Input validation failed
@@ -365,6 +366,7 @@ Common error codes:
 ## Rate Limiting
 
 Firebase Data Connect has default rate limits. For high-volume operations, consider:
+
 - Batching queries where possible
 - Caching results with TanStack Query
 - Using pagination for large lists

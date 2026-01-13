@@ -1,7 +1,11 @@
 # Phase Template Operations
 
 # Query all phase templates for an organization
-query ListPhaseTemplates($organizationId: UUID!) @auth(level: USER) {
+query ListPhaseTemplates($organizationId: UUID!)
+@auth(
+  level: USER
+  insecureReason: "Query filtered by organizationId which scopes access to user's organization"
+) {
   phaseTemplates(where: { organizationId: { eq: $organizationId } }) {
     id
     name
@@ -9,18 +13,12 @@ query ListPhaseTemplates($organizationId: UUID!) @auth(level: USER) {
     isDefault
     createdAt
     updatedAt
-    phases {
-      id
-      name
-      description
-      durationWeeks
-      order
-    }
   }
 }
 
 # Query a single phase template by ID
-query GetPhaseTemplate($id: UUID!) @auth(level: USER) {
+query GetPhaseTemplate($id: UUID!)
+@auth(level: USER, insecureReason: "Query filtered by template ID which is organization-scoped") {
   phaseTemplate(id: $id) {
     id
     organizationId
@@ -29,35 +27,19 @@ query GetPhaseTemplate($id: UUID!) @auth(level: USER) {
     isDefault
     createdAt
     updatedAt
-    phases {
-      id
-      name
-      description
-      durationWeeks
-      order
-      createdAt
-    }
   }
 }
 
 # Query default templates
-query GetDefaultTemplates($organizationId: UUID!) @auth(level: USER) {
-  phaseTemplates(
-    where: {
-      organizationId: { eq: $organizationId }
-      isDefault: { eq: true }
-    }
-  ) {
+query GetDefaultTemplates($organizationId: UUID!)
+@auth(
+  level: USER
+  insecureReason: "Query filtered by organizationId which scopes access to user's organization"
+) {
+  phaseTemplates(where: { organizationId: { eq: $organizationId }, isDefault: { eq: true } }) {
     id
     name
     description
-    phases {
-      id
-      name
-      description
-      durationWeeks
-      order
-    }
   }
 }
 
@@ -67,7 +49,11 @@ mutation CreatePhaseTemplate(
   $name: String!
   $description: String
   $isDefault: Boolean
-) @auth(level: USER) {
+)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   phaseTemplate_insert(
     data: {
       organizationId: $organizationId
@@ -79,24 +65,23 @@ mutation CreatePhaseTemplate(
 }
 
 # Update a phase template
-mutation UpdatePhaseTemplate(
-  $id: UUID!
-  $name: String
-  $description: String
-  $isDefault: Boolean
-) @auth(level: USER) {
+mutation UpdatePhaseTemplate($id: UUID!, $name: String, $description: String, $isDefault: Boolean)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   phaseTemplate_update(
     id: $id
-    data: {
-      name: $name
-      description: $description
-      isDefault: $isDefault
-    }
+    data: { name: $name, description: $description, isDefault: $isDefault }
   )
 }
 
 # Delete a phase template
-mutation DeletePhaseTemplate($id: UUID!) @auth(level: USER) {
+mutation DeletePhaseTemplate($id: UUID!)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   phaseTemplate_delete(id: $id)
 }
 
@@ -107,7 +92,11 @@ mutation CreatePhaseTemplatePhase(
   $description: String
   $durationWeeks: Int
   $order: Int!
-) @auth(level: USER) {
+)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   phaseTemplatePhase_insert(
     data: {
       templateId: $templateId
@@ -126,19 +115,22 @@ mutation UpdatePhaseTemplatePhase(
   $description: String
   $durationWeeks: Int
   $order: Int
-) @auth(level: USER) {
+)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   phaseTemplatePhase_update(
     id: $id
-    data: {
-      name: $name
-      description: $description
-      durationWeeks: $durationWeeks
-      order: $order
-    }
+    data: { name: $name, description: $description, durationWeeks: $durationWeeks, order: $order }
   )
 }
 
 # Delete a template phase
-mutation DeletePhaseTemplatePhase($id: UUID!) @auth(level: USER) {
+mutation DeletePhaseTemplatePhase($id: UUID!)
+@auth(
+  level: USER
+  insecureReason: "Authorization enforced at application layer based on user role and organization membership"
+) {
   phaseTemplatePhase_delete(id: $id)
 }

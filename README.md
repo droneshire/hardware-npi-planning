@@ -3,7 +3,7 @@
 A comprehensive web application for managing hardware New Product Introduction (NPI) planning, built with Next.js and Firebase. Plan projects, allocate resources, and track progress across portfolios, programs, and projects with fiscal-year awareness.
 
 ![Dashboard](docs/screenshots/dashboard.png)
-*Executive dashboard showing portfolio overview and resource utilization*
+_Executive dashboard showing portfolio overview and resource utilization_
 
 ## Features
 
@@ -15,10 +15,10 @@ A comprehensive web application for managing hardware New Product Introduction (
 - **Multi-tenant Ready**: Organization-based data isolation
 
 ![Timeline View](docs/screenshots/timeline.png)
-*Project timeline showing phases across fiscal quarters*
+_Project timeline showing phases across fiscal quarters_
 
 ![Resource Planning](docs/screenshots/resources.png)
-*Resource allocation view with capacity indicators*
+_Resource allocation view with capacity indicators_
 
 ## Getting Started
 

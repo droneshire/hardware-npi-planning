@@ -1,6 +1,8 @@
 "use client"
 
 import { User, LogOut } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -17,6 +19,14 @@ interface HeaderProps {
 }
 
 export function Header({ title, actions }: HeaderProps) {
+  const router = useRouter()
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: false })
+    router.push("/auth/signin")
+    router.refresh()
+  }
+
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-background px-6">
       <div className="flex items-center gap-4">
@@ -39,7 +49,7 @@ export function Header({ title, actions }: HeaderProps) {
               <User className="mr-2 h-4 w-4" />
               Profile
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSignOut}>
               <LogOut className="mr-2 h-4 w-4" />
               Sign out
             </DropdownMenuItem>

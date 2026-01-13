@@ -123,14 +123,14 @@ All data access goes through Firebase Data Connect GraphQL operations:
 
 ```typescript
 // Service layer
-const projects = await getProjects(portfolioId);
+const projects = await getProjects(portfolioId)
 
 // Generated SDK
 export async function getProjects(portfolioId: string) {
   return await executeQuery({
     query: GET_PROJECTS_QUERY,
     variables: { portfolioId },
-  });
+  })
 }
 
 // Data Connect enforces authorization

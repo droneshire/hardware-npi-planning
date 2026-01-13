@@ -107,16 +107,10 @@ export class ProgramService {
   /**
    * Validate program name uniqueness within a portfolio
    */
-  async isNameAvailable(
-    portfolioId: UUID,
-    name: string,
-    excludeId?: UUID
-  ): Promise<boolean> {
+  async isNameAvailable(portfolioId: UUID, name: string, excludeId?: UUID): Promise<boolean> {
     const programs = await this.listPrograms(portfolioId)
 
-    return !programs.some(
-      (p) => p.name.toLowerCase() === name.toLowerCase() && p.id !== excludeId
-    )
+    return !programs.some((p) => p.name.toLowerCase() === name.toLowerCase() && p.id !== excludeId)
   }
 }
 

@@ -24,9 +24,7 @@ export function AppLayout({ children, title, breadcrumbs, actions }: AppLayoutPr
             </div>
           )}
 
-          <div className="p-6">
-            {children}
-          </div>
+          <div className="p-6">{children}</div>
         </main>
       </div>
     </div>

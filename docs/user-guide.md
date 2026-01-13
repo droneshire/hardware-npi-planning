@@ -127,6 +127,7 @@ Projects can have the following statuses:
 ### Person Allocation View
 
 The person view shows:
+
 - **Quarterly Breakdown**: Allocation by quarter
 - **Project Assignments**: Bar chart showing all projects
 - **Total Allocation**: Warning if >100%
@@ -151,6 +152,7 @@ The timeline provides a Gantt-style view of all projects:
 ### Default Templates
 
 The system includes default phase templates:
+
 - **EVT** (Engineering Validation Test)
 - **DVT** (Design Validation Test)
 - **PVT** (Production Validation Test)
@@ -236,6 +238,7 @@ The dashboard provides an executive overview:
 ## Getting Help
 
 For technical issues or questions:
+
 - Check the [Development Guide](development.md) for technical details
 - Review the [API Reference](api.md) for data model questions
 - Contact your system administrator
