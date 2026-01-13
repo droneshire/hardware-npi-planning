@@ -59,3 +59,5 @@ dataconnect/**/__generated__/
 *.njsproj
 *.sln
 *.sw?
+# Ralph config (may contain API key)
+.cursor/ralph-config.json

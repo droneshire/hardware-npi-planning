@@ -1,6 +1,14 @@
-# Hardware NPI Planning Webapp – Product Requirements Document
+---
+task: Build a modern looking, comprehensive hardware NPI (New Product Introduction) planning web application built with Next.js and Firebase.
+test_command: "npm run test"
+---
 
-## Overview
+# Task: CLI Todo App (TypeScript)
+
+Build a modern looking, comprehensive hardware NPI (New Product Introduction) planning web application built with Next.js and Firebase.
+The system supports portfolio → program → project hierarchies, customizable NPI phase templates, and percentage-based resource planning with fiscal-year awareness.
+
+## Requirements
 
 A comprehensive hardware NPI (New Product Introduction) planning web application built with Next.js and Firebase.
 The system supports portfolio → program → project hierarchies, customizable NPI phase templates, and percentage-based resource planning with fiscal-year awareness.
@@ -16,8 +24,6 @@ Primary use cases:
 - Program-level planning and tradeoff analysis
 - Resource allocation and capacity tracking
 - Historical auditability of NPI plans
-
-**Project location**: `/home/ross/Documents/hardware_project_planning`
 
 ---
 
@@ -67,21 +73,6 @@ Primary use cases:
 - GitHub repository
 - `main` is the production branch
 
-### Deployment model
-- Every commit merged into `main` automatically:
-  - Builds the Next.js app
-  - Deploys to Firebase Hosting
-  - Uses Firebase service account credentials via GitHub Secrets
-
-### GitHub Actions requirements
-- `.github/workflows/deploy.yml`
-- Steps:
-  1. Checkout repo
-  2. Install dependencies
-  3. Build Next.js app
-  4. Deploy to Firebase Hosting
-  5. (Optional) Run Data Connect schema checks
-
 ### Environments
 - `main` → production Firebase project
 - (Optional later) `staging` branch → staging Firebase project
@@ -91,9 +82,10 @@ Primary use cases:
 ## UI Principles (Design System)
 
 ### Design goals
-- Calm, modern, executive-friendly
+- Modern, executive-friendly, dark themed
 - Dense enough for planning, never cramped
 - Data clarity over decoration
+- Reference UIs - Robinhood, Ramp, Github
 
 ### Core principles
 
@@ -170,11 +162,13 @@ Primary use cases:
 ## Core Pages
 
 ### 1. Projects Timeline (`/timeline`)
-- Gantt-style horizontal bars per project
+- Gantt-style horizontal bars per project - inline phases
 - Quarterly granularity (initial)
 - Fiscal year or calendar year toggle
 - Filter by portfolio, program, product type, status
 - Click-through to project detail
+- Ability to expand and contract phases inline and move left/right in time
+- Relative sliding of resources when the "collide" in the gantt - auto snapping
 
 ### 2. Resources Overview (`/resources`)
 - Organization-wide resource list
@@ -270,11 +264,12 @@ Organization
 - KPI dashboard
 - Status export
 - Performance optimization
-- SSO readiness
 
 ---
 
 ## Project Structure
+
+public/
 
 src/
 ├─ app/
@@ -315,19 +310,9 @@ tests/
 | E2E | Create project → assign resources → view timeline |
 | Manual | Executive and PM workflows |
 
----
+## Success Criteria
 
-## Current Status
-
-- Next.js project initialized
-- Firebase-based architecture selected
-
-## Immediate Next Steps
-
-1. Create Firebase project
-2. Initialize Firebase Hosting + Data Connect
-3. Define schema in `dataconnect/schema.gql`
-4. Set up GitHub Actions deployment
-5. Implement auth + base layout
-6. Build Timeline and Resources MVP
-7. Update README.md with top level getting started and brief description with screen shots. Update more detailed documentation as .md files under the docs/ directory.
+1. [ ] Login and auth works as basic access - use typical Google/Email auth
+2. [ ] Schema and Dataconnect are working properly - make update_sdk is working
+3. [ ] All pages are completed and meet requirements listed above
+4. [ ] All tests are passing and logic is properly tested
