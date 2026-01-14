@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { AppLayout } from "@/components/layout/app-layout"
+import { AuthProtection } from "@/components/auth-protection"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Table,
@@ -75,10 +76,11 @@ export default function ResourcesPage() {
   ).length
 
   return (
-    <AppLayout
-      title="Resources"
-      breadcrumbs={[{ label: "Home", href: "/" }, { label: "Resources" }]}
-    >
+    <AuthProtection>
+      <AppLayout
+        title="Resources"
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Resources" }]}
+      >
       <div className="space-y-6">
         {/* Summary Cards */}
         <div className="grid gap-4 md:grid-cols-3">
@@ -184,5 +186,6 @@ export default function ResourcesPage() {
         </Card>
       </div>
     </AppLayout>
+    </AuthProtection>
   )
 }

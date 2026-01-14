@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle } from "lucide-react"
+import { ROUTES } from "@/constants/routes"
 
 const errorMessages: Record<string, string> = {
   Configuration: "There is a problem with the server configuration.",
@@ -34,7 +35,7 @@ export default function AuthErrorPage() {
               If this problem persists, please contact support.
             </p>
             <Button asChild className="w-full">
-              <Link href="/auth/signin">Return to Sign In</Link>
+              <Link href={ROUTES.AUTH.SIGNIN}>Return to Sign In</Link>
             </Button>
           </div>
         </CardContent>

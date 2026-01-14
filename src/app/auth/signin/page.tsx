@@ -1,30 +1,87 @@
 "use client"
 
-import { useState } from "react"
-import { signIn } from "next-auth/react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useState, useEffect, useRef } from "react"
+import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Chrome } from "lucide-react"
+import {
+  useAuthStateWatcher,
+  signInWithGoogle,
+  logInWithEmailAndPassword,
+  registerWithEmailAndPassword,
+  handleRedirectResult,
+} from "@/hooks/use-auth"
+import { DEFAULT_SIGNIN_REDIRECT, ROUTES } from "@/constants/routes"
 
 export default function SignInPage() {
   const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
-  const error = searchParams.get("error")
+  const { user, isLoading: authLoading } = useAuthStateWatcher()
+  const hasRedirected = useRef(false)
 
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [emailError, setEmailError] = useState("")
+  const [isRegister, setIsRegister] = useState(false)
+
+  // Validate and sanitize callbackUrl to prevent redirect loops
+  const getValidCallbackUrl = () => {
+    const rawCallbackUrl = searchParams.get("callbackUrl") || DEFAULT_SIGNIN_REDIRECT
+    // Prevent redirecting to auth pages or current page
+    if (
+      rawCallbackUrl.startsWith(ROUTES.AUTH.BASE) ||
+      rawCallbackUrl === pathname
+    ) {
+      return DEFAULT_SIGNIN_REDIRECT
+    }
+    return rawCallbackUrl
+  }
+
+  // Handle redirect result on component mount (for Google OAuth redirect flow)
+  useEffect(() => {
+    const handleRedirect = async () => {
+      try {
+        const result = await handleRedirectResult()
+        if (result?.user) {
+          console.log("Successfully signed in via redirect, waiting for auth state update...")
+          // Don't redirect here - let the auth state watcher handle it
+          // The user state will update and trigger the redirect below
+        }
+      } catch (error) {
+        console.error("Error getting redirect result:", error)
+      }
+    }
+
+    // Only check for redirect result if we're not already authenticated
+    if (!user && !authLoading) {
+      handleRedirect()
+    }
+  }, [user, authLoading])
+
+  // Redirect if already authenticated (this handles both popup and redirect flows)
+  useEffect(() => {
+    if (user && !authLoading && !hasRedirected.current) {
+      const callbackUrl = getValidCallbackUrl()
+      console.log("User authenticated, redirecting to:", callbackUrl)
+      hasRedirected.current = true
+      // Use replace instead of push to avoid adding to history
+      router.replace(callbackUrl)
+    }
+  }, [user, authLoading, router, pathname, searchParams])
 
   const handleGoogleSignIn = async () => {
+    if (isLoading) return
     setIsLoading(true)
     try {
-      await signIn("google", { callbackUrl })
-    } catch (error) {
+      await signInWithGoogle()
+      // Navigation will happen via auth state change
+    } catch (error: any) {
       console.error("Google sign in error:", error)
+      setEmailError(error.message || "Failed to sign in with Google")
     } finally {
       setIsLoading(false)
     }
@@ -41,30 +98,19 @@ export default function SignInPage() {
 
     setIsLoading(true)
     try {
-      // Use Firebase Auth client-side to get ID token
-      const { signInWithEmailAndPassword } = await import("firebase/auth")
-      const { auth } = await import("@/lib/firebase")
-
-      const userCredential = await signInWithEmailAndPassword(auth, email, password)
-      const idToken = await userCredential.user.getIdToken()
-
-      // Pass the ID token to NextAuth
-      const result = await signIn("credentials", {
-        idToken,
-        callbackUrl,
-        redirect: false,
-      })
-
-      if (result?.error) {
-        setEmailError("Invalid email or password")
-      } else if (result?.ok) {
-        router.push(callbackUrl)
-        router.refresh()
+      if (isRegister) {
+        await registerWithEmailAndPassword({ email, password })
+      } else {
+        await logInWithEmailAndPassword({ email, password })
       }
+      // Navigation will happen via auth state change
     } catch (error: any) {
       console.error("Sign in error:", error)
       if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
         setEmailError("Invalid email or password")
+      } else if (error.code === "auth/email-already-in-use") {
+        setEmailError("Email already in use. Please sign in instead.")
+        setIsRegister(false)
       } else {
         setEmailError(error.message || "An error occurred. Please try again.")
       }
@@ -72,6 +118,15 @@ export default function SignInPage() {
       setIsLoading(false)
     }
   }
+
+  if (authLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-muted-foreground">Loading...</div>
+      </div>
+    )
+  }
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
@@ -81,13 +136,6 @@ export default function SignInPage() {
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {error && (
-            <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-              {error === "CredentialsSignin"
-                ? "Invalid email or password"
-                : "An error occurred during sign in. Please try again."}
-            </div>
-          )}
 
           <Button
             type="button"
@@ -144,9 +192,25 @@ export default function SignInPage() {
 
             {emailError && <div className="text-sm text-destructive">{emailError}</div>}
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Signing in..." : "Sign in with Email"}
-            </Button>
+            <div className="flex gap-2">
+              <Button type="submit" className="flex-1" disabled={isLoading}>
+                {isLoading
+                  ? isRegister
+                    ? "Creating account..."
+                    : "Signing in..."
+                  : isRegister
+                    ? "Create Account"
+                    : "Sign in with Email"}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsRegister(!isRegister)}
+                disabled={isLoading}
+              >
+                {isRegister ? "Sign in instead" : "Register"}
+              </Button>
+            </div>
           </form>
         </CardContent>
       </Card>

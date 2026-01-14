@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   title: "Hardware NPI Planning",
   description: "Comprehensive hardware New Product Introduction planning and resource management",
   manifest: "/manifest.json",
-  themeColor: "#0f172a",
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
@@ -20,6 +19,10 @@ export const metadata: Metadata = {
     description: "Comprehensive hardware New Product Introduction planning and resource management",
     type: "website",
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#0f172a",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

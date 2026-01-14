@@ -1,15 +1,19 @@
+"use client"
+
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { AuthProtection } from "@/components/auth-protection"
 
 export default function DashboardPage() {
   return (
-    <AppLayout
-      title="Dashboard"
-      breadcrumbs={[
-        { label: "Home", href: "/" },
-        { label: "Dashboard" },
-      ]}
-    >
+    <AuthProtection>
+      <AppLayout
+        title="Dashboard"
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Dashboard" },
+        ]}
+      >
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader>
@@ -54,5 +58,6 @@ export default function DashboardPage() {
         </Card>
       </div>
     </AppLayout>
+    </AuthProtection>
   )
 }

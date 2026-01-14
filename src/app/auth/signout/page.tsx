@@ -1,17 +1,16 @@
 "use client"
 
 import { useEffect } from "react"
-import { signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import { logout } from "@/hooks/use-auth"
+import { AUTH_REDIRECTS } from "@/constants/auth"
 
 export default function SignOutPage() {
   const router = useRouter()
 
   useEffect(() => {
-    signOut({ redirect: false }).then(() => {
-      router.push("/auth/signin")
-      router.refresh()
-    })
+    logout()
+    router.push(AUTH_REDIRECTS.AFTER_SIGNOUT)
   }, [router])
 
   return (

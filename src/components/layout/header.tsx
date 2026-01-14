@@ -2,8 +2,9 @@
 
 import { User, LogOut } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { signOut } from "next-auth/react"
+import { logout } from "@/hooks/use-auth"
 import { Button } from "@/components/ui/button"
+import { AUTH_REDIRECTS } from "@/constants/auth"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,10 +22,9 @@ interface HeaderProps {
 export function Header({ title, actions }: HeaderProps) {
   const router = useRouter()
 
-  const handleSignOut = async () => {
-    await signOut({ redirect: false })
-    router.push("/auth/signin")
-    router.refresh()
+  const handleSignOut = () => {
+    logout()
+    router.push(AUTH_REDIRECTS.AFTER_SIGNOUT)
   }
 
   return (

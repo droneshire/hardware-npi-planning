@@ -1,24 +1,26 @@
 import type { NextAuthConfig } from "next-auth"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
+import { AUTH_PAGES, AUTH_REDIRECTS } from "@/constants/auth"
+import { ROUTE_PREFIXES, DEFAULT_REDIRECT } from "@/constants/routes"
 
 export const authConfig: NextAuthConfig = {
   pages: {
-    signIn: "/auth/signin",
-    signOut: "/auth/signout",
-    error: "/auth/error",
+    signIn: AUTH_PAGES.SIGNIN,
+    signOut: AUTH_PAGES.SIGNOUT,
+    error: AUTH_PAGES.ERROR,
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
-      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard")
-      const isOnAuth = nextUrl.pathname.startsWith("/auth")
+      const isOnDashboard = nextUrl.pathname.startsWith(ROUTE_PREFIXES.DASHBOARD)
+      const isOnAuth = nextUrl.pathname.startsWith(ROUTE_PREFIXES.AUTH)
 
       if (isOnDashboard) {
         if (isLoggedIn) return true
         return false // Redirect unauthenticated users to login page
       } else if (isLoggedIn && isOnAuth) {
-        return Response.redirect(new URL("/dashboard", nextUrl))
+        return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl))
       }
       return true
     },

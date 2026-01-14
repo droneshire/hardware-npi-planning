@@ -1,5 +1,6 @@
 // Re-export all type definitions
-export * from "./next-auth"
+// Note: next-auth types are declared globally via module augmentation in next-auth.d.ts
+// They don't need to be exported here
 
 // Application-specific types
 export type UserRole = "ADMIN" | "MANAGER" | "MEMBER" | "VIEWER"

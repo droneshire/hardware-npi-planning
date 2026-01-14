@@ -3,18 +3,12 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { LayoutDashboard, FolderKanban, Users, Calendar, Settings, ChevronLeft } from "lucide-react"
+import { ChevronLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useState } from "react"
-
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Timeline", href: "/timeline", icon: Calendar },
-  { name: "Projects", href: "/projects", icon: FolderKanban },
-  { name: "Resources", href: "/resources", icon: Users },
-  { name: "Settings", href: "/settings", icon: Settings },
-]
+import { NAVIGATION_ITEMS } from "@/constants/navigation"
+import { ROUTES } from "@/constants/routes"
 
 export function Sidebar() {
   const pathname = usePathname()
@@ -30,7 +24,7 @@ export function Sidebar() {
       {/* Header */}
       <div className="flex h-16 items-center justify-between px-4">
         {!collapsed && (
-          <Link href="/dashboard" className="flex items-center gap-2">
+          <Link href={ROUTES.DASHBOARD} className="flex items-center gap-2">
             <span className="text-lg font-semibold">NPI Planning</span>
           </Link>
         )}
@@ -48,7 +42,7 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 space-y-1 p-2">
-        {navigation.map((item) => {
+        {NAVIGATION_ITEMS.map((item) => {
           const isActive = pathname === item.href
           return (
             <Link

@@ -1,5 +1,11 @@
 import { initializeApp, getApps, getApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
+import { getFirestore } from "firebase/firestore"
+import {
+  connectDataConnectEmulator,
+  getDataConnect,
+} from "firebase/data-connect"
+import { connectorConfig } from "@firebasegen/default-connector"
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -10,8 +16,31 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
+// Validate Firebase config
+if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+  console.error("Firebase configuration is missing. Please check your environment variables.")
+}
+
 // Initialize Firebase (singleton pattern)
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()
 const auth = getAuth(app)
+const db = getFirestore(app)
 
-export { app, auth }
+// Initialize Data Connect
+export const dataConnect = getDataConnect(connectorConfig)
+
+// Connect to emulator if in development
+if (process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST) {
+  console.log(
+    "Connecting to Data Connect emulator",
+    process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST,
+    process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_PORT || "9399"
+  )
+  connectDataConnectEmulator(
+    dataConnect,
+    process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST,
+    parseInt(process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_PORT || "9399")
+  )
+}
+
+export { app, auth, db }

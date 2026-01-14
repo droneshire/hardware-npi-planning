@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { AppLayout } from "@/components/layout/app-layout"
+import { AuthProtection } from "@/components/auth-protection"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -132,16 +133,17 @@ export default function ProjectsPage() {
   }
 
   return (
-    <AppLayout
-      title="Projects"
-      breadcrumbs={[{ label: "Home", href: "/" }, { label: "Projects" }]}
-      actions={
-        <Button onClick={() => setIsCreateDialogOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" />
-          New Project
-        </Button>
-      }
-    >
+    <AuthProtection>
+      <AppLayout
+        title="Projects"
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Projects" }]}
+        actions={
+          <Button onClick={() => setIsCreateDialogOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            New Project
+          </Button>
+        }
+      >
       <div className="space-y-6">
         {/* Filters */}
         <Card>
@@ -296,5 +298,6 @@ export default function ProjectsPage() {
 
       <CreateProjectDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} />
     </AppLayout>
+    </AuthProtection>
   )
 }
