@@ -30,7 +30,7 @@ interface ProjectWithDetails extends Project {
 }
 
 // Mock organization ID for development - in production, this would come from user session
-const MOCK_ORGANIZATION_ID = "org-1"
+const MOCK_ORGANIZATION_ID = "00000000-0000-0000-0000-000000000001"
 
 export default function TimelinePage() {
   const [portfolioFilter, setPortfolioFilter] = useState<string>("ALL")

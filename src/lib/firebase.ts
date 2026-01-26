@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
-import { getFirestore } from "firebase/firestore"
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore"
 import { getStorage, connectStorageEmulator } from "firebase/storage"
 import {
   connectDataConnectEmulator,
@@ -44,14 +44,31 @@ if (process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST) {
     parseInt(process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_PORT || "9399")
   )
 
-  // Connect Storage emulator if configured
+  // Connect Firestore and Storage emulators if configured (server-side only)
   if (typeof window === "undefined") {
-    // Only connect on server side
+    // Connect Firestore emulator
+    try {
+      connectFirestoreEmulator(db, process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST, 8080)
+      console.log("Connected to Firestore emulator")
+    } catch (error: any) {
+      // Emulator might already be connected or not available
+      if (error?.message?.includes("already been called")) {
+        console.log("Firestore emulator already connected")
+      } else {
+        console.log("Firestore emulator connection:", error?.message || error)
+      }
+    }
+
+    // Connect Storage emulator
     try {
       connectStorageEmulator(storage, process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST, 9199)
-    } catch (error) {
+    } catch (error: any) {
       // Emulator might already be connected
-      console.log("Storage emulator connection:", error)
+      if (error?.message?.includes("already been called")) {
+        console.log("Storage emulator already connected")
+      } else {
+        console.log("Storage emulator connection:", error?.message || error)
+      }
     }
   }
 }

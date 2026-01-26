@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 
 // Mock organization ID for development
-const MOCK_ORGANIZATION_ID = "org-1"
+const MOCK_ORGANIZATION_ID = "00000000-0000-0000-0000-000000000001"
 
 export default function DashboardPage() {
   // Fetch active projects

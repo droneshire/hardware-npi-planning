@@ -58,7 +58,7 @@ export function CreateProjectDialog({ open, onOpenChange }: CreateProjectDialogP
     queryFn: async () => {
       try {
         // Use a mock organization ID for now
-        const MOCK_ORGANIZATION_ID = "org-1"
+        const MOCK_ORGANIZATION_ID = "00000000-0000-0000-0000-000000000001"
         return await phaseTemplateService.listTemplates(MOCK_ORGANIZATION_ID)
       } catch (error) {
         console.error("Failed to load templates:", error)

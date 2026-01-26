@@ -56,8 +56,8 @@ import { storage } from "@/lib/firebase"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import Image from "next/image"
 
-// Mock organization ID for development
-const MOCK_ORGANIZATION_ID = "org-1"
+// Mock organization ID for development (must be valid UUID format)
+const MOCK_ORGANIZATION_ID = "00000000-0000-0000-0000-000000000001"
 
 export default function SettingsPage() {
   const queryClient = useQueryClient()
@@ -349,6 +349,12 @@ export default function SettingsPage() {
                   {/* Logo Upload */}
                   <div className="space-y-2">
                     <Label>Company Logo</Label>
+                    {/* Debug info */}
+                    {process.env.NODE_ENV === "development" && (
+                      <div className="text-xs text-muted-foreground mb-2">
+                        Debug: logoUrl = {logoUrl ? `"${logoUrl.substring(0, 50)}..."` : "null"}
+                      </div>
+                    )}
                     <div className="flex items-center gap-4">
                       {logoUrl ? (
                         <div className="relative">
