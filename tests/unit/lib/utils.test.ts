@@ -7,6 +7,11 @@ import {
   validateAllocation,
   isOverAllocated,
   getCapacityStatus,
+  validateNonEmptyString,
+  validateRequired,
+  validateNonNegative,
+  validateEmail,
+  validateDateRange,
 } from "@/lib/utils"
 
 describe("cn - Tailwind class merger", () => {
@@ -176,5 +181,95 @@ describe("getCapacityStatus", () => {
     expect(getCapacityStatus(100)).toBe("normal")
     expect(getCapacityStatus(120)).toBe("warning")
     expect(getCapacityStatus(121)).toBe("critical")
+  })
+})
+
+describe("validateNonEmptyString", () => {
+  it("should not throw for valid non-empty strings", () => {
+    expect(() => validateNonEmptyString("valid", "Field")).not.toThrow()
+    expect(() => validateNonEmptyString("  valid  ", "Field")).not.toThrow()
+  })
+
+  it("should not throw for undefined values", () => {
+    expect(() => validateNonEmptyString(undefined, "Field")).not.toThrow()
+  })
+
+  it("should throw for empty strings", () => {
+    expect(() => validateNonEmptyString("", "Field")).toThrow("Field cannot be empty")
+    expect(() => validateNonEmptyString("   ", "Field")).toThrow("Field cannot be empty")
+  })
+})
+
+describe("validateRequired", () => {
+  it("should not throw for valid values", () => {
+    expect(() => validateRequired("value", "Field")).not.toThrow()
+    expect(() => validateRequired(123, "Field")).not.toThrow()
+    expect(() => validateRequired(true, "Field")).not.toThrow()
+    expect(() => validateRequired([], "Field")).not.toThrow()
+  })
+
+  it("should throw for undefined", () => {
+    expect(() => validateRequired(undefined, "Field")).toThrow("Field is required")
+  })
+
+  it("should throw for null", () => {
+    expect(() => validateRequired(null, "Field")).toThrow("Field is required")
+  })
+
+  it("should throw for empty strings", () => {
+    expect(() => validateRequired("", "Field")).toThrow("Field is required")
+    expect(() => validateRequired("   ", "Field")).toThrow("Field is required")
+  })
+})
+
+describe("validateNonNegative", () => {
+  it("should not throw for valid non-negative numbers", () => {
+    expect(() => validateNonNegative(0, "Field")).not.toThrow()
+    expect(() => validateNonNegative(1, "Field")).not.toThrow()
+    expect(() => validateNonNegative(100, "Field")).not.toThrow()
+  })
+
+  it("should not throw for undefined", () => {
+    expect(() => validateNonNegative(undefined, "Field")).not.toThrow()
+  })
+
+  it("should throw for negative numbers", () => {
+    expect(() => validateNonNegative(-1, "Field")).toThrow("Field must be non-negative")
+    expect(() => validateNonNegative(-100, "Field")).toThrow("Field must be non-negative")
+  })
+})
+
+describe("validateEmail", () => {
+  it("should not throw for valid email addresses", () => {
+    expect(() => validateEmail("test@example.com")).not.toThrow()
+    expect(() => validateEmail("user.name@example.co.uk")).not.toThrow()
+    expect(() => validateEmail("user+tag@example.com")).not.toThrow()
+  })
+
+  it("should throw for invalid email addresses", () => {
+    expect(() => validateEmail("invalid")).toThrow("Invalid email format")
+    expect(() => validateEmail("invalid@")).toThrow("Invalid email format")
+    expect(() => validateEmail("@example.com")).toThrow("Invalid email format")
+    expect(() => validateEmail("invalid@example")).toThrow("Invalid email format")
+    expect(() => validateEmail("invalid @example.com")).toThrow("Invalid email format")
+  })
+})
+
+describe("validateDateRange", () => {
+  it("should not throw for valid date ranges", () => {
+    expect(() => validateDateRange("2024-01-01", "2024-01-02")).not.toThrow()
+    expect(() => validateDateRange("2024-01-01", "2024-12-31")).not.toThrow()
+  })
+
+  it("should throw when target date is before start date", () => {
+    expect(() => validateDateRange("2024-01-02", "2024-01-01")).toThrow(
+      "Target completion date must be after start date"
+    )
+  })
+
+  it("should throw when target date equals start date", () => {
+    expect(() => validateDateRange("2024-01-01", "2024-01-01")).toThrow(
+      "Target completion date must be after start date"
+    )
   })
 })

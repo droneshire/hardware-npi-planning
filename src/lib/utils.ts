@@ -65,3 +65,52 @@ export function getCapacityStatus(totalAllocation: number): "normal" | "warning"
   if (totalAllocation > 90) return "warning"
   return "normal"
 }
+
+/**
+ * Validates that a string is not empty after trimming
+ */
+export function validateNonEmptyString(value: string | undefined, fieldName: string): void {
+  if (value !== undefined && value.trim().length === 0) {
+    throw new Error(`${fieldName} cannot be empty`)
+  }
+}
+
+/**
+ * Validates that a required value is provided
+ */
+export function validateRequired<T>(value: T | undefined | null, fieldName: string): asserts value is T {
+  if (value === undefined || value === null || (typeof value === "string" && value.trim().length === 0)) {
+    throw new Error(`${fieldName} is required`)
+  }
+}
+
+/**
+ * Validates that a number is non-negative
+ */
+export function validateNonNegative(value: number | undefined, fieldName: string): void {
+  if (value !== undefined && value < 0) {
+    throw new Error(`${fieldName} must be non-negative`)
+  }
+}
+
+/**
+ * Validates email format
+ */
+export function validateEmail(email: string): void {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email)) {
+    throw new Error("Invalid email format")
+  }
+}
+
+/**
+ * Validates that a target date is after a start date
+ */
+export function validateDateRange(startDate: string, targetDate: string): void {
+  const start = new Date(startDate)
+  const target = new Date(targetDate)
+
+  if (target <= start) {
+    throw new Error("Target completion date must be after start date")
+  }
+}

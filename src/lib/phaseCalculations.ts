@@ -222,7 +222,8 @@ export function calculateProjectedCompletion(
   const totalDuration = target.getTime() - start.getTime()
 
   // Calculate projected total time based on current velocity
-  const elapsedTime = Date.now() - start.getTime()
+  const currentDate = new Date()
+  const elapsedTime = currentDate.getTime() - start.getTime()
   const projectedTotalTime = (elapsedTime / percentComplete) * 100
 
   const projectedEnd = new Date(start.getTime() + projectedTotalTime)

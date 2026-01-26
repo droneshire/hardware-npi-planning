@@ -20,6 +20,7 @@ import {
 import { ProjectStatus as SDKProjectStatus } from "@firebasegen/default-connector"
 import { phaseTemplateService } from "./phaseTemplate.service"
 import { addWeeks, format } from "date-fns"
+import { validateRequired, validateNonEmptyString, validateDateRange } from "@/lib/utils"
 
 type UUID = string
 
@@ -160,22 +161,12 @@ export class ProjectService {
    */
   async createProject(input: CreateProjectInput): Promise<Project> {
     // Validate input
-    if (!input.name || input.name.trim().length === 0) {
-      throw new Error("Project name is required")
-    }
-
-    if (!input.programId) {
-      throw new Error("Program ID is required")
-    }
+    validateRequired(input.name, "Project name")
+    validateRequired(input.programId, "Program ID")
 
     // Validate dates if provided
     if (input.startDate && input.targetCompletionDate) {
-      const start = new Date(input.startDate)
-      const target = new Date(input.targetCompletionDate)
-
-      if (target <= start) {
-        throw new Error("Target completion date must be after start date")
-      }
+      validateDateRange(input.startDate, input.targetCompletionDate)
     }
 
     // Create the project
@@ -223,22 +214,12 @@ export class ProjectService {
    */
   async updateProject(input: UpdateProjectInput): Promise<Project> {
     // Validate input
-    if (!input.id) {
-      throw new Error("Project ID is required")
-    }
-
-    if (input.name !== undefined && input.name.trim().length === 0) {
-      throw new Error("Project name cannot be empty")
-    }
+    validateRequired(input.id, "Project ID")
+    validateNonEmptyString(input.name, "Project name")
 
     // Validate dates if provided
     if (input.startDate && input.targetCompletionDate) {
-      const start = new Date(input.startDate)
-      const target = new Date(input.targetCompletionDate)
-
-      if (target <= start) {
-        throw new Error("Target completion date must be after start date")
-      }
+      validateDateRange(input.startDate, input.targetCompletionDate)
     }
 
     const result = await updateProject(dataConnect, {
@@ -272,9 +253,7 @@ export class ProjectService {
    * WARNING: This will cascade delete all phases and assignments for the project.
    */
   async deleteProject(id: UUID): Promise<void> {
-    if (!id) {
-      throw new Error("Project ID is required")
-    }
+    validateRequired(id, "Project ID")
 
     await deleteProject(dataConnect, { id })
   }
@@ -317,7 +296,7 @@ export class ProjectService {
         projectId,
         name: templatePhase.name,
         description: templatePhase.description ?? null,
-        status: "NOT_STARTED" as any,
+        status: "NOT_STARTED" as "NOT_STARTED",
         startDate: format(phaseStartDate, "yyyy-MM-dd"),
         targetEndDate: format(phaseEndDate, "yyyy-MM-dd"),
         order: templatePhase.order,
