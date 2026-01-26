@@ -6,6 +6,14 @@
  */
 
 import { Portfolio } from "@/types"
+import { dataConnect } from "@/lib/firebase"
+import {
+  listPortfolios,
+  getPortfolio,
+  createPortfolio,
+  updatePortfolio,
+  deletePortfolio,
+} from "@firebasegen/default-connector"
 
 // Placeholder types until SDK is generated
 type UUID = string
@@ -47,24 +55,37 @@ export class PortfolioService {
    * List all portfolios for an organization
    */
   async listPortfolios(organizationId: UUID): Promise<Portfolio[]> {
-    // TODO: Replace with generated SDK call
-    // import { listPortfolios } from '@/dataconnect/generated'
-    // const result = await listPortfolios({ organizationId })
-    // return result.data.portfolios
-
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await listPortfolios(dataConnect, { organizationId })
+    return result.data.portfolios.map((p) => ({
+      id: p.id,
+      organizationId: p.organizationId || organizationId,
+      name: p.name,
+      description: p.description ?? undefined,
+      ownerId: p.ownerId ?? undefined,
+      createdAt: p.createdAt,
+      updatedAt: p.updatedAt,
+    }))
   }
 
   /**
    * Get a single portfolio by ID with related data
    */
   async getPortfolio(id: UUID): Promise<PortfolioWithPrograms | null> {
-    // TODO: Replace with generated SDK call
-    // import { getPortfolio } from '@/dataconnect/generated'
-    // const result = await getPortfolio({ id })
-    // return result.data.portfolio
-
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await getPortfolio(dataConnect, { id })
+    if (!result.data.portfolio) {
+      return null
+    }
+    const portfolio = result.data.portfolio
+    return {
+      id: portfolio.id,
+      organizationId: portfolio.organizationId,
+      name: portfolio.name,
+      description: portfolio.description ?? undefined,
+      ownerId: portfolio.ownerId ?? undefined,
+      createdAt: portfolio.createdAt,
+      updatedAt: portfolio.updatedAt,
+      programs: [], // Programs will be loaded separately if needed
+    }
   }
 
   /**
@@ -80,12 +101,22 @@ export class PortfolioService {
       throw new Error("Organization ID is required")
     }
 
-    // TODO: Replace with generated SDK call
-    // import { createPortfolio } from '@/dataconnect/generated'
-    // const result = await createPortfolio(input)
-    // return result.data.portfolio
-
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await createPortfolio(dataConnect, {
+      organizationId: input.organizationId,
+      name: input.name,
+      description: input.description ?? null,
+      ownerId: input.ownerId ?? null,
+    })
+    const portfolio = result.data.portfolio_insert
+    return {
+      id: portfolio.id,
+      organizationId: input.organizationId,
+      name: input.name,
+      description: input.description,
+      ownerId: input.ownerId,
+      createdAt: portfolio.createdAt || new Date().toISOString(),
+      updatedAt: portfolio.updatedAt || new Date().toISOString(),
+    }
   }
 
   /**
@@ -101,12 +132,24 @@ export class PortfolioService {
       throw new Error("Portfolio name cannot be empty")
     }
 
-    // TODO: Replace with generated SDK call
-    // import { updatePortfolio } from '@/dataconnect/generated'
-    // const result = await updatePortfolio(input)
-    // return result.data.portfolio
+    const result = await updatePortfolio(dataConnect, {
+      id: input.id,
+      name: input.name ?? null,
+      description: input.description ?? null,
+      ownerId: input.ownerId ?? null,
+    })
 
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    if (!result.data.portfolio_update) {
+      throw new Error("Portfolio not found")
+    }
+
+    // Fetch the updated portfolio to get all fields
+    const updated = await this.getPortfolio(input.id)
+    if (!updated) {
+      throw new Error("Failed to fetch updated portfolio")
+    }
+
+    return updated
   }
 
   /**
@@ -120,11 +163,7 @@ export class PortfolioService {
       throw new Error("Portfolio ID is required")
     }
 
-    // TODO: Replace with generated SDK call
-    // import { deletePortfolio } from '@/dataconnect/generated'
-    // await deletePortfolio({ id })
-
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    await deletePortfolio(dataConnect, { id })
   }
 
   /**

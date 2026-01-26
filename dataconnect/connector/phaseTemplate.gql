@@ -30,6 +30,20 @@ query GetPhaseTemplate($id: UUID!)
   }
 }
 
+# Query all phases for a template
+query ListPhaseTemplatePhases($templateId: UUID!)
+@auth(level: USER, insecureReason: "Query filtered by templateId which is organization-scoped") {
+  phaseTemplatePhases(where: { templateId: { eq: $templateId } }, orderBy: { order: ASC }) {
+    id
+    templateId
+    name
+    description
+    durationWeeks
+    order
+    createdAt
+  }
+}
+
 # Query default templates
 query GetDefaultTemplates($organizationId: UUID!)
 @auth(

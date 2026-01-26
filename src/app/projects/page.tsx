@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useRouter } from "next/navigation"
 import { AppLayout } from "@/components/layout/app-layout"
 import { AuthProtection } from "@/components/auth-protection"
 import { Button } from "@/components/ui/button"
@@ -75,6 +76,7 @@ const STATUS_COLORS: Record<ProjectStatus, string> = {
 }
 
 export default function ProjectsPage() {
+  const router = useRouter()
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState<ProjectStatus | "ALL">("ALL")
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
@@ -229,11 +231,24 @@ export default function ProjectsPage() {
                 </TableHeader>
                 <TableBody>
                   {filteredProjects.map((project) => (
-                    <TableRow key={project.id}>
+                    <TableRow
+                      key={project.id}
+                      className="cursor-pointer hover:bg-muted/50"
+                      onClick={(e) => {
+                        // Don't navigate if clicking on the actions dropdown or its trigger
+                        const target = e.target as HTMLElement
+                        if (
+                          target.closest('[role="menuitem"]') ||
+                          target.closest('button') ||
+                          target.closest('[data-radix-popper-content-wrapper]')
+                        ) {
+                          return
+                        }
+                        router.push(`/projects/${project.id}`)
+                      }}
+                    >
                       <TableCell className="font-medium">
-                        <Link href={`/projects/${project.id}`} className="hover:underline">
-                          {project.name}
-                        </Link>
+                        <div className="hover:underline">{project.name}</div>
                         {project.description && (
                           <p className="mt-1 text-sm text-muted-foreground">
                             {project.description}
@@ -257,7 +272,7 @@ export default function ProjectsPage() {
                           ? new Date(project.targetCompletionDate).toLocaleDateString()
                           : "-"}
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon">

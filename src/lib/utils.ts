@@ -61,7 +61,7 @@ export function isOverAllocated(totalAllocation: number): boolean {
  * Gets capacity badge status
  */
 export function getCapacityStatus(totalAllocation: number): "normal" | "warning" | "critical" {
-  if (totalAllocation <= 100) return "normal"
-  if (totalAllocation <= 120) return "warning"
-  return "critical"
+  if (totalAllocation > 100) return "critical"
+  if (totalAllocation > 90) return "warning"
+  return "normal"
 }

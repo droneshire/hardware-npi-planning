@@ -9,10 +9,31 @@ import { Separator } from "@/components/ui/separator"
 import { useState } from "react"
 import { NAVIGATION_ITEMS } from "@/constants/navigation"
 import { ROUTES } from "@/constants/routes"
+import { useAuthStateWatcher } from "@/hooks/use-auth"
+import { useQuery } from "@tanstack/react-query"
+import Image from "next/image"
 
 export function Sidebar() {
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(false)
+  const { user } = useAuthStateWatcher()
+
+  // Fetch logo URL
+  const { data: logoUrl } = useQuery({
+    queryKey: ["company-logo", user?.email],
+    queryFn: async () => {
+      if (!user?.email) return null
+      try {
+        const response = await fetch(`/api/logo?userEmail=${encodeURIComponent(user.email)}`)
+        const data = await response.json()
+        return data.logoUrl || null
+      } catch (error) {
+        console.error("Error fetching logo:", error)
+        return null
+      }
+    },
+    enabled: !!user?.email,
+  })
 
   return (
     <div
@@ -23,10 +44,37 @@ export function Sidebar() {
     >
       {/* Header */}
       <div className="flex h-16 items-center justify-between px-4">
-        {!collapsed && (
+        {!collapsed ? (
           <Link href={ROUTES.DASHBOARD} className="flex items-center gap-2">
-            <span className="text-lg font-semibold">NPI Planning</span>
+            {logoUrl ? (
+              <div className="flex items-center gap-2">
+                <Image
+                  src={logoUrl}
+                  alt="Company Logo"
+                  width={32}
+                  height={32}
+                  className="rounded object-contain"
+                  unoptimized
+                />
+                <span className="text-lg font-semibold">NPI Planning</span>
+              </div>
+            ) : (
+              <span className="text-lg font-semibold">NPI Planning</span>
+            )}
           </Link>
+        ) : (
+          logoUrl && (
+            <Link href={ROUTES.DASHBOARD} className="flex items-center justify-center">
+              <Image
+                src={logoUrl}
+                alt="Company Logo"
+                width={32}
+                height={32}
+                className="rounded object-contain"
+                unoptimized
+              />
+            </Link>
+          )
         )}
         <Button
           variant="ghost"

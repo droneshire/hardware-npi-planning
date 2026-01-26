@@ -24,17 +24,20 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { projectService } from "@/services/project.service"
+import { phaseTemplateService } from "@/services/phaseTemplate.service"
 import { ProjectStatus } from "@/types"
 import { useToast } from "@/hooks/use-toast"
+import { useQuery } from "@tanstack/react-query"
 
 const projectSchema = z.object({
   name: z.string().min(1, "Project name is required"),
   description: z.string().optional(),
-  status: z.nativeEnum(ProjectStatus).default(ProjectStatus.PLANNING),
+  status: z.enum(["PLANNING", "ACTIVE", "ON_HOLD", "COMPLETED", "CANCELLED"]).default("PLANNING"),
   startDate: z.string().optional(),
   targetCompletionDate: z.string().optional(),
   programId: z.string().min(1, "Program is required"),
   productTypeId: z.string().optional(),
+  templateId: z.string().optional(), // Phase template ID
 })
 
 type ProjectFormData = z.infer<typeof projectSchema>
@@ -49,6 +52,22 @@ export function CreateProjectDialog({ open, onOpenChange }: CreateProjectDialogP
   const queryClient = useQueryClient()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // Fetch phase templates for selection
+  const { data: templates = [] } = useQuery({
+    queryKey: ["phase-templates"],
+    queryFn: async () => {
+      try {
+        // Use a mock organization ID for now
+        const MOCK_ORGANIZATION_ID = "org-1"
+        return await phaseTemplateService.listTemplates(MOCK_ORGANIZATION_ID)
+      } catch (error) {
+        console.error("Failed to load templates:", error)
+        return []
+      }
+    },
+    enabled: open, // Only fetch when dialog is open
+  })
+
   const {
     register,
     handleSubmit,
@@ -59,7 +78,7 @@ export function CreateProjectDialog({ open, onOpenChange }: CreateProjectDialogP
   } = useForm<ProjectFormData>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
-      status: ProjectStatus.PLANNING,
+      status: "PLANNING",
     },
   })
 
@@ -73,13 +92,17 @@ export function CreateProjectDialog({ open, onOpenChange }: CreateProjectDialogP
         startDate: data.startDate,
         targetCompletionDate: data.targetCompletionDate,
         productTypeId: data.productTypeId,
+        templateId: data.templateId, // Include template ID for phase generation
       })
     },
-    onSuccess: () => {
+    onSuccess: (project) => {
       queryClient.invalidateQueries({ queryKey: ["projects"] })
+      queryClient.invalidateQueries({ queryKey: ["project", project.id] })
       toast({
         title: "Project created",
-        description: "The project has been successfully created.",
+        description: watch("templateId")
+          ? "The project has been created with phases from the selected template."
+          : "The project has been successfully created.",
       })
       reset()
       onOpenChange(false)
@@ -156,19 +179,53 @@ export function CreateProjectDialog({ open, onOpenChange }: CreateProjectDialogP
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={ProjectStatus.PLANNING}>Planning</SelectItem>
-                <SelectItem value={ProjectStatus.ACTIVE}>Active</SelectItem>
-                <SelectItem value={ProjectStatus.ON_HOLD}>On Hold</SelectItem>
-                <SelectItem value={ProjectStatus.COMPLETED}>Completed</SelectItem>
-                <SelectItem value={ProjectStatus.CANCELLED}>Cancelled</SelectItem>
+                <SelectItem value="PLANNING">Planning</SelectItem>
+                <SelectItem value="ACTIVE">Active</SelectItem>
+                <SelectItem value="ON_HOLD">On Hold</SelectItem>
+                <SelectItem value="COMPLETED">Completed</SelectItem>
+                <SelectItem value="CANCELLED">Cancelled</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="templateId">Phase Template (Optional)</Label>
+            <Select
+              onValueChange={(value) => setValue("templateId", value)}
+              value={watch("templateId")}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a phase template to auto-generate phases" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">None - Create phases manually</SelectItem>
+                {templates.map((template) => (
+                  <SelectItem key={template.id} value={template.id}>
+                    {template.name}
+                    {template.isDefault && " (Default)"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {watch("templateId") && (
+              <p className="text-xs text-muted-foreground">
+                Phases will be automatically generated from this template when the project is created.
+                Start date is required for phase generation.
+              </p>
+            )}
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="startDate">Start Date</Label>
+              <Label htmlFor="startDate">
+                Start Date {watch("templateId") && <span className="text-destructive">*</span>}
+              </Label>
               <Input id="startDate" type="date" {...register("startDate")} />
+              {watch("templateId") && !watch("startDate") && (
+                <p className="text-xs text-destructive">
+                  Start date is required when using a phase template
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="targetCompletionDate">Target Completion</Label>

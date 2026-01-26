@@ -28,81 +28,70 @@ export const connectorConfig = {
   location: 'us-west2'
 };
 
-export const listProductTypesRef = (dcOrVars, vars) => {
+export const listProjectAssignmentsRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'ListProductTypes', inputVars);
+  return queryRef(dcInstance, 'ListProjectAssignments', inputVars);
 }
-listProductTypesRef.operationName = 'ListProductTypes';
+listProjectAssignmentsRef.operationName = 'ListProjectAssignments';
 
-export function listProductTypes(dcOrVars, vars) {
-  return executeQuery(listProductTypesRef(dcOrVars, vars));
+export function listProjectAssignments(dcOrVars, vars) {
+  return executeQuery(listProjectAssignmentsRef(dcOrVars, vars));
 }
 
-export const getProductTypeRef = (dcOrVars, vars) => {
+export const listUserAssignmentsRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetProductType', inputVars);
+  return queryRef(dcInstance, 'ListUserAssignments', inputVars);
 }
-getProductTypeRef.operationName = 'GetProductType';
+listUserAssignmentsRef.operationName = 'ListUserAssignments';
 
-export function getProductType(dcOrVars, vars) {
-  return executeQuery(getProductTypeRef(dcOrVars, vars));
+export function listUserAssignments(dcOrVars, vars) {
+  return executeQuery(listUserAssignmentsRef(dcOrVars, vars));
 }
 
-export const createProductTypeRef = (dcOrVars, vars) => {
+export const listAssignmentsByDateRangeRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreateProductType', inputVars);
+  return queryRef(dcInstance, 'ListAssignmentsByDateRange', inputVars);
 }
-createProductTypeRef.operationName = 'CreateProductType';
+listAssignmentsByDateRangeRef.operationName = 'ListAssignmentsByDateRange';
 
-export function createProductType(dcOrVars, vars) {
-  return executeMutation(createProductTypeRef(dcOrVars, vars));
+export function listAssignmentsByDateRange(dcOrVars, vars) {
+  return executeQuery(listAssignmentsByDateRangeRef(dcOrVars, vars));
 }
 
-export const updateProductTypeRef = (dcOrVars, vars) => {
+export const createProjectAssignmentRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpdateProductType', inputVars);
+  return mutationRef(dcInstance, 'CreateProjectAssignment', inputVars);
 }
-updateProductTypeRef.operationName = 'UpdateProductType';
+createProjectAssignmentRef.operationName = 'CreateProjectAssignment';
 
-export function updateProductType(dcOrVars, vars) {
-  return executeMutation(updateProductTypeRef(dcOrVars, vars));
+export function createProjectAssignment(dcOrVars, vars) {
+  return executeMutation(createProjectAssignmentRef(dcOrVars, vars));
 }
 
-export const deleteProductTypeRef = (dcOrVars, vars) => {
+export const updateProjectAssignmentRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'DeleteProductType', inputVars);
+  return mutationRef(dcInstance, 'UpdateProjectAssignment', inputVars);
 }
-deleteProductTypeRef.operationName = 'DeleteProductType';
+updateProjectAssignmentRef.operationName = 'UpdateProjectAssignment';
 
-export function deleteProductType(dcOrVars, vars) {
-  return executeMutation(deleteProductTypeRef(dcOrVars, vars));
+export function updateProjectAssignment(dcOrVars, vars) {
+  return executeMutation(updateProjectAssignmentRef(dcOrVars, vars));
 }
 
-export const createProductTypePhaseConfigRef = (dcOrVars, vars) => {
+export const deleteProjectAssignmentRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreateProductTypePhaseConfig', inputVars);
+  return mutationRef(dcInstance, 'DeleteProjectAssignment', inputVars);
 }
-createProductTypePhaseConfigRef.operationName = 'CreateProductTypePhaseConfig';
+deleteProjectAssignmentRef.operationName = 'DeleteProjectAssignment';
 
-export function createProductTypePhaseConfig(dcOrVars, vars) {
-  return executeMutation(createProductTypePhaseConfigRef(dcOrVars, vars));
-}
-
-export const deleteProductTypePhaseConfigRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'DeleteProductTypePhaseConfig', inputVars);
-}
-deleteProductTypePhaseConfigRef.operationName = 'DeleteProductTypePhaseConfig';
-
-export function deleteProductTypePhaseConfig(dcOrVars, vars) {
-  return executeMutation(deleteProductTypePhaseConfigRef(dcOrVars, vars));
+export function deleteProjectAssignment(dcOrVars, vars) {
+  return executeMutation(deleteProjectAssignmentRef(dcOrVars, vars));
 }
 
 export const listProjectPhasesRef = (dcOrVars, vars) => {
@@ -158,6 +147,94 @@ deleteProjectPhaseRef.operationName = 'DeleteProjectPhase';
 
 export function deleteProjectPhase(dcOrVars, vars) {
   return executeMutation(deleteProjectPhaseRef(dcOrVars, vars));
+}
+
+export const listTeamsRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'ListTeams', inputVars);
+}
+listTeamsRef.operationName = 'ListTeams';
+
+export function listTeams(dcOrVars, vars) {
+  return executeQuery(listTeamsRef(dcOrVars, vars));
+}
+
+export const getTeamRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'GetTeam', inputVars);
+}
+getTeamRef.operationName = 'GetTeam';
+
+export function getTeam(dcOrVars, vars) {
+  return executeQuery(getTeamRef(dcOrVars, vars));
+}
+
+export const createTeamRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'CreateTeam', inputVars);
+}
+createTeamRef.operationName = 'CreateTeam';
+
+export function createTeam(dcOrVars, vars) {
+  return executeMutation(createTeamRef(dcOrVars, vars));
+}
+
+export const updateTeamRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'UpdateTeam', inputVars);
+}
+updateTeamRef.operationName = 'UpdateTeam';
+
+export function updateTeam(dcOrVars, vars) {
+  return executeMutation(updateTeamRef(dcOrVars, vars));
+}
+
+export const deleteTeamRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'DeleteTeam', inputVars);
+}
+deleteTeamRef.operationName = 'DeleteTeam';
+
+export function deleteTeam(dcOrVars, vars) {
+  return executeMutation(deleteTeamRef(dcOrVars, vars));
+}
+
+export const addTeamMemberRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'AddTeamMember', inputVars);
+}
+addTeamMemberRef.operationName = 'AddTeamMember';
+
+export function addTeamMember(dcOrVars, vars) {
+  return executeMutation(addTeamMemberRef(dcOrVars, vars));
+}
+
+export const removeTeamMemberRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'RemoveTeamMember', inputVars);
+}
+removeTeamMemberRef.operationName = 'RemoveTeamMember';
+
+export function removeTeamMember(dcOrVars, vars) {
+  return executeMutation(removeTeamMemberRef(dcOrVars, vars));
+}
+
+export const updateTeamMemberRoleRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'UpdateTeamMemberRole', inputVars);
+}
+updateTeamMemberRoleRef.operationName = 'UpdateTeamMemberRole';
+
+export function updateTeamMemberRole(dcOrVars, vars) {
+  return executeMutation(updateTeamMemberRoleRef(dcOrVars, vars));
 }
 
 export const listUsersRef = (dcOrVars, vars) => {
@@ -237,92 +314,114 @@ export function deleteUser(dcOrVars, vars) {
   return executeMutation(deleteUserRef(dcOrVars, vars));
 }
 
-export const getOrganizationRef = (dcOrVars, vars) => {
+export const listPhaseTemplatesRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetOrganization', inputVars);
+  return queryRef(dcInstance, 'ListPhaseTemplates', inputVars);
 }
-getOrganizationRef.operationName = 'GetOrganization';
+listPhaseTemplatesRef.operationName = 'ListPhaseTemplates';
 
-export function getOrganization(dcOrVars, vars) {
-  return executeQuery(getOrganizationRef(dcOrVars, vars));
+export function listPhaseTemplates(dcOrVars, vars) {
+  return executeQuery(listPhaseTemplatesRef(dcOrVars, vars));
 }
 
-export const createOrganizationRef = (dcOrVars, vars) => {
+export const getPhaseTemplateRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreateOrganization', inputVars);
+  return queryRef(dcInstance, 'GetPhaseTemplate', inputVars);
 }
-createOrganizationRef.operationName = 'CreateOrganization';
+getPhaseTemplateRef.operationName = 'GetPhaseTemplate';
 
-export function createOrganization(dcOrVars, vars) {
-  return executeMutation(createOrganizationRef(dcOrVars, vars));
+export function getPhaseTemplate(dcOrVars, vars) {
+  return executeQuery(getPhaseTemplateRef(dcOrVars, vars));
 }
 
-export const updateOrganizationRef = (dcOrVars, vars) => {
+export const listPhaseTemplatePhasesRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpdateOrganization', inputVars);
+  return queryRef(dcInstance, 'ListPhaseTemplatePhases', inputVars);
 }
-updateOrganizationRef.operationName = 'UpdateOrganization';
+listPhaseTemplatePhasesRef.operationName = 'ListPhaseTemplatePhases';
 
-export function updateOrganization(dcOrVars, vars) {
-  return executeMutation(updateOrganizationRef(dcOrVars, vars));
+export function listPhaseTemplatePhases(dcOrVars, vars) {
+  return executeQuery(listPhaseTemplatePhasesRef(dcOrVars, vars));
 }
 
-export const listPortfoliosRef = (dcOrVars, vars) => {
+export const getDefaultTemplatesRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'ListPortfolios', inputVars);
+  return queryRef(dcInstance, 'GetDefaultTemplates', inputVars);
 }
-listPortfoliosRef.operationName = 'ListPortfolios';
+getDefaultTemplatesRef.operationName = 'GetDefaultTemplates';
 
-export function listPortfolios(dcOrVars, vars) {
-  return executeQuery(listPortfoliosRef(dcOrVars, vars));
+export function getDefaultTemplates(dcOrVars, vars) {
+  return executeQuery(getDefaultTemplatesRef(dcOrVars, vars));
 }
 
-export const getPortfolioRef = (dcOrVars, vars) => {
+export const createPhaseTemplateRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetPortfolio', inputVars);
+  return mutationRef(dcInstance, 'CreatePhaseTemplate', inputVars);
 }
-getPortfolioRef.operationName = 'GetPortfolio';
+createPhaseTemplateRef.operationName = 'CreatePhaseTemplate';
 
-export function getPortfolio(dcOrVars, vars) {
-  return executeQuery(getPortfolioRef(dcOrVars, vars));
+export function createPhaseTemplate(dcOrVars, vars) {
+  return executeMutation(createPhaseTemplateRef(dcOrVars, vars));
 }
 
-export const createPortfolioRef = (dcOrVars, vars) => {
+export const updatePhaseTemplateRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreatePortfolio', inputVars);
+  return mutationRef(dcInstance, 'UpdatePhaseTemplate', inputVars);
 }
-createPortfolioRef.operationName = 'CreatePortfolio';
+updatePhaseTemplateRef.operationName = 'UpdatePhaseTemplate';
 
-export function createPortfolio(dcOrVars, vars) {
-  return executeMutation(createPortfolioRef(dcOrVars, vars));
+export function updatePhaseTemplate(dcOrVars, vars) {
+  return executeMutation(updatePhaseTemplateRef(dcOrVars, vars));
 }
 
-export const updatePortfolioRef = (dcOrVars, vars) => {
+export const deletePhaseTemplateRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpdatePortfolio', inputVars);
+  return mutationRef(dcInstance, 'DeletePhaseTemplate', inputVars);
 }
-updatePortfolioRef.operationName = 'UpdatePortfolio';
+deletePhaseTemplateRef.operationName = 'DeletePhaseTemplate';
 
-export function updatePortfolio(dcOrVars, vars) {
-  return executeMutation(updatePortfolioRef(dcOrVars, vars));
+export function deletePhaseTemplate(dcOrVars, vars) {
+  return executeMutation(deletePhaseTemplateRef(dcOrVars, vars));
 }
 
-export const deletePortfolioRef = (dcOrVars, vars) => {
+export const createPhaseTemplatePhaseRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'DeletePortfolio', inputVars);
+  return mutationRef(dcInstance, 'CreatePhaseTemplatePhase', inputVars);
 }
-deletePortfolioRef.operationName = 'DeletePortfolio';
+createPhaseTemplatePhaseRef.operationName = 'CreatePhaseTemplatePhase';
 
-export function deletePortfolio(dcOrVars, vars) {
-  return executeMutation(deletePortfolioRef(dcOrVars, vars));
+export function createPhaseTemplatePhase(dcOrVars, vars) {
+  return executeMutation(createPhaseTemplatePhaseRef(dcOrVars, vars));
+}
+
+export const updatePhaseTemplatePhaseRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'UpdatePhaseTemplatePhase', inputVars);
+}
+updatePhaseTemplatePhaseRef.operationName = 'UpdatePhaseTemplatePhase';
+
+export function updatePhaseTemplatePhase(dcOrVars, vars) {
+  return executeMutation(updatePhaseTemplatePhaseRef(dcOrVars, vars));
+}
+
+export const deletePhaseTemplatePhaseRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'DeletePhaseTemplatePhase', inputVars);
+}
+deletePhaseTemplatePhaseRef.operationName = 'DeletePhaseTemplatePhase';
+
+export function deletePhaseTemplatePhase(dcOrVars, vars) {
+  return executeMutation(deletePhaseTemplatePhaseRef(dcOrVars, vars));
 }
 
 export const listProgramsRef = (dcOrVars, vars) => {
@@ -446,256 +545,168 @@ export function deleteProject(dcOrVars, vars) {
   return executeMutation(deleteProjectRef(dcOrVars, vars));
 }
 
-export const listProjectAssignmentsRef = (dcOrVars, vars) => {
+export const getOrganizationRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'ListProjectAssignments', inputVars);
+  return queryRef(dcInstance, 'GetOrganization', inputVars);
 }
-listProjectAssignmentsRef.operationName = 'ListProjectAssignments';
+getOrganizationRef.operationName = 'GetOrganization';
 
-export function listProjectAssignments(dcOrVars, vars) {
-  return executeQuery(listProjectAssignmentsRef(dcOrVars, vars));
+export function getOrganization(dcOrVars, vars) {
+  return executeQuery(getOrganizationRef(dcOrVars, vars));
 }
 
-export const listUserAssignmentsRef = (dcOrVars, vars) => {
+export const createOrganizationRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'ListUserAssignments', inputVars);
+  return mutationRef(dcInstance, 'CreateOrganization', inputVars);
 }
-listUserAssignmentsRef.operationName = 'ListUserAssignments';
+createOrganizationRef.operationName = 'CreateOrganization';
 
-export function listUserAssignments(dcOrVars, vars) {
-  return executeQuery(listUserAssignmentsRef(dcOrVars, vars));
+export function createOrganization(dcOrVars, vars) {
+  return executeMutation(createOrganizationRef(dcOrVars, vars));
 }
 
-export const listAssignmentsByDateRangeRef = (dcOrVars, vars) => {
+export const updateOrganizationRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'ListAssignmentsByDateRange', inputVars);
+  return mutationRef(dcInstance, 'UpdateOrganization', inputVars);
 }
-listAssignmentsByDateRangeRef.operationName = 'ListAssignmentsByDateRange';
+updateOrganizationRef.operationName = 'UpdateOrganization';
 
-export function listAssignmentsByDateRange(dcOrVars, vars) {
-  return executeQuery(listAssignmentsByDateRangeRef(dcOrVars, vars));
+export function updateOrganization(dcOrVars, vars) {
+  return executeMutation(updateOrganizationRef(dcOrVars, vars));
 }
 
-export const createProjectAssignmentRef = (dcOrVars, vars) => {
+export const listPortfoliosRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreateProjectAssignment', inputVars);
+  return queryRef(dcInstance, 'ListPortfolios', inputVars);
 }
-createProjectAssignmentRef.operationName = 'CreateProjectAssignment';
+listPortfoliosRef.operationName = 'ListPortfolios';
 
-export function createProjectAssignment(dcOrVars, vars) {
-  return executeMutation(createProjectAssignmentRef(dcOrVars, vars));
+export function listPortfolios(dcOrVars, vars) {
+  return executeQuery(listPortfoliosRef(dcOrVars, vars));
 }
 
-export const updateProjectAssignmentRef = (dcOrVars, vars) => {
+export const getPortfolioRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpdateProjectAssignment', inputVars);
+  return queryRef(dcInstance, 'GetPortfolio', inputVars);
 }
-updateProjectAssignmentRef.operationName = 'UpdateProjectAssignment';
+getPortfolioRef.operationName = 'GetPortfolio';
 
-export function updateProjectAssignment(dcOrVars, vars) {
-  return executeMutation(updateProjectAssignmentRef(dcOrVars, vars));
+export function getPortfolio(dcOrVars, vars) {
+  return executeQuery(getPortfolioRef(dcOrVars, vars));
 }
 
-export const deleteProjectAssignmentRef = (dcOrVars, vars) => {
+export const createPortfolioRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'DeleteProjectAssignment', inputVars);
+  return mutationRef(dcInstance, 'CreatePortfolio', inputVars);
 }
-deleteProjectAssignmentRef.operationName = 'DeleteProjectAssignment';
+createPortfolioRef.operationName = 'CreatePortfolio';
 
-export function deleteProjectAssignment(dcOrVars, vars) {
-  return executeMutation(deleteProjectAssignmentRef(dcOrVars, vars));
+export function createPortfolio(dcOrVars, vars) {
+  return executeMutation(createPortfolioRef(dcOrVars, vars));
 }
 
-export const listTeamsRef = (dcOrVars, vars) => {
+export const updatePortfolioRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'ListTeams', inputVars);
+  return mutationRef(dcInstance, 'UpdatePortfolio', inputVars);
 }
-listTeamsRef.operationName = 'ListTeams';
+updatePortfolioRef.operationName = 'UpdatePortfolio';
 
-export function listTeams(dcOrVars, vars) {
-  return executeQuery(listTeamsRef(dcOrVars, vars));
+export function updatePortfolio(dcOrVars, vars) {
+  return executeMutation(updatePortfolioRef(dcOrVars, vars));
 }
 
-export const getTeamRef = (dcOrVars, vars) => {
+export const deletePortfolioRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetTeam', inputVars);
+  return mutationRef(dcInstance, 'DeletePortfolio', inputVars);
 }
-getTeamRef.operationName = 'GetTeam';
+deletePortfolioRef.operationName = 'DeletePortfolio';
 
-export function getTeam(dcOrVars, vars) {
-  return executeQuery(getTeamRef(dcOrVars, vars));
+export function deletePortfolio(dcOrVars, vars) {
+  return executeMutation(deletePortfolioRef(dcOrVars, vars));
 }
 
-export const createTeamRef = (dcOrVars, vars) => {
+export const listProductTypesRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreateTeam', inputVars);
+  return queryRef(dcInstance, 'ListProductTypes', inputVars);
 }
-createTeamRef.operationName = 'CreateTeam';
+listProductTypesRef.operationName = 'ListProductTypes';
 
-export function createTeam(dcOrVars, vars) {
-  return executeMutation(createTeamRef(dcOrVars, vars));
+export function listProductTypes(dcOrVars, vars) {
+  return executeQuery(listProductTypesRef(dcOrVars, vars));
 }
 
-export const updateTeamRef = (dcOrVars, vars) => {
+export const getProductTypeRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpdateTeam', inputVars);
+  return queryRef(dcInstance, 'GetProductType', inputVars);
 }
-updateTeamRef.operationName = 'UpdateTeam';
+getProductTypeRef.operationName = 'GetProductType';
 
-export function updateTeam(dcOrVars, vars) {
-  return executeMutation(updateTeamRef(dcOrVars, vars));
+export function getProductType(dcOrVars, vars) {
+  return executeQuery(getProductTypeRef(dcOrVars, vars));
 }
 
-export const deleteTeamRef = (dcOrVars, vars) => {
+export const createProductTypeRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'DeleteTeam', inputVars);
+  return mutationRef(dcInstance, 'CreateProductType', inputVars);
 }
-deleteTeamRef.operationName = 'DeleteTeam';
+createProductTypeRef.operationName = 'CreateProductType';
 
-export function deleteTeam(dcOrVars, vars) {
-  return executeMutation(deleteTeamRef(dcOrVars, vars));
+export function createProductType(dcOrVars, vars) {
+  return executeMutation(createProductTypeRef(dcOrVars, vars));
 }
 
-export const addTeamMemberRef = (dcOrVars, vars) => {
+export const updateProductTypeRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'AddTeamMember', inputVars);
+  return mutationRef(dcInstance, 'UpdateProductType', inputVars);
 }
-addTeamMemberRef.operationName = 'AddTeamMember';
+updateProductTypeRef.operationName = 'UpdateProductType';
 
-export function addTeamMember(dcOrVars, vars) {
-  return executeMutation(addTeamMemberRef(dcOrVars, vars));
+export function updateProductType(dcOrVars, vars) {
+  return executeMutation(updateProductTypeRef(dcOrVars, vars));
 }
 
-export const removeTeamMemberRef = (dcOrVars, vars) => {
+export const deleteProductTypeRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'RemoveTeamMember', inputVars);
+  return mutationRef(dcInstance, 'DeleteProductType', inputVars);
 }
-removeTeamMemberRef.operationName = 'RemoveTeamMember';
+deleteProductTypeRef.operationName = 'DeleteProductType';
 
-export function removeTeamMember(dcOrVars, vars) {
-  return executeMutation(removeTeamMemberRef(dcOrVars, vars));
+export function deleteProductType(dcOrVars, vars) {
+  return executeMutation(deleteProductTypeRef(dcOrVars, vars));
 }
 
-export const updateTeamMemberRoleRef = (dcOrVars, vars) => {
+export const createProductTypePhaseConfigRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpdateTeamMemberRole', inputVars);
+  return mutationRef(dcInstance, 'CreateProductTypePhaseConfig', inputVars);
 }
-updateTeamMemberRoleRef.operationName = 'UpdateTeamMemberRole';
+createProductTypePhaseConfigRef.operationName = 'CreateProductTypePhaseConfig';
 
-export function updateTeamMemberRole(dcOrVars, vars) {
-  return executeMutation(updateTeamMemberRoleRef(dcOrVars, vars));
+export function createProductTypePhaseConfig(dcOrVars, vars) {
+  return executeMutation(createProductTypePhaseConfigRef(dcOrVars, vars));
 }
 
-export const listPhaseTemplatesRef = (dcOrVars, vars) => {
+export const deleteProductTypePhaseConfigRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'ListPhaseTemplates', inputVars);
+  return mutationRef(dcInstance, 'DeleteProductTypePhaseConfig', inputVars);
 }
-listPhaseTemplatesRef.operationName = 'ListPhaseTemplates';
+deleteProductTypePhaseConfigRef.operationName = 'DeleteProductTypePhaseConfig';
 
-export function listPhaseTemplates(dcOrVars, vars) {
-  return executeQuery(listPhaseTemplatesRef(dcOrVars, vars));
-}
-
-export const getPhaseTemplateRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetPhaseTemplate', inputVars);
-}
-getPhaseTemplateRef.operationName = 'GetPhaseTemplate';
-
-export function getPhaseTemplate(dcOrVars, vars) {
-  return executeQuery(getPhaseTemplateRef(dcOrVars, vars));
-}
-
-export const getDefaultTemplatesRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetDefaultTemplates', inputVars);
-}
-getDefaultTemplatesRef.operationName = 'GetDefaultTemplates';
-
-export function getDefaultTemplates(dcOrVars, vars) {
-  return executeQuery(getDefaultTemplatesRef(dcOrVars, vars));
-}
-
-export const createPhaseTemplateRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreatePhaseTemplate', inputVars);
-}
-createPhaseTemplateRef.operationName = 'CreatePhaseTemplate';
-
-export function createPhaseTemplate(dcOrVars, vars) {
-  return executeMutation(createPhaseTemplateRef(dcOrVars, vars));
-}
-
-export const updatePhaseTemplateRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpdatePhaseTemplate', inputVars);
-}
-updatePhaseTemplateRef.operationName = 'UpdatePhaseTemplate';
-
-export function updatePhaseTemplate(dcOrVars, vars) {
-  return executeMutation(updatePhaseTemplateRef(dcOrVars, vars));
-}
-
-export const deletePhaseTemplateRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'DeletePhaseTemplate', inputVars);
-}
-deletePhaseTemplateRef.operationName = 'DeletePhaseTemplate';
-
-export function deletePhaseTemplate(dcOrVars, vars) {
-  return executeMutation(deletePhaseTemplateRef(dcOrVars, vars));
-}
-
-export const createPhaseTemplatePhaseRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'CreatePhaseTemplatePhase', inputVars);
-}
-createPhaseTemplatePhaseRef.operationName = 'CreatePhaseTemplatePhase';
-
-export function createPhaseTemplatePhase(dcOrVars, vars) {
-  return executeMutation(createPhaseTemplatePhaseRef(dcOrVars, vars));
-}
-
-export const updatePhaseTemplatePhaseRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'UpdatePhaseTemplatePhase', inputVars);
-}
-updatePhaseTemplatePhaseRef.operationName = 'UpdatePhaseTemplatePhase';
-
-export function updatePhaseTemplatePhase(dcOrVars, vars) {
-  return executeMutation(updatePhaseTemplatePhaseRef(dcOrVars, vars));
-}
-
-export const deletePhaseTemplatePhaseRef = (dcOrVars, vars) => {
-  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
-  return mutationRef(dcInstance, 'DeletePhaseTemplatePhase', inputVars);
-}
-deletePhaseTemplatePhaseRef.operationName = 'DeletePhaseTemplatePhase';
-
-export function deletePhaseTemplatePhase(dcOrVars, vars) {
-  return executeMutation(deletePhaseTemplatePhaseRef(dcOrVars, vars));
+export function deleteProductTypePhaseConfig(dcOrVars, vars) {
+  return executeMutation(deleteProductTypePhaseConfigRef(dcOrVars, vars));
 }
 

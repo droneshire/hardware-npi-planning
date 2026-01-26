@@ -8,6 +8,12 @@ export interface UserSettings {
       updatesEnabled?: boolean
     }
   }
+  organization?: {
+    organizationName?: string // User-friendly organization name
+    organizationId?: string // UUID used as the key in the database
+    fiscalYearStartMonth?: number // 1-12, where 1 = January
+    logoUrl?: string // URL to company logo
+  }
   // Add other user settings as needed
 }
 

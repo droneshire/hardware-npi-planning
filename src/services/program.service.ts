@@ -5,6 +5,14 @@
  */
 
 import { Program } from "@/types"
+import { dataConnect } from "@/lib/firebase"
+import {
+  listPrograms,
+  getProgram,
+  createProgram,
+  updateProgram,
+  deleteProgram,
+} from "@firebasegen/default-connector"
 
 type UUID = string
 
@@ -44,16 +52,37 @@ export class ProgramService {
    * List all programs for a portfolio
    */
   async listPrograms(portfolioId: UUID): Promise<Program[]> {
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await listPrograms(dataConnect, { portfolioId })
+    return result.data.programs.map((p) => ({
+      id: p.id,
+      portfolioId: p.portfolioId || portfolioId,
+      name: p.name,
+      description: p.description ?? undefined,
+      ownerId: p.ownerId ?? undefined,
+      createdAt: p.createdAt,
+      updatedAt: p.updatedAt,
+    }))
   }
 
   /**
    * Get a single program by ID with related data
    */
   async getProgram(id: UUID): Promise<ProgramWithProjects | null> {
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await getProgram(dataConnect, { id })
+    if (!result.data.program) {
+      return null
+    }
+    const program = result.data.program
+    return {
+      id: program.id,
+      portfolioId: program.portfolioId,
+      name: program.name,
+      description: program.description ?? undefined,
+      ownerId: program.ownerId ?? undefined,
+      createdAt: program.createdAt,
+      updatedAt: program.updatedAt,
+      projects: [], // Projects will be loaded separately if needed
+    }
   }
 
   /**
@@ -69,8 +98,22 @@ export class ProgramService {
       throw new Error("Portfolio ID is required")
     }
 
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await createProgram(dataConnect, {
+      portfolioId: input.portfolioId,
+      name: input.name,
+      description: input.description ?? null,
+      ownerId: input.ownerId ?? null,
+    })
+    const program = result.data.program_insert
+    return {
+      id: program.id,
+      portfolioId: input.portfolioId,
+      name: input.name,
+      description: input.description,
+      ownerId: input.ownerId,
+      createdAt: program.createdAt || new Date().toISOString(),
+      updatedAt: program.updatedAt || new Date().toISOString(),
+    }
   }
 
   /**
@@ -86,8 +129,24 @@ export class ProgramService {
       throw new Error("Program name cannot be empty")
     }
 
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await updateProgram(dataConnect, {
+      id: input.id,
+      name: input.name ?? null,
+      description: input.description ?? null,
+      ownerId: input.ownerId ?? null,
+    })
+
+    if (!result.data.program_update) {
+      throw new Error("Program not found")
+    }
+
+    // Fetch the updated program to get all fields
+    const updated = await this.getProgram(input.id)
+    if (!updated) {
+      throw new Error("Failed to fetch updated program")
+    }
+
+    return updated
   }
 
   /**
@@ -100,8 +159,7 @@ export class ProgramService {
       throw new Error("Program ID is required")
     }
 
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    await deleteProgram(dataConnect, { id })
   }
 
   /**

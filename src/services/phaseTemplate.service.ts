@@ -6,6 +6,19 @@
  */
 
 import { DEFAULT_TEMPLATES, DefaultTemplate } from "@/lib/defaultTemplates"
+import { dataConnect } from "@/lib/firebase"
+import {
+  listPhaseTemplates,
+  getPhaseTemplate,
+  getDefaultTemplates,
+  createPhaseTemplate,
+  updatePhaseTemplate,
+  deletePhaseTemplate,
+  createPhaseTemplatePhase,
+  updatePhaseTemplatePhase,
+  deletePhaseTemplatePhase,
+  listPhaseTemplatePhases,
+} from "@firebasegen/default-connector"
 
 type UUID = string
 
@@ -63,24 +76,68 @@ export class PhaseTemplateService {
    * List all templates for an organization
    */
   async listTemplates(organizationId: UUID): Promise<PhaseTemplate[]> {
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await listPhaseTemplates(dataConnect, { organizationId })
+    return result.data.phaseTemplates.map((t) => ({
+      id: t.id,
+      organizationId: t.organizationId || organizationId,
+      name: t.name,
+      description: t.description ?? undefined,
+      isDefault: t.isDefault,
+      createdAt: t.createdAt,
+      updatedAt: t.updatedAt,
+    }))
   }
 
   /**
    * Get a single template with all phases
    */
   async getTemplate(id: UUID): Promise<PhaseTemplateWithPhases | null> {
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const templateResult = await getPhaseTemplate(dataConnect, { id })
+    if (!templateResult.data.phaseTemplate) {
+      return null
+    }
+
+    const template = templateResult.data.phaseTemplate
+
+    // Fetch phases
+    const phasesResult = await listPhaseTemplatePhases(dataConnect, { templateId: id })
+    const phases: PhaseTemplatePhase[] = phasesResult.data.phaseTemplatePhases.map((p) => ({
+      id: p.id,
+      templateId: p.templateId,
+      name: p.name,
+      description: p.description ?? undefined,
+      durationWeeks: p.durationWeeks ?? undefined,
+      order: p.order,
+      createdAt: p.createdAt,
+    }))
+
+    return {
+      id: template.id,
+      organizationId: template.organizationId,
+      name: template.name,
+      description: template.description ?? undefined,
+      isDefault: template.isDefault,
+      createdAt: template.createdAt,
+      updatedAt: template.updatedAt,
+      phases,
+    }
   }
 
   /**
    * Get default templates for an organization
    */
   async getDefaultTemplates(organizationId: UUID): Promise<PhaseTemplateWithPhases[]> {
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await getDefaultTemplates(dataConnect, { organizationId })
+    const templates: PhaseTemplateWithPhases[] = []
+
+    for (const template of result.data.phaseTemplates) {
+      const fullTemplate = await this.getTemplate(template.id)
+      if (fullTemplate) {
+        templates.push(fullTemplate)
+      }
+    }
+
+    return templates
   }
 
   /**
@@ -96,8 +153,23 @@ export class PhaseTemplateService {
       throw new Error("Organization ID is required")
     }
 
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await createPhaseTemplate(dataConnect, {
+      organizationId: input.organizationId,
+      name: input.name,
+      description: input.description ?? null,
+      isDefault: input.isDefault ?? null,
+    })
+
+    const template = result.data.phaseTemplate_insert
+    return {
+      id: template.id,
+      organizationId: input.organizationId,
+      name: input.name,
+      description: input.description,
+      isDefault: input.isDefault || false,
+      createdAt: template.createdAt || new Date().toISOString(),
+      updatedAt: template.updatedAt || new Date().toISOString(),
+    }
   }
 
   /**
@@ -113,8 +185,20 @@ export class PhaseTemplateService {
       throw new Error("Template name cannot be empty")
     }
 
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    await updatePhaseTemplate(dataConnect, {
+      id: input.id,
+      name: input.name ?? null,
+      description: input.description ?? null,
+      isDefault: input.isDefault ?? null,
+    })
+
+    // Fetch the updated template
+    const updated = await this.getTemplate(input.id)
+    if (!updated) {
+      throw new Error("Failed to fetch updated template")
+    }
+
+    return updated
   }
 
   /**
@@ -128,8 +212,7 @@ export class PhaseTemplateService {
       throw new Error("Template ID is required")
     }
 
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    await deletePhaseTemplate(dataConnect, { id })
   }
 
   /**
@@ -153,8 +236,24 @@ export class PhaseTemplateService {
       throw new Error("Duration weeks must be non-negative")
     }
 
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await createPhaseTemplatePhase(dataConnect, {
+      templateId: input.templateId,
+      name: input.name,
+      description: input.description ?? null,
+      durationWeeks: input.durationWeeks ?? null,
+      order: input.order,
+    })
+
+    const phase = result.data.phaseTemplatePhase_insert
+    return {
+      id: phase.id,
+      templateId: input.templateId,
+      name: input.name,
+      description: input.description,
+      durationWeeks: input.durationWeeks,
+      order: input.order,
+      createdAt: phase.createdAt || new Date().toISOString(),
+    }
   }
 
   /**
@@ -180,8 +279,17 @@ export class PhaseTemplateService {
       throw new Error("Duration weeks must be non-negative")
     }
 
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    await updatePhaseTemplatePhase(dataConnect, {
+      id,
+      name: updates.name ?? null,
+      description: updates.description ?? null,
+      durationWeeks: updates.durationWeeks ?? null,
+      order: updates.order ?? null,
+    })
+
+    // Note: We'd need a getPhaseTemplatePhase query to fetch the updated phase
+    // For now, return a partial object
+    throw new Error("Update phase - need to implement get phase query")
   }
 
   /**
@@ -192,8 +300,7 @@ export class PhaseTemplateService {
       throw new Error("Phase ID is required")
     }
 
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    await deletePhaseTemplatePhase(dataConnect, { id })
   }
 
   /**
@@ -207,10 +314,23 @@ export class PhaseTemplateService {
       throw new Error("Organization ID is required")
     }
 
+    // Check if templates already exist
+    const existingTemplates = await this.listTemplates(organizationId)
+    const existingTemplateNames = new Set(existingTemplates.map((t) => t.name))
+
     const createdTemplates: PhaseTemplate[] = []
 
     for (const defaultTemplate of DEFAULT_TEMPLATES) {
       try {
+        // Skip if template already exists
+        if (existingTemplateNames.has(defaultTemplate.name)) {
+          const existing = existingTemplates.find((t) => t.name === defaultTemplate.name)
+          if (existing) {
+            createdTemplates.push(existing)
+          }
+          continue
+        }
+
         // Create the template
         const template = await this.createTemplate({
           organizationId,
@@ -221,18 +341,30 @@ export class PhaseTemplateService {
 
         // Create all phases for this template
         for (const phase of defaultTemplate.phases) {
-          await this.createPhase({
-            templateId: template.id,
-            name: phase.name,
-            description: phase.description,
-            durationWeeks: phase.durationWeeks,
-            order: phase.order,
-          })
+          try {
+            await this.createPhase({
+              templateId: template.id,
+              name: phase.name,
+              description: phase.description,
+              durationWeeks: phase.durationWeeks,
+              order: phase.order,
+            })
+          } catch (phaseError: any) {
+            console.error(`Failed to create phase ${phase.name} for template ${defaultTemplate.name}:`, phaseError)
+            // Continue with other phases even if one fails
+          }
         }
 
         createdTemplates.push(template)
-      } catch (error) {
+      } catch (error: any) {
         console.error(`Failed to create template ${defaultTemplate.name}:`, error)
+        // If it's a duplicate error, try to find the existing template
+        if (error.message?.toLowerCase().includes("already exists") || error.message?.toLowerCase().includes("duplicate")) {
+          const existing = existingTemplates.find((t) => t.name === defaultTemplate.name)
+          if (existing) {
+            createdTemplates.push(existing)
+          }
+        }
         // Continue with other templates even if one fails
       }
     }

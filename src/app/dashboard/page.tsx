@@ -1,10 +1,112 @@
 "use client"
 
+import { useMemo } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AuthProtection } from "@/components/auth-protection"
+import { Skeleton } from "@/components/ui/skeleton"
+import { projectService } from "@/services/project.service"
+import { dataConnect } from "@/lib/firebase"
+import { listUsers, listUserAssignments } from "@firebasegen/default-connector"
+import { isWithinInterval, parseISO } from "date-fns"
+import { Activity, TrendingUp, AlertTriangle } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
+
+// Mock organization ID for development
+const MOCK_ORGANIZATION_ID = "org-1"
 
 export default function DashboardPage() {
+  // Fetch active projects
+  const { data: activeProjects = [], isLoading: isLoadingProjects } = useQuery({
+    queryKey: ["dashboard-active-projects"],
+    queryFn: async () => {
+      return await projectService.listProjectsByStatus("ACTIVE")
+    },
+  })
+
+  // Fetch all users
+  const { data: users = [] } = useQuery({
+    queryKey: ["dashboard-users", MOCK_ORGANIZATION_ID],
+    queryFn: async () => {
+      const result = await listUsers(dataConnect, { organizationId: MOCK_ORGANIZATION_ID })
+      return result.data.users
+    },
+  })
+
+  // Fetch assignments for all users to calculate utilization
+  const { data: allAssignments = [] } = useQuery({
+    queryKey: ["dashboard-all-assignments"],
+    queryFn: async () => {
+      const assignments = []
+      for (const user of users) {
+        try {
+          const result = await listUserAssignments(dataConnect, { userId: user.id })
+          assignments.push(...result.data.projectAssignments)
+        } catch (error) {
+          console.error(`Failed to fetch assignments for user ${user.id}:`, error)
+        }
+      }
+      return assignments
+    },
+    enabled: users.length > 0,
+  })
+
+  // Calculate resource utilization statistics
+  const resourceStats = useMemo(() => {
+    if (users.length === 0) {
+      return {
+        averageUtilization: 0,
+        overAllocatedCount: 0,
+        totalAllocations: 0,
+      }
+    }
+
+    const now = new Date()
+    const userUtilizations: number[] = []
+    let overAllocatedCount = 0
+
+    users.forEach((user) => {
+      const userAssignments = allAssignments.filter((a) => a.userId === user.id)
+      const currentAllocation = userAssignments
+        .filter((assignment) => {
+          const start = parseISO(assignment.startDate)
+          const end = assignment.endDate ? parseISO(assignment.endDate) : new Date("2099-12-31")
+          return isWithinInterval(now, { start, end })
+        })
+        .reduce((sum, assignment) => sum + assignment.allocationPercent, 0)
+
+      userUtilizations.push(currentAllocation)
+      if (currentAllocation > 100) {
+        overAllocatedCount++
+      }
+    })
+
+    const averageUtilization =
+      userUtilizations.length > 0
+        ? Math.round(
+            userUtilizations.reduce((sum, util) => sum + util, 0) / userUtilizations.length
+          )
+        : 0
+
+    return {
+      averageUtilization,
+      overAllocatedCount,
+      totalAllocations: userUtilizations.length,
+    }
+  }, [users, allAssignments])
+
+  // Calculate recent activity (projects updated in last 7 days)
+  const recentProjects = useMemo(() => {
+    const sevenDaysAgo = new Date()
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+
+    // We'll use active projects as a proxy for recent activity
+    // In a full implementation, we'd track actual update timestamps
+    return activeProjects.slice(0, 5)
+  }, [activeProjects])
+
   return (
     <AuthProtection>
       <AppLayout
@@ -14,50 +116,136 @@ export default function DashboardPage() {
           { label: "Dashboard" },
         ]}
       >
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>Active Projects</CardTitle>
-            <CardDescription>Currently in progress</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">12</p>
-          </CardContent>
-        </Card>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {/* Active Projects Card */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
+              <Activity className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              {isLoadingProjects ? (
+                <Skeleton className="h-8 w-16" />
+              ) : (
+                <>
+                  <div className="text-3xl font-bold">{activeProjects.length}</div>
+                  <p className="text-xs text-muted-foreground">Currently in progress</p>
+                  <Link
+                    href="/projects"
+                    className="text-xs text-primary hover:underline mt-2 inline-block"
+                  >
+                    View all projects →
+                  </Link>
+                </>
+              )}
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Resource Utilization</CardTitle>
-            <CardDescription>Organization-wide average</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold">87%</p>
-          </CardContent>
-        </Card>
+          {/* Resource Utilization Card */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Resource Utilization</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              {isLoadingProjects ? (
+                <Skeleton className="h-8 w-16" />
+              ) : (
+                <>
+                  <div className="text-3xl font-bold">{resourceStats.averageUtilization}%</div>
+                  <p className="text-xs text-muted-foreground">
+                    Organization-wide average
+                  </p>
+                  <Link
+                    href="/resources"
+                    className="text-xs text-primary hover:underline mt-2 inline-block"
+                  >
+                    View resources →
+                  </Link>
+                </>
+              )}
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Over-allocated</CardTitle>
-            <CardDescription>Team members at &gt;100%</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-destructive">3</p>
-          </CardContent>
-        </Card>
-      </div>
+          {/* Over-allocated Card */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Over-allocated</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-destructive" />
+            </CardHeader>
+            <CardContent>
+              {isLoadingProjects ? (
+                <Skeleton className="h-8 w-16" />
+              ) : (
+                <>
+                  <div className="text-3xl font-bold text-destructive">
+                    {resourceStats.overAllocatedCount}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Team members at &gt;100%</p>
+                  {resourceStats.overAllocatedCount > 0 && (
+                    <Link
+                      href="/resources"
+                      className="text-xs text-primary hover:underline mt-2 inline-block"
+                    >
+                      Review allocations →
+                    </Link>
+                  )}
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </div>
 
-      <div className="mt-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Latest updates across portfolios</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">No recent activity</p>
-          </CardContent>
-        </Card>
-      </div>
-    </AppLayout>
+        {/* Recent Activity */}
+        <div className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Activity</CardTitle>
+              <CardDescription>Latest active projects</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isLoadingProjects ? (
+                <div className="space-y-2">
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-12 w-full" />
+                </div>
+              ) : recentProjects.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No recent activity</p>
+              ) : (
+                <div className="space-y-2">
+                  {recentProjects.map((project) => (
+                    <div
+                      key={project.id}
+                      className="flex items-center justify-between p-2 rounded-md hover:bg-muted"
+                    >
+                      <div>
+                        <Link
+                          href={`/projects/${project.id}` as any}
+                          className="font-medium hover:underline"
+                        >
+                          {project.name}
+                        </Link>
+                        {project.programId && (
+                          <p className="text-xs text-muted-foreground">
+                            Program: {project.programId}
+                          </p>
+                        )}
+                      </div>
+                      <Badge variant="outline">{project.status}</Badge>
+                    </div>
+                  ))}
+                  <Link
+                    href="/projects"
+                    className="text-sm text-primary hover:underline mt-4 inline-block"
+                  >
+                    View all projects →
+                  </Link>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </AppLayout>
     </AuthProtection>
   )
 }

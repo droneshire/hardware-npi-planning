@@ -6,6 +6,20 @@
  */
 
 import { Project, ProjectStatus, ProjectPhase } from "@/types"
+import { dataConnect } from "@/lib/firebase"
+import {
+  listProjects,
+  getProject,
+  listProjectsByStatus,
+  createProject,
+  updateProject,
+  deleteProject,
+  listProjectPhases,
+  createProjectPhase,
+} from "@firebasegen/default-connector"
+import { ProjectStatus as SDKProjectStatus } from "@firebasegen/default-connector"
+import { phaseTemplateService } from "./phaseTemplate.service"
+import { addWeeks, format } from "date-fns"
 
 type UUID = string
 
@@ -18,6 +32,7 @@ interface CreateProjectInput {
   targetCompletionDate?: string
   ownerId?: UUID
   productTypeId?: UUID
+  templateId?: UUID // Phase template ID to generate phases from
 }
 
 interface UpdateProjectInput {
@@ -52,24 +67,89 @@ export class ProjectService {
    * List all projects for a program
    */
   async listProjects(programId: UUID): Promise<Project[]> {
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await listProjects(dataConnect, { programId })
+    return result.data.projects.map((p) => ({
+      id: p.id,
+      programId: p.programId || programId,
+      productTypeId: p.productTypeId ?? undefined,
+      name: p.name,
+      description: p.description ?? undefined,
+      status: p.status as ProjectStatus,
+      startDate: p.startDate ?? undefined,
+      targetCompletionDate: p.targetCompletionDate ?? undefined,
+      actualCompletionDate: p.actualCompletionDate ?? undefined,
+      ownerId: p.ownerId ?? undefined,
+      createdAt: p.createdAt,
+      updatedAt: p.updatedAt,
+    }))
   }
 
   /**
    * List projects by status across the organization
    */
   async listProjectsByStatus(status: ProjectStatus): Promise<Project[]> {
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await listProjectsByStatus(dataConnect, {
+      status: status as SDKProjectStatus,
+    })
+    return result.data.projects.map((p) => ({
+      id: p.id,
+      programId: p.programId,
+      productTypeId: undefined, // Not included in this query
+      name: p.name,
+      description: p.description ?? undefined,
+      status: p.status as ProjectStatus,
+      startDate: p.startDate ?? undefined,
+      targetCompletionDate: p.targetCompletionDate ?? undefined,
+      actualCompletionDate: undefined, // Not included in this query
+      ownerId: undefined, // Not included in this query
+      createdAt: "", // Not included in this query
+      updatedAt: "", // Not included in this query
+    }))
   }
 
   /**
    * Get a single project by ID with full details
    */
   async getProject(id: UUID): Promise<ProjectWithDetails | null> {
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await getProject(dataConnect, { id })
+    if (!result.data.project) {
+      return null
+    }
+    const project = result.data.project
+
+    // Load phases separately
+    const phasesResult = await listProjectPhases(dataConnect, { projectId: id })
+    const phases: ProjectPhase[] = phasesResult.data.projectPhases.map((p) => ({
+      id: p.id,
+      projectId: p.projectId,
+      name: p.name,
+      description: p.description ?? undefined,
+      status: p.status as ProjectPhase["status"],
+      startDate: p.startDate ?? undefined,
+      targetEndDate: p.targetEndDate ?? undefined,
+      actualEndDate: p.actualEndDate ?? undefined,
+      order: p.order,
+      percentComplete: p.percentComplete ?? 0,
+      createdAt: p.createdAt,
+      updatedAt: p.updatedAt,
+    }))
+
+    return {
+      id: project.id,
+      programId: project.programId,
+      productTypeId: project.productTypeId ?? undefined,
+      name: project.name,
+      description: project.description ?? undefined,
+      status: project.status as ProjectStatus,
+      startDate: project.startDate ?? undefined,
+      targetCompletionDate: project.targetCompletionDate ?? undefined,
+      actualCompletionDate: project.actualCompletionDate ?? undefined,
+      ownerId: project.ownerId ?? undefined,
+      createdAt: project.createdAt,
+      updatedAt: project.updatedAt,
+      phases,
+      assignments: [], // Assignments will be loaded separately if needed
+    }
   }
 
   /**
@@ -98,12 +178,44 @@ export class ProjectService {
       }
     }
 
-    // TODO: Replace with generated SDK call
-    // 1. Create the project
-    // 2. If productTypeId is provided, fetch the associated phase template
-    // 3. Generate project phases from the template phases
+    // Create the project
+    const result = await createProject(dataConnect, {
+      programId: input.programId,
+      name: input.name,
+      description: input.description ?? null,
+      status: (input.status as SDKProjectStatus) ?? null,
+      startDate: input.startDate ?? null,
+      targetCompletionDate: input.targetCompletionDate ?? null,
+      ownerId: input.ownerId ?? null,
+      productTypeId: input.productTypeId ?? null,
+    })
 
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const project = result.data.project_insert
+
+    // If templateId is provided in input, generate phases from template
+    if (input.templateId && input.startDate) {
+      try {
+        await this.generatePhasesFromTemplate(project.id, input.templateId, input.startDate)
+      } catch (error) {
+        console.error("Failed to generate phases from template:", error)
+        // Don't fail project creation if phase generation fails
+      }
+    }
+
+    return {
+      id: project.id,
+      programId: input.programId,
+      productTypeId: input.productTypeId,
+      name: input.name,
+      description: input.description,
+      status: input.status || "PLANNING",
+      startDate: input.startDate,
+      targetCompletionDate: input.targetCompletionDate,
+      actualCompletionDate: undefined,
+      ownerId: input.ownerId,
+      createdAt: project.createdAt || new Date().toISOString(),
+      updatedAt: project.updatedAt || new Date().toISOString(),
+    }
   }
 
   /**
@@ -129,8 +241,29 @@ export class ProjectService {
       }
     }
 
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    const result = await updateProject(dataConnect, {
+      id: input.id,
+      name: input.name ?? null,
+      description: input.description ?? null,
+      status: input.status ? (input.status as SDKProjectStatus) : null,
+      startDate: input.startDate ?? null,
+      targetCompletionDate: input.targetCompletionDate ?? null,
+      actualCompletionDate: input.actualCompletionDate ?? null,
+      ownerId: input.ownerId ?? null,
+      productTypeId: input.productTypeId ?? null,
+    })
+
+    if (!result.data.project_update) {
+      throw new Error("Project not found")
+    }
+
+    // Fetch the updated project to get all fields
+    const updated = await this.getProject(input.id)
+    if (!updated) {
+      throw new Error("Failed to fetch updated project")
+    }
+
+    return updated
   }
 
   /**
@@ -143,8 +276,7 @@ export class ProjectService {
       throw new Error("Project ID is required")
     }
 
-    // TODO: Replace with generated SDK call
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    await deleteProject(dataConnect, { id })
   }
 
   /**
@@ -158,12 +290,61 @@ export class ProjectService {
     templateId: UUID,
     projectStartDate?: string
   ): Promise<ProjectPhase[]> {
-    // TODO: Implement phase generation logic
-    // 1. Fetch template phases
-    // 2. Calculate phase dates based on duration and project start date
-    // 3. Create project phases in correct order
+    // Fetch template with all phases
+    const template = await phaseTemplateService.getTemplate(templateId)
+    if (!template) {
+      throw new Error(`Template ${templateId} not found`)
+    }
 
-    throw new Error("SDK not generated. Run: firebase dataconnect:sdk:generate")
+    if (template.phases.length === 0) {
+      return []
+    }
+
+    // Determine start date
+    const startDate = projectStartDate ? new Date(projectStartDate) : new Date()
+    let currentDate = new Date(startDate)
+
+    // Create project phases from template phases
+    const createdPhases: ProjectPhase[] = []
+
+    for (const templatePhase of template.phases.sort((a, b) => a.order - b.order)) {
+      const phaseStartDate = new Date(currentDate)
+      const durationWeeks = templatePhase.durationWeeks || 4
+      const phaseEndDate = addWeeks(phaseStartDate, durationWeeks)
+
+      // Create the project phase
+      const result = await createProjectPhase(dataConnect, {
+        projectId,
+        name: templatePhase.name,
+        description: templatePhase.description ?? null,
+        status: "NOT_STARTED" as any,
+        startDate: format(phaseStartDate, "yyyy-MM-dd"),
+        targetEndDate: format(phaseEndDate, "yyyy-MM-dd"),
+        order: templatePhase.order,
+        percentComplete: 0,
+      })
+
+      const createdPhase = result.data.projectPhase_insert
+      createdPhases.push({
+        id: createdPhase.id,
+        projectId,
+        name: templatePhase.name,
+        description: templatePhase.description,
+        status: "NOT_STARTED",
+        startDate: format(phaseStartDate, "yyyy-MM-dd"),
+        targetEndDate: format(phaseEndDate, "yyyy-MM-dd"),
+        actualEndDate: undefined,
+        order: templatePhase.order,
+        percentComplete: 0,
+        createdAt: createdPhase.createdAt || new Date().toISOString(),
+        updatedAt: createdPhase.updatedAt || new Date().toISOString(),
+      })
+
+      // Move to next phase start date
+      currentDate = phaseEndDate
+    }
+
+    return createdPhases
   }
 
   /**

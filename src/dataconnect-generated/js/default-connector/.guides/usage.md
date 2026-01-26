@@ -12,28 +12,28 @@ For each operation, there is a wrapper hook that can be used to call the operati
 
 Here are all of the hooks that get generated:
 ```ts
-import { useListProductTypes, useGetProductType, useCreateProductType, useUpdateProductType, useDeleteProductType, useCreateProductTypePhaseConfig, useDeleteProductTypePhaseConfig, useListProjectPhases, useGetProjectPhase, useCreateProjectPhase } from '@firebasegen/default-connector/react';
+import { useListProjectAssignments, useListUserAssignments, useListAssignmentsByDateRange, useCreateProjectAssignment, useUpdateProjectAssignment, useDeleteProjectAssignment, useListProjectPhases, useGetProjectPhase, useCreateProjectPhase, useUpdateProjectPhase } from '@firebasegen/default-connector/react';
 // The types of these hooks are available in react/index.d.ts
 
-const { data, isPending, isSuccess, isError, error } = useListProductTypes(listProductTypesVars);
+const { data, isPending, isSuccess, isError, error } = useListProjectAssignments(listProjectAssignmentsVars);
 
-const { data, isPending, isSuccess, isError, error } = useGetProductType(getProductTypeVars);
+const { data, isPending, isSuccess, isError, error } = useListUserAssignments(listUserAssignmentsVars);
 
-const { data, isPending, isSuccess, isError, error } = useCreateProductType(createProductTypeVars);
+const { data, isPending, isSuccess, isError, error } = useListAssignmentsByDateRange(listAssignmentsByDateRangeVars);
 
-const { data, isPending, isSuccess, isError, error } = useUpdateProductType(updateProductTypeVars);
+const { data, isPending, isSuccess, isError, error } = useCreateProjectAssignment(createProjectAssignmentVars);
 
-const { data, isPending, isSuccess, isError, error } = useDeleteProductType(deleteProductTypeVars);
+const { data, isPending, isSuccess, isError, error } = useUpdateProjectAssignment(updateProjectAssignmentVars);
 
-const { data, isPending, isSuccess, isError, error } = useCreateProductTypePhaseConfig(createProductTypePhaseConfigVars);
-
-const { data, isPending, isSuccess, isError, error } = useDeleteProductTypePhaseConfig(deleteProductTypePhaseConfigVars);
+const { data, isPending, isSuccess, isError, error } = useDeleteProjectAssignment(deleteProjectAssignmentVars);
 
 const { data, isPending, isSuccess, isError, error } = useListProjectPhases(listProjectPhasesVars);
 
 const { data, isPending, isSuccess, isError, error } = useGetProjectPhase(getProjectPhaseVars);
 
 const { data, isPending, isSuccess, isError, error } = useCreateProjectPhase(createProjectPhaseVars);
+
+const { data, isPending, isSuccess, isError, error } = useUpdateProjectPhase(updateProjectPhaseVars);
 
 ```
 
@@ -72,29 +72,26 @@ If a user is not using a supported framework, they can use the generated SDK dir
 Here's an example of how to use it with the first 5 operations:
 
 ```js
-import { listProductTypes, getProductType, createProductType, updateProductType, deleteProductType, createProductTypePhaseConfig, deleteProductTypePhaseConfig, listProjectPhases, getProjectPhase, createProjectPhase } from '@firebasegen/default-connector';
+import { listProjectAssignments, listUserAssignments, listAssignmentsByDateRange, createProjectAssignment, updateProjectAssignment, deleteProjectAssignment, listProjectPhases, getProjectPhase, createProjectPhase, updateProjectPhase } from '@firebasegen/default-connector';
 
 
-// Operation ListProductTypes:  For variables, look at type ListProductTypesVars in ../index.d.ts
-const { data } = await ListProductTypes(dataConnect, listProductTypesVars);
+// Operation ListProjectAssignments:  For variables, look at type ListProjectAssignmentsVars in ../index.d.ts
+const { data } = await ListProjectAssignments(dataConnect, listProjectAssignmentsVars);
 
-// Operation GetProductType:  For variables, look at type GetProductTypeVars in ../index.d.ts
-const { data } = await GetProductType(dataConnect, getProductTypeVars);
+// Operation ListUserAssignments:  For variables, look at type ListUserAssignmentsVars in ../index.d.ts
+const { data } = await ListUserAssignments(dataConnect, listUserAssignmentsVars);
 
-// Operation CreateProductType:  For variables, look at type CreateProductTypeVars in ../index.d.ts
-const { data } = await CreateProductType(dataConnect, createProductTypeVars);
+// Operation ListAssignmentsByDateRange:  For variables, look at type ListAssignmentsByDateRangeVars in ../index.d.ts
+const { data } = await ListAssignmentsByDateRange(dataConnect, listAssignmentsByDateRangeVars);
 
-// Operation UpdateProductType:  For variables, look at type UpdateProductTypeVars in ../index.d.ts
-const { data } = await UpdateProductType(dataConnect, updateProductTypeVars);
+// Operation CreateProjectAssignment:  For variables, look at type CreateProjectAssignmentVars in ../index.d.ts
+const { data } = await CreateProjectAssignment(dataConnect, createProjectAssignmentVars);
 
-// Operation DeleteProductType:  For variables, look at type DeleteProductTypeVars in ../index.d.ts
-const { data } = await DeleteProductType(dataConnect, deleteProductTypeVars);
+// Operation UpdateProjectAssignment:  For variables, look at type UpdateProjectAssignmentVars in ../index.d.ts
+const { data } = await UpdateProjectAssignment(dataConnect, updateProjectAssignmentVars);
 
-// Operation CreateProductTypePhaseConfig:  For variables, look at type CreateProductTypePhaseConfigVars in ../index.d.ts
-const { data } = await CreateProductTypePhaseConfig(dataConnect, createProductTypePhaseConfigVars);
-
-// Operation DeleteProductTypePhaseConfig:  For variables, look at type DeleteProductTypePhaseConfigVars in ../index.d.ts
-const { data } = await DeleteProductTypePhaseConfig(dataConnect, deleteProductTypePhaseConfigVars);
+// Operation DeleteProjectAssignment:  For variables, look at type DeleteProjectAssignmentVars in ../index.d.ts
+const { data } = await DeleteProjectAssignment(dataConnect, deleteProjectAssignmentVars);
 
 // Operation ListProjectPhases:  For variables, look at type ListProjectPhasesVars in ../index.d.ts
 const { data } = await ListProjectPhases(dataConnect, listProjectPhasesVars);
@@ -104,6 +101,9 @@ const { data } = await GetProjectPhase(dataConnect, getProjectPhaseVars);
 
 // Operation CreateProjectPhase:  For variables, look at type CreateProjectPhaseVars in ../index.d.ts
 const { data } = await CreateProjectPhase(dataConnect, createProjectPhaseVars);
+
+// Operation UpdateProjectPhase:  For variables, look at type UpdateProjectPhaseVars in ../index.d.ts
+const { data } = await UpdateProjectPhase(dataConnect, updateProjectPhaseVars);
 
 
 ```

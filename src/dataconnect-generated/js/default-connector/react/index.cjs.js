@@ -1,55 +1,45 @@
-const { listProductTypesRef, getProductTypeRef, createProductTypeRef, updateProductTypeRef, deleteProductTypeRef, createProductTypePhaseConfigRef, deleteProductTypePhaseConfigRef, listProjectPhasesRef, getProjectPhaseRef, createProjectPhaseRef, updateProjectPhaseRef, deleteProjectPhaseRef, listUsersRef, getUserRef, getUserByEmailRef, getUserByFirebaseUidRef, createUserRef, updateUserRef, deleteUserRef, getOrganizationRef, createOrganizationRef, updateOrganizationRef, listPortfoliosRef, getPortfolioRef, createPortfolioRef, updatePortfolioRef, deletePortfolioRef, listProgramsRef, getProgramRef, createProgramRef, updateProgramRef, deleteProgramRef, listProjectsRef, getProjectRef, listProjectsByStatusRef, createProjectRef, updateProjectRef, deleteProjectRef, listProjectAssignmentsRef, listUserAssignmentsRef, listAssignmentsByDateRangeRef, createProjectAssignmentRef, updateProjectAssignmentRef, deleteProjectAssignmentRef, listTeamsRef, getTeamRef, createTeamRef, updateTeamRef, deleteTeamRef, addTeamMemberRef, removeTeamMemberRef, updateTeamMemberRoleRef, listPhaseTemplatesRef, getPhaseTemplateRef, getDefaultTemplatesRef, createPhaseTemplateRef, updatePhaseTemplateRef, deletePhaseTemplateRef, createPhaseTemplatePhaseRef, updatePhaseTemplatePhaseRef, deletePhaseTemplatePhaseRef, connectorConfig } = require('../index.cjs.js');
+const { listProjectAssignmentsRef, listUserAssignmentsRef, listAssignmentsByDateRangeRef, createProjectAssignmentRef, updateProjectAssignmentRef, deleteProjectAssignmentRef, listProjectPhasesRef, getProjectPhaseRef, createProjectPhaseRef, updateProjectPhaseRef, deleteProjectPhaseRef, listTeamsRef, getTeamRef, createTeamRef, updateTeamRef, deleteTeamRef, addTeamMemberRef, removeTeamMemberRef, updateTeamMemberRoleRef, listUsersRef, getUserRef, getUserByEmailRef, getUserByFirebaseUidRef, createUserRef, updateUserRef, deleteUserRef, listPhaseTemplatesRef, getPhaseTemplateRef, listPhaseTemplatePhasesRef, getDefaultTemplatesRef, createPhaseTemplateRef, updatePhaseTemplateRef, deletePhaseTemplateRef, createPhaseTemplatePhaseRef, updatePhaseTemplatePhaseRef, deletePhaseTemplatePhaseRef, listProgramsRef, getProgramRef, createProgramRef, updateProgramRef, deleteProgramRef, listProjectsRef, getProjectRef, listProjectsByStatusRef, createProjectRef, updateProjectRef, deleteProjectRef, getOrganizationRef, createOrganizationRef, updateOrganizationRef, listPortfoliosRef, getPortfolioRef, createPortfolioRef, updatePortfolioRef, deletePortfolioRef, listProductTypesRef, getProductTypeRef, createProductTypeRef, updateProductTypeRef, deleteProductTypeRef, createProductTypePhaseConfigRef, deleteProductTypePhaseConfigRef, connectorConfig } = require('../index.cjs.js');
 const { validateArgs, CallerSdkTypeEnum } = require('firebase/data-connect');
 const { useDataConnectQuery, useDataConnectMutation, validateReactArgs } = require('@tanstack-query-firebase/react/data-connect');
 
 
-exports.useListProductTypes = function useListProductTypes(dcOrVars, varsOrOptions, options) {
+exports.useListProjectAssignments = function useListProjectAssignments(dcOrVars, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = listProductTypesRef(dcInstance, inputVars);
+  const ref = listProjectAssignmentsRef(dcInstance, inputVars);
   return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-exports.useGetProductType = function useGetProductType(dcOrVars, varsOrOptions, options) {
+exports.useListUserAssignments = function useListUserAssignments(dcOrVars, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = getProductTypeRef(dcInstance, inputVars);
+  const ref = listUserAssignmentsRef(dcInstance, inputVars);
   return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
-exports.useCreateProductType = function useCreateProductType(dcOrOptions, options) {
+
+exports.useListAssignmentsByDateRange = function useListAssignmentsByDateRange(dcOrVars, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  const ref = listAssignmentsByDateRangeRef(dcInstance, inputVars);
+  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+exports.useCreateProjectAssignment = function useCreateProjectAssignment(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return createProductTypeRef(dcInstance, vars);
+    return createProjectAssignmentRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-exports.useUpdateProductType = function useUpdateProductType(dcOrOptions, options) {
+exports.useUpdateProjectAssignment = function useUpdateProjectAssignment(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return updateProductTypeRef(dcInstance, vars);
+    return updateProjectAssignmentRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-exports.useDeleteProductType = function useDeleteProductType(dcOrOptions, options) {
+exports.useDeleteProjectAssignment = function useDeleteProjectAssignment(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return deleteProductTypeRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useCreateProductTypePhaseConfig = function useCreateProductTypePhaseConfig(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return createProductTypePhaseConfigRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useDeleteProductTypePhaseConfig = function useDeleteProductTypePhaseConfig(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return deleteProductTypePhaseConfigRef(dcInstance, vars);
+    return deleteProjectAssignmentRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
@@ -86,6 +76,66 @@ exports.useDeleteProjectPhase = function useDeleteProjectPhase(dcOrOptions, opti
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
     return deleteProjectPhaseRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+
+exports.useListTeams = function useListTeams(dcOrVars, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  const ref = listTeamsRef(dcInstance, inputVars);
+  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useGetTeam = function useGetTeam(dcOrVars, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  const ref = getTeamRef(dcInstance, inputVars);
+  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+exports.useCreateTeam = function useCreateTeam(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return createTeamRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useUpdateTeam = function useUpdateTeam(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return updateTeamRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useDeleteTeam = function useDeleteTeam(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return deleteTeamRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useAddTeamMember = function useAddTeamMember(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return addTeamMemberRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useRemoveTeamMember = function useRemoveTeamMember(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return removeTeamMemberRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useUpdateTeamMemberRole = function useUpdateTeamMemberRole(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return updateTeamMemberRoleRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
@@ -139,59 +189,73 @@ exports.useDeleteUser = function useDeleteUser(dcOrOptions, options) {
 }
 
 
-exports.useGetOrganization = function useGetOrganization(dcOrVars, varsOrOptions, options) {
+exports.useListPhaseTemplates = function useListPhaseTemplates(dcOrVars, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = getOrganizationRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-exports.useCreateOrganization = function useCreateOrganization(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return createOrganizationRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useUpdateOrganization = function useUpdateOrganization(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return updateOrganizationRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-
-exports.useListPortfolios = function useListPortfolios(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = listPortfoliosRef(dcInstance, inputVars);
+  const ref = listPhaseTemplatesRef(dcInstance, inputVars);
   return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-exports.useGetPortfolio = function useGetPortfolio(dcOrVars, varsOrOptions, options) {
+exports.useGetPhaseTemplate = function useGetPhaseTemplate(dcOrVars, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = getPortfolioRef(dcInstance, inputVars);
+  const ref = getPhaseTemplateRef(dcInstance, inputVars);
   return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
-exports.useCreatePortfolio = function useCreatePortfolio(dcOrOptions, options) {
+
+exports.useListPhaseTemplatePhases = function useListPhaseTemplatePhases(dcOrVars, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  const ref = listPhaseTemplatePhasesRef(dcInstance, inputVars);
+  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useGetDefaultTemplates = function useGetDefaultTemplates(dcOrVars, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  const ref = getDefaultTemplatesRef(dcInstance, inputVars);
+  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+exports.useCreatePhaseTemplate = function useCreatePhaseTemplate(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return createPortfolioRef(dcInstance, vars);
+    return createPhaseTemplateRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-exports.useUpdatePortfolio = function useUpdatePortfolio(dcOrOptions, options) {
+exports.useUpdatePhaseTemplate = function useUpdatePhaseTemplate(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return updatePortfolioRef(dcInstance, vars);
+    return updatePhaseTemplateRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-exports.useDeletePortfolio = function useDeletePortfolio(dcOrOptions, options) {
+exports.useDeletePhaseTemplate = function useDeletePhaseTemplate(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return deletePortfolioRef(dcInstance, vars);
+    return deletePhaseTemplateRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useCreatePhaseTemplatePhase = function useCreatePhaseTemplatePhase(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return createPhaseTemplatePhaseRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useUpdatePhaseTemplatePhase = function useUpdatePhaseTemplatePhase(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return updatePhaseTemplatePhaseRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useDeletePhaseTemplatePhase = function useDeletePhaseTemplatePhase(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return deletePhaseTemplatePhaseRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
@@ -275,169 +339,111 @@ exports.useDeleteProject = function useDeleteProject(dcOrOptions, options) {
 }
 
 
-exports.useListProjectAssignments = function useListProjectAssignments(dcOrVars, varsOrOptions, options) {
+exports.useGetOrganization = function useGetOrganization(dcOrVars, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = listProjectAssignmentsRef(dcInstance, inputVars);
+  const ref = getOrganizationRef(dcInstance, inputVars);
+  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+exports.useCreateOrganization = function useCreateOrganization(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return createOrganizationRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useUpdateOrganization = function useUpdateOrganization(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return updateOrganizationRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+
+exports.useListPortfolios = function useListPortfolios(dcOrVars, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  const ref = listPortfoliosRef(dcInstance, inputVars);
   return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-exports.useListUserAssignments = function useListUserAssignments(dcOrVars, varsOrOptions, options) {
+exports.useGetPortfolio = function useGetPortfolio(dcOrVars, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = listUserAssignmentsRef(dcInstance, inputVars);
+  const ref = getPortfolioRef(dcInstance, inputVars);
+  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+exports.useCreatePortfolio = function useCreatePortfolio(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return createPortfolioRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useUpdatePortfolio = function useUpdatePortfolio(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return updatePortfolioRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+exports.useDeletePortfolio = function useDeletePortfolio(dcOrOptions, options) {
+  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
+  function refFactory(vars) {
+    return deletePortfolioRef(dcInstance, vars);
+  }
+  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
+}
+
+
+exports.useListProductTypes = function useListProductTypes(dcOrVars, varsOrOptions, options) {
+  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
+  const ref = listProductTypesRef(dcInstance, inputVars);
   return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-exports.useListAssignmentsByDateRange = function useListAssignmentsByDateRange(dcOrVars, varsOrOptions, options) {
+exports.useGetProductType = function useGetProductType(dcOrVars, varsOrOptions, options) {
   const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = listAssignmentsByDateRangeRef(dcInstance, inputVars);
+  const ref = getProductTypeRef(dcInstance, inputVars);
   return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
-exports.useCreateProjectAssignment = function useCreateProjectAssignment(dcOrOptions, options) {
+exports.useCreateProductType = function useCreateProductType(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return createProjectAssignmentRef(dcInstance, vars);
+    return createProductTypeRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-exports.useUpdateProjectAssignment = function useUpdateProjectAssignment(dcOrOptions, options) {
+exports.useUpdateProductType = function useUpdateProductType(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return updateProjectAssignmentRef(dcInstance, vars);
+    return updateProductTypeRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-exports.useDeleteProjectAssignment = function useDeleteProjectAssignment(dcOrOptions, options) {
+exports.useDeleteProductType = function useDeleteProductType(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return deleteProjectAssignmentRef(dcInstance, vars);
+    return deleteProductTypeRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-
-exports.useListTeams = function useListTeams(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = listTeamsRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useGetTeam = function useGetTeam(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = getTeamRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-exports.useCreateTeam = function useCreateTeam(dcOrOptions, options) {
+exports.useCreateProductTypePhaseConfig = function useCreateProductTypePhaseConfig(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return createTeamRef(dcInstance, vars);
+    return createProductTypePhaseConfigRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }
 
-exports.useUpdateTeam = function useUpdateTeam(dcOrOptions, options) {
+exports.useDeleteProductTypePhaseConfig = function useDeleteProductTypePhaseConfig(dcOrOptions, options) {
   const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
   function refFactory(vars) {
-    return updateTeamRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useDeleteTeam = function useDeleteTeam(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return deleteTeamRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useAddTeamMember = function useAddTeamMember(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return addTeamMemberRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useRemoveTeamMember = function useRemoveTeamMember(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return removeTeamMemberRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useUpdateTeamMemberRole = function useUpdateTeamMemberRole(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return updateTeamMemberRoleRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-
-exports.useListPhaseTemplates = function useListPhaseTemplates(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = listPhaseTemplatesRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useGetPhaseTemplate = function useGetPhaseTemplate(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = getPhaseTemplateRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useGetDefaultTemplates = function useGetDefaultTemplates(dcOrVars, varsOrOptions, options) {
-  const { dc: dcInstance, vars: inputVars, options: inputOpts } = validateReactArgs(connectorConfig, dcOrVars, varsOrOptions, options, true, true);
-  const ref = getDefaultTemplatesRef(dcInstance, inputVars);
-  return useDataConnectQuery(ref, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-exports.useCreatePhaseTemplate = function useCreatePhaseTemplate(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return createPhaseTemplateRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useUpdatePhaseTemplate = function useUpdatePhaseTemplate(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return updatePhaseTemplateRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useDeletePhaseTemplate = function useDeletePhaseTemplate(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return deletePhaseTemplateRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useCreatePhaseTemplatePhase = function useCreatePhaseTemplatePhase(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return createPhaseTemplatePhaseRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useUpdatePhaseTemplatePhase = function useUpdatePhaseTemplatePhase(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return updatePhaseTemplatePhaseRef(dcInstance, vars);
-  }
-  return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
-}
-
-exports.useDeletePhaseTemplatePhase = function useDeletePhaseTemplatePhase(dcOrOptions, options) {
-  const { dc: dcInstance, vars: inputOpts } = validateArgs(connectorConfig, dcOrOptions, options);
-  function refFactory(vars) {
-    return deletePhaseTemplatePhaseRef(dcInstance, vars);
+    return deleteProductTypePhaseConfigRef(dcInstance, vars);
   }
   return useDataConnectMutation(refFactory, inputOpts, CallerSdkTypeEnum.GeneratedReact);
 }

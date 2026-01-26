@@ -5,7 +5,9 @@ service cloud.firestore {
       function isAdmin(request) {
         return request.auth.token.email == "ryeager12@gmail.com";
       }
-      allow read, update: if request.auth.token.email == email;
+      // Allow users to create, read, and update their own document
+      allow create, read, update: if request.auth.token.email == email;
+      // Admins can do everything
       allow create, read, update, delete: if isAdmin(request);
     }
     match /admin/{status} {
