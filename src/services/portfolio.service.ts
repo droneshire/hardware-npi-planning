@@ -14,6 +14,7 @@ import {
   updatePortfolio,
   deletePortfolio,
 } from "@firebasegen/default-connector"
+import { validateRequired, validateNonEmptyString } from "@/lib/utils"
 
 // Placeholder types until SDK is generated
 type UUID = string
@@ -93,13 +94,8 @@ export class PortfolioService {
    */
   async createPortfolio(input: CreatePortfolioInput): Promise<Portfolio> {
     // Validate input
-    if (!input.name || input.name.trim().length === 0) {
-      throw new Error("Portfolio name is required")
-    }
-
-    if (!input.organizationId) {
-      throw new Error("Organization ID is required")
-    }
+    validateRequired(input.name, "Portfolio name")
+    validateRequired(input.organizationId, "Organization ID")
 
     const result = await createPortfolio(dataConnect, {
       organizationId: input.organizationId,
@@ -124,13 +120,8 @@ export class PortfolioService {
    */
   async updatePortfolio(input: UpdatePortfolioInput): Promise<Portfolio> {
     // Validate input
-    if (!input.id) {
-      throw new Error("Portfolio ID is required")
-    }
-
-    if (input.name !== undefined && input.name.trim().length === 0) {
-      throw new Error("Portfolio name cannot be empty")
-    }
+    validateRequired(input.id, "Portfolio ID")
+    validateNonEmptyString(input.name, "Portfolio name")
 
     const result = await updatePortfolio(dataConnect, {
       id: input.id,
@@ -159,9 +150,7 @@ export class PortfolioService {
    * Ensure proper confirmation from the user before calling this method.
    */
   async deletePortfolio(id: UUID): Promise<void> {
-    if (!id) {
-      throw new Error("Portfolio ID is required")
-    }
+    validateRequired(id, "Portfolio ID")
 
     await deletePortfolio(dataConnect, { id })
   }

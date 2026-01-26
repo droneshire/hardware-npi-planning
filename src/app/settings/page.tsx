@@ -94,7 +94,6 @@ export default function SettingsPage() {
         }
         const data = await response.json()
         console.log("Settings API response:", data)
-        console.log("Full settings object:", JSON.stringify(data.settings, null, 2))
         console.log("Logo URL from API:", data.settings?.organization?.logoUrl)
         setIsLoadingSettings(false)
         return data.settings
@@ -125,15 +124,15 @@ export default function SettingsPage() {
         setFiscalYearStart(userSettings.organization.fiscalYearStartMonth)
       }
 
-      // Set logo URL - update from settings if present, otherwise keep current value
+      // Set logo URL - ALWAYS update from settings if present
       const logo = userSettings?.organization?.logoUrl
-      console.log("useEffect - userSettings:", userSettings, "logo:", logo)
       if (logo) {
-        console.log("Setting logo URL from settings:", logo)
         setLogoUrl(logo)
+      } else if (userSettings === null) {
+        // Only clear if we got null (no settings document exists)
+        // Don't clear if userSettings is an object but logoUrl is missing (might be partial data)
+        setLogoUrl(null)
       }
-      // Don't clear logoUrl if it's not in settings - it might be from a recent upload
-      // Only clear if we explicitly have null/undefined in settings
     }
   }, [userSettings, orgNameFromHook])
 

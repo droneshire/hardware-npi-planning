@@ -13,6 +13,7 @@ import {
   updateProgram,
   deleteProgram,
 } from "@firebasegen/default-connector"
+import { validateRequired, validateNonEmptyString } from "@/lib/utils"
 
 type UUID = string
 
@@ -90,13 +91,8 @@ export class ProgramService {
    */
   async createProgram(input: CreateProgramInput): Promise<Program> {
     // Validate input
-    if (!input.name || input.name.trim().length === 0) {
-      throw new Error("Program name is required")
-    }
-
-    if (!input.portfolioId) {
-      throw new Error("Portfolio ID is required")
-    }
+    validateRequired(input.name, "Program name")
+    validateRequired(input.portfolioId, "Portfolio ID")
 
     const result = await createProgram(dataConnect, {
       portfolioId: input.portfolioId,
@@ -121,13 +117,8 @@ export class ProgramService {
    */
   async updateProgram(input: UpdateProgramInput): Promise<Program> {
     // Validate input
-    if (!input.id) {
-      throw new Error("Program ID is required")
-    }
-
-    if (input.name !== undefined && input.name.trim().length === 0) {
-      throw new Error("Program name cannot be empty")
-    }
+    validateRequired(input.id, "Program ID")
+    validateNonEmptyString(input.name, "Program name")
 
     const result = await updateProgram(dataConnect, {
       id: input.id,
@@ -155,9 +146,7 @@ export class ProgramService {
    * WARNING: This will cascade delete all projects within the program.
    */
   async deleteProgram(id: UUID): Promise<void> {
-    if (!id) {
-      throw new Error("Program ID is required")
-    }
+    validateRequired(id, "Program ID")
 
     await deleteProgram(dataConnect, { id })
   }

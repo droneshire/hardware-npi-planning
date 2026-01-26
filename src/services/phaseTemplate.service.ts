@@ -19,6 +19,7 @@ import {
   deletePhaseTemplatePhase,
   listPhaseTemplatePhases,
 } from "@firebasegen/default-connector"
+import { validateRequired, validateNonEmptyString, validateNonNegative } from "@/lib/utils"
 
 type UUID = string
 
@@ -145,13 +146,8 @@ export class PhaseTemplateService {
    */
   async createTemplate(input: CreateTemplateInput): Promise<PhaseTemplate> {
     // Validate input
-    if (!input.name || input.name.trim().length === 0) {
-      throw new Error("Template name is required")
-    }
-
-    if (!input.organizationId) {
-      throw new Error("Organization ID is required")
-    }
+    validateRequired(input.name, "Template name")
+    validateRequired(input.organizationId, "Organization ID")
 
     const result = await createPhaseTemplate(dataConnect, {
       organizationId: input.organizationId,
@@ -177,13 +173,8 @@ export class PhaseTemplateService {
    */
   async updateTemplate(input: UpdateTemplateInput): Promise<PhaseTemplate> {
     // Validate input
-    if (!input.id) {
-      throw new Error("Template ID is required")
-    }
-
-    if (input.name !== undefined && input.name.trim().length === 0) {
-      throw new Error("Template name cannot be empty")
-    }
+    validateRequired(input.id, "Template ID")
+    validateNonEmptyString(input.name, "Template name")
 
     await updatePhaseTemplate(dataConnect, {
       id: input.id,
@@ -208,9 +199,7 @@ export class PhaseTemplateService {
    * Projects using this template will keep their copied phases.
    */
   async deleteTemplate(id: UUID): Promise<void> {
-    if (!id) {
-      throw new Error("Template ID is required")
-    }
+    validateRequired(id, "Template ID")
 
     await deletePhaseTemplate(dataConnect, { id })
   }
@@ -220,21 +209,10 @@ export class PhaseTemplateService {
    */
   async createPhase(input: CreateTemplatePhaseInput): Promise<PhaseTemplatePhase> {
     // Validate input
-    if (!input.name || input.name.trim().length === 0) {
-      throw new Error("Phase name is required")
-    }
-
-    if (!input.templateId) {
-      throw new Error("Template ID is required")
-    }
-
-    if (input.order < 0) {
-      throw new Error("Phase order must be non-negative")
-    }
-
-    if (input.durationWeeks !== undefined && input.durationWeeks < 0) {
-      throw new Error("Duration weeks must be non-negative")
-    }
+    validateRequired(input.name, "Phase name")
+    validateRequired(input.templateId, "Template ID")
+    validateNonNegative(input.order, "Phase order")
+    validateNonNegative(input.durationWeeks, "Duration weeks")
 
     const result = await createPhaseTemplatePhase(dataConnect, {
       templateId: input.templateId,
@@ -261,23 +239,14 @@ export class PhaseTemplateService {
    */
   async updatePhase(
     id: UUID,
+    templateId: UUID,
     updates: Partial<Omit<CreateTemplatePhaseInput, "templateId">>
   ): Promise<PhaseTemplatePhase> {
-    if (!id) {
-      throw new Error("Phase ID is required")
-    }
-
-    if (updates.name !== undefined && updates.name.trim().length === 0) {
-      throw new Error("Phase name cannot be empty")
-    }
-
-    if (updates.order !== undefined && updates.order < 0) {
-      throw new Error("Phase order must be non-negative")
-    }
-
-    if (updates.durationWeeks !== undefined && updates.durationWeeks < 0) {
-      throw new Error("Duration weeks must be non-negative")
-    }
+    validateRequired(id, "Phase ID")
+    validateRequired(templateId, "Template ID")
+    validateNonEmptyString(updates.name, "Phase name")
+    validateNonNegative(updates.order, "Phase order")
+    validateNonNegative(updates.durationWeeks, "Duration weeks")
 
     await updatePhaseTemplatePhase(dataConnect, {
       id,
@@ -287,18 +256,30 @@ export class PhaseTemplateService {
       order: updates.order ?? null,
     })
 
-    // Note: We'd need a getPhaseTemplatePhase query to fetch the updated phase
-    // For now, return a partial object
-    throw new Error("Update phase - need to implement get phase query")
+    // Fetch the updated phase
+    const phasesResult = await listPhaseTemplatePhases(dataConnect, { templateId })
+    const updatedPhase = phasesResult.data.phaseTemplatePhases.find((p) => p.id === id)
+    
+    if (!updatedPhase) {
+      throw new Error("Failed to fetch updated phase")
+    }
+
+    return {
+      id: updatedPhase.id,
+      templateId: updatedPhase.templateId,
+      name: updatedPhase.name,
+      description: updatedPhase.description ?? undefined,
+      durationWeeks: updatedPhase.durationWeeks ?? undefined,
+      order: updatedPhase.order,
+      createdAt: updatedPhase.createdAt,
+    }
   }
 
   /**
    * Delete a template phase
    */
   async deletePhase(id: UUID): Promise<void> {
-    if (!id) {
-      throw new Error("Phase ID is required")
-    }
+    validateRequired(id, "Phase ID")
 
     await deletePhaseTemplatePhase(dataConnect, { id })
   }
@@ -310,9 +291,7 @@ export class PhaseTemplateService {
    * This should be called during organization onboarding.
    */
   async initializeDefaultTemplates(organizationId: UUID): Promise<PhaseTemplate[]> {
-    if (!organizationId) {
-      throw new Error("Organization ID is required")
-    }
+    validateRequired(organizationId, "Organization ID")
 
     // Check if templates already exist
     const existingTemplates = await this.listTemplates(organizationId)
@@ -383,13 +362,8 @@ export class PhaseTemplateService {
     newName: string,
     organizationId: UUID
   ): Promise<PhaseTemplateWithPhases> {
-    if (!templateId) {
-      throw new Error("Template ID is required")
-    }
-
-    if (!newName || newName.trim().length === 0) {
-      throw new Error("New template name is required")
-    }
+    validateRequired(templateId, "Template ID")
+    validateRequired(newName, "New template name")
 
     // Get the source template with all phases
     const sourceTemplate = await this.getTemplate(templateId)
