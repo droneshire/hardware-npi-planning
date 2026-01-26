@@ -122,41 +122,50 @@ export function OrganizationIdDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={(newOpen) => {
-      // Allow closing if we just saved, or if organization name is already set
-      if (justSaved || currentOrganizationName || newOpen) {
+    <Dialog
+      open={open}
+      onOpenChange={(newOpen) => {
+        // Allow closing if we just saved, or if organization name is already set
+        if (justSaved || currentOrganizationName || newOpen) {
+          onOpenChange(newOpen)
+          return
+        }
+        // Prevent closing if organization name is not set and we haven't just saved
+        if (!newOpen) {
+          return
+        }
         onOpenChange(newOpen)
-        return
-      }
-      // Prevent closing if organization name is not set and we haven't just saved
-      if (!newOpen) {
-        return
-      }
-      onOpenChange(newOpen)
-    }}>
-      <DialogContent className="sm:max-w-[425px]" onInteractOutside={(e) => {
-        // Allow closing if we just saved, otherwise prevent if organization name is not set
-        if (!justSaved && !currentOrganizationName) {
-          e.preventDefault()
-        }
-      }} onEscapeKeyDown={(e) => {
-        // Allow closing if we just saved, otherwise prevent if organization name is not set
-        if (!justSaved && !currentOrganizationName) {
-          e.preventDefault()
-        }
-      }}>
+      }}
+    >
+      <DialogContent
+        className="sm:max-w-[425px]"
+        onInteractOutside={(e) => {
+          // Allow closing if we just saved, otherwise prevent if organization name is not set
+          if (!justSaved && !currentOrganizationName) {
+            e.preventDefault()
+          }
+        }}
+        onEscapeKeyDown={(e) => {
+          // Allow closing if we just saved, otherwise prevent if organization name is not set
+          if (!justSaved && !currentOrganizationName) {
+            e.preventDefault()
+          }
+        }}
+      >
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Set Organization Name</DialogTitle>
             <DialogDescription>
-              Please set your organization name to continue. A unique ID will be automatically generated for your organization.
+              Please set your organization name to continue. A unique ID will be automatically
+              generated for your organization.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                An organization name is required to use this application. A unique identifier will be automatically generated.
+                An organization name is required to use this application. A unique identifier will
+                be automatically generated.
               </AlertDescription>
             </Alert>
 
@@ -173,7 +182,8 @@ export function OrganizationIdDialog({
                 <p className="text-sm text-destructive">{errors.organizationName.message}</p>
               )}
               <p className="text-xs text-muted-foreground">
-                This name will be used to identify your organization. A unique ID will be generated automatically.
+                This name will be used to identify your organization. A unique ID will be generated
+                automatically.
               </p>
             </div>
           </div>

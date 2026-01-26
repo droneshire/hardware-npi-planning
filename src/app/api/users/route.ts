@@ -16,10 +16,7 @@ export async function POST(request: NextRequest) {
     const { organizationId, name, email, role } = body
 
     if (!name || !email) {
-      return NextResponse.json(
-        { error: "Name and email are required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Name and email are required" }, { status: 400 })
     }
 
     const user = await userService.createUser({
@@ -31,9 +28,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, user })
   } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || "Failed to create user" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: error.message || "Failed to create user" }, { status: 500 })
   }
 }

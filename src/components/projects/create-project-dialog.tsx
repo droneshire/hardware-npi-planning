@@ -209,8 +209,8 @@ export function CreateProjectDialog({ open, onOpenChange }: CreateProjectDialogP
             </Select>
             {watch("templateId") && (
               <p className="text-xs text-muted-foreground">
-                Phases will be automatically generated from this template when the project is created.
-                Start date is required for phase generation.
+                Phases will be automatically generated from this template when the project is
+                created. Start date is required for phase generation.
               </p>
             )}
           </div>

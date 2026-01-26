@@ -259,7 +259,7 @@ export class PhaseTemplateService {
     // Fetch the updated phase
     const phasesResult = await listPhaseTemplatePhases(dataConnect, { templateId })
     const updatedPhase = phasesResult.data.phaseTemplatePhases.find((p) => p.id === id)
-    
+
     if (!updatedPhase) {
       throw new Error("Failed to fetch updated phase")
     }
@@ -329,7 +329,10 @@ export class PhaseTemplateService {
               order: phase.order,
             })
           } catch (phaseError: any) {
-            console.error(`Failed to create phase ${phase.name} for template ${defaultTemplate.name}:`, phaseError)
+            console.error(
+              `Failed to create phase ${phase.name} for template ${defaultTemplate.name}:`,
+              phaseError
+            )
             // Continue with other phases even if one fails
           }
         }
@@ -338,7 +341,10 @@ export class PhaseTemplateService {
       } catch (error: any) {
         console.error(`Failed to create template ${defaultTemplate.name}:`, error)
         // If it's a duplicate error, try to find the existing template
-        if (error.message?.toLowerCase().includes("already exists") || error.message?.toLowerCase().includes("duplicate")) {
+        if (
+          error.message?.toLowerCase().includes("already exists") ||
+          error.message?.toLowerCase().includes("duplicate")
+        ) {
           const existing = existingTemplates.find((t) => t.name === defaultTemplate.name)
           if (existing) {
             createdTemplates.push(existing)

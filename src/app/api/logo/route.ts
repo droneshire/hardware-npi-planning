@@ -75,9 +75,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error: any) {
     console.error("Get logo error:", error)
-    return NextResponse.json(
-      { error: error.message || "Failed to get logo" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: error.message || "Failed to get logo" }, { status: 500 })
   }
 }

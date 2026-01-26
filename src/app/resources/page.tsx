@@ -102,9 +102,7 @@ export default function ResourcesPage() {
       const currentAllocation = userAssignments
         .filter((assignment) => {
           const start = parseISO(assignment.startDate)
-          const end = assignment.endDate
-            ? parseISO(assignment.endDate)
-            : new Date("2099-12-31")
+          const end = assignment.endDate ? parseISO(assignment.endDate) : new Date("2099-12-31")
           return isWithinInterval(now, { start, end })
         })
         .reduce((sum, assignment) => sum + assignment.allocationPercent, 0)
@@ -178,176 +176,179 @@ export default function ResourcesPage() {
         title="Resources"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Resources" }]}
       >
-      <div className="space-y-6">
-        {/* Summary Cards */}
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Resources</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{resources.length}</div>
-              <p className="text-xs text-muted-foreground">Active team members</p>
-            </CardContent>
-          </Card>
+        <div className="space-y-6">
+          {/* Summary Cards */}
+          <div className="grid gap-4 md:grid-cols-3">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Resources</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{resources.length}</div>
+                <p className="text-xs text-muted-foreground">Active team members</p>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Over-allocated</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-destructive" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-destructive">{overAllocatedCount}</div>
-              <p className="text-xs text-muted-foreground">Resources at &gt;100%</p>
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Over-allocated</CardTitle>
+                <AlertTriangle className="h-4 w-4 text-destructive" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-destructive">{overAllocatedCount}</div>
+                <p className="text-xs text-muted-foreground">Resources at &gt;100%</p>
+              </CardContent>
+            </Card>
 
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">At Capacity</CardTitle>
+                <AlertTriangle className="h-4 w-4 text-yellow-500" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-yellow-500">{warningCount}</div>
+                <p className="text-xs text-muted-foreground">Resources at 90-100%</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Resources Table */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">At Capacity</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-yellow-500" />
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Resource List</CardTitle>
+                  <CardDescription>
+                    View all team members and their current allocation status
+                  </CardDescription>
+                </div>
+                <div className="flex gap-2">
+                  <ImportUsersDialog
+                    organizationId={MOCK_ORGANIZATION_ID}
+                    onSuccess={() => {
+                      queryClient.invalidateQueries({ queryKey: ["users"] })
+                      queryClient.invalidateQueries({ queryKey: ["all-user-assignments"] })
+                    }}
+                  />
+                  <CreateUserDialog
+                    organizationId={MOCK_ORGANIZATION_ID}
+                    onSuccess={() => {
+                      queryClient.invalidateQueries({ queryKey: ["users"] })
+                      queryClient.invalidateQueries({ queryKey: ["all-user-assignments"] })
+                    }}
+                  />
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-500">{warningCount}</div>
-              <p className="text-xs text-muted-foreground">Resources at 90-100%</p>
+              <div className="mb-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by name, email, or team..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9"
+                  />
+                </div>
+              </div>
+
+              {isLoading ? (
+                <div className="space-y-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Skeleton key={i} className="h-12 w-full" />
+                  ))}
+                </div>
+              ) : filteredResources.length === 0 ? (
+                <EmptyState
+                  title="No resources found"
+                  description="Try adjusting your search query"
+                />
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Role</TableHead>
+                      <TableHead className="text-right">Allocation</TableHead>
+                      <TableHead className="text-right">Status</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredResources.map((resource) => (
+                      <TableRow key={resource.id}>
+                        <TableCell className="font-medium">
+                          <Link
+                            href={`/resources/people/${resource.id}`}
+                            className="hover:underline"
+                          >
+                            {resource.name}
+                          </Link>
+                        </TableCell>
+                        <TableCell>{resource.email}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline">{resource.role}</Badge>
+                        </TableCell>
+                        <TableCell className="text-right">{resource.totalAllocation}%</TableCell>
+                        <TableCell className="text-right">
+                          <CapacityBadge status={resource.status} />
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm">
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  setEditingUser({
+                                    id: resource.id,
+                                    name: resource.name,
+                                    email: resource.email,
+                                    role: resource.role,
+                                  })
+                                }
+                              >
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(resource)}
+                                className="text-destructive"
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
         </div>
 
-        {/* Resources Table */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Resource List</CardTitle>
-                <CardDescription>
-                  View all team members and their current allocation status
-                </CardDescription>
-              </div>
-              <div className="flex gap-2">
-                <ImportUsersDialog
-                  organizationId={MOCK_ORGANIZATION_ID}
-                  onSuccess={() => {
-                    queryClient.invalidateQueries({ queryKey: ["users"] })
-                    queryClient.invalidateQueries({ queryKey: ["all-user-assignments"] })
-                  }}
-                />
-                <CreateUserDialog
-                  organizationId={MOCK_ORGANIZATION_ID}
-                  onSuccess={() => {
-                    queryClient.invalidateQueries({ queryKey: ["users"] })
-                    queryClient.invalidateQueries({ queryKey: ["all-user-assignments"] })
-                  }}
-                />
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="mb-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder="Search by name, email, or team..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9"
-                />
-              </div>
-            </div>
-
-            {isLoading ? (
-              <div className="space-y-2">
-                {[...Array(5)].map((_, i) => (
-                  <Skeleton key={i} className="h-12 w-full" />
-                ))}
-              </div>
-            ) : filteredResources.length === 0 ? (
-              <EmptyState
-                title="No resources found"
-                description="Try adjusting your search query"
-              />
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead className="text-right">Allocation</TableHead>
-                    <TableHead className="text-right">Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredResources.map((resource) => (
-                    <TableRow key={resource.id}>
-                      <TableCell className="font-medium">
-                        <Link href={`/resources/people/${resource.id}`} className="hover:underline">
-                          {resource.name}
-                        </Link>
-                      </TableCell>
-                      <TableCell>{resource.email}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{resource.role}</Badge>
-                      </TableCell>
-                      <TableCell className="text-right">{resource.totalAllocation}%</TableCell>
-                      <TableCell className="text-right">
-                        <CapacityBadge status={resource.status} />
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() =>
-                                setEditingUser({
-                                  id: resource.id,
-                                  name: resource.name,
-                                  email: resource.email,
-                                  role: resource.role,
-                                })
-                              }
-                            >
-                              <Edit className="mr-2 h-4 w-4" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleDelete(resource)}
-                              className="text-destructive"
-                            >
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
-      <EditUserDialog
-        open={!!editingUser}
-        onOpenChange={(open) => {
-          if (!open) setEditingUser(null)
-        }}
-        user={editingUser}
-        onSuccess={() => {
-          queryClient.invalidateQueries({ queryKey: ["users"] })
-          queryClient.invalidateQueries({ queryKey: ["all-user-assignments"] })
-          setEditingUser(null)
-        }}
-      />
-    </AppLayout>
+        <EditUserDialog
+          open={!!editingUser}
+          onOpenChange={(open) => {
+            if (!open) setEditingUser(null)
+          }}
+          user={editingUser}
+          onSuccess={() => {
+            queryClient.invalidateQueries({ queryKey: ["users"] })
+            queryClient.invalidateQueries({ queryKey: ["all-user-assignments"] })
+            setEditingUser(null)
+          }}
+        />
+      </AppLayout>
     </AuthProtection>
   )
 }

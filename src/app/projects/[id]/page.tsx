@@ -214,9 +214,7 @@ export default function ProjectDetailPage() {
                 <div>
                   <CardTitle className="flex items-center gap-2">
                     {project.name}
-                    <Badge
-                      className={STATUS_COLORS[project.status] || "bg-gray-500"}
-                    >
+                    <Badge className={STATUS_COLORS[project.status] || "bg-gray-500"}>
                       {project.status}
                     </Badge>
                   </CardTitle>
@@ -227,7 +225,7 @@ export default function ProjectDetailPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {project.startDate && (
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -266,7 +264,9 @@ export default function ProjectDetailPage() {
                     <FileText className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <div className="text-sm text-muted-foreground">Phases</div>
-                      <div className="font-medium">{phases.length} phase{phases.length !== 1 ? "s" : ""}</div>
+                      <div className="font-medium">
+                        {phases.length} phase{phases.length !== 1 ? "s" : ""}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -306,16 +306,20 @@ export default function ProjectDetailPage() {
                   ) : (
                     <div className="space-y-4">
                       {sortedPhases.map((phase) => (
-                        <Card key={phase.id} className="border-l-4" style={{
-                          borderLeftColor: PHASE_STATUS_COLORS[phase.status] || "#9ca3af"
-                        }}>
+                        <Card
+                          key={phase.id}
+                          className="border-l-4"
+                          style={{
+                            borderLeftColor: PHASE_STATUS_COLORS[phase.status] || "#9ca3af",
+                          }}
+                        >
                           <CardHeader>
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <div
-                                  className="w-3 h-3 rounded-full"
+                                  className="h-3 w-3 rounded-full"
                                   style={{
-                                    backgroundColor: PHASE_STATUS_COLORS[phase.status] || "#9ca3af"
+                                    backgroundColor: PHASE_STATUS_COLORS[phase.status] || "#9ca3af",
                                   }}
                                 />
                                 <CardTitle className="text-lg">{phase.name}</CardTitle>
@@ -330,7 +334,7 @@ export default function ProjectDetailPage() {
                             )}
                           </CardHeader>
                           <CardContent>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                               {phase.startDate && (
                                 <div>
                                   <div className="text-sm text-muted-foreground">Start Date</div>
@@ -358,13 +362,13 @@ export default function ProjectDetailPage() {
                             </div>
                             {phase.percentComplete > 0 && (
                               <div className="mt-4">
-                                <div className="flex items-center justify-between text-sm mb-1">
+                                <div className="mb-1 flex items-center justify-between text-sm">
                                   <span>Progress</span>
                                   <span>{phase.percentComplete}%</span>
                                 </div>
-                                <div className="w-full bg-muted rounded-full h-2">
+                                <div className="h-2 w-full rounded-full bg-muted">
                                   <div
-                                    className="bg-primary h-2 rounded-full transition-all"
+                                    className="h-2 rounded-full bg-primary transition-all"
                                     style={{ width: `${phase.percentComplete}%` }}
                                   />
                                 </div>
@@ -410,9 +414,7 @@ export default function ProjectDetailPage() {
                       description="No resources have been assigned to this project yet."
                       action={
                         <Button asChild>
-                          <Link href={`/projects/${projectId}/resources`}>
-                            Assign Resources
-                          </Link>
+                          <Link href={`/projects/${projectId}/resources`}>Assign Resources</Link>
                         </Button>
                       }
                     />
@@ -431,9 +433,7 @@ export default function ProjectDetailPage() {
                       <TableBody>
                         {assignments.map((assignment) => (
                           <TableRow key={assignment.id}>
-                            <TableCell className="font-medium">
-                              {assignment.user.name}
-                            </TableCell>
+                            <TableCell className="font-medium">{assignment.user.name}</TableCell>
                             <TableCell>{assignment.user.email}</TableCell>
                             <TableCell>
                               <Badge variant="outline">{assignment.allocationPercent}%</Badge>

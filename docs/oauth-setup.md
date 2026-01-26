@@ -18,21 +18,25 @@ If you're getting an "Error 401: invalid_client" when trying to deploy or use Fi
 ### 3. Fill in OAuth Consent Screen Information
 
 **App information:**
+
 - **App name**: Hardware NPI Planning (or your preferred name)
 - **User support email**: Select your email (ryeager12@gmail.com)
 - **App logo**: (Optional) Upload a logo if you have one
 
 **App domain:**
+
 - **Application home page**: `https://hw-npi-planning.web.app` (or your hosting URL)
 - **Application privacy policy link**: (Optional, but recommended)
 - **Application terms of service link**: (Optional)
 
 **Authorized domains:**
+
 - Add: `firebaseapp.com`
 - Add: `web.app`
 - Add: `localhost` (for development)
 
 **Developer contact information:**
+
 - **Email addresses**: Your email (ryeager12@gmail.com)
 
 4. Click **Save and Continue**
@@ -111,6 +115,7 @@ make deploy_schema
 ### For Production Deployment
 
 When deploying to production, you'll need to:
+
 1. Submit your OAuth consent screen for verification (if using External app type)
 2. Add your production domain to authorized domains
 3. Update OAuth client redirect URIs with production URLs

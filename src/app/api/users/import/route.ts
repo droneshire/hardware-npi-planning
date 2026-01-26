@@ -16,16 +16,10 @@ export async function POST(request: NextRequest) {
     const { organizationId, users } = body
 
     if (!users || !Array.isArray(users)) {
-      return NextResponse.json(
-        { error: "Users array is required" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "Users array is required" }, { status: 400 })
     }
 
-    const result = await userService.bulkCreateUsers(
-      organizationId || MOCK_ORGANIZATION_ID,
-      users
-    )
+    const result = await userService.bulkCreateUsers(organizationId || MOCK_ORGANIZATION_ID, users)
 
     return NextResponse.json({
       success: true,
@@ -33,9 +27,6 @@ export async function POST(request: NextRequest) {
       errors: result.errors,
     })
   } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || "Failed to import users" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: error.message || "Failed to import users" }, { status: 500 })
   }
 }

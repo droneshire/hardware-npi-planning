@@ -146,173 +146,175 @@ export default function ProjectsPage() {
           </Button>
         }
       >
-      <div className="space-y-6">
-        {/* Filters */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Filters</CardTitle>
-            <CardDescription>Filter projects by status and search by name</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    placeholder="Search projects..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9"
-                  />
+        <div className="space-y-6">
+          {/* Filters */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Filters</CardTitle>
+              <CardDescription>Filter projects by status and search by name</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      placeholder="Search projects..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-9"
+                    />
+                  </div>
                 </div>
+                <Select
+                  value={statusFilter}
+                  onValueChange={(value) => setStatusFilter(value as ProjectStatus | "ALL")}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Filter by status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">All Statuses</SelectItem>
+                    <SelectItem value="PLANNING">Planning</SelectItem>
+                    <SelectItem value="ACTIVE">Active</SelectItem>
+                    <SelectItem value="ON_HOLD">On Hold</SelectItem>
+                    <SelectItem value="COMPLETED">Completed</SelectItem>
+                    <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <Select
-                value={statusFilter}
-                onValueChange={(value) => setStatusFilter(value as ProjectStatus | "ALL")}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Filter by status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ALL">All Statuses</SelectItem>
-                  <SelectItem value="PLANNING">Planning</SelectItem>
-                  <SelectItem value="ACTIVE">Active</SelectItem>
-                  <SelectItem value="ON_HOLD">On Hold</SelectItem>
-                  <SelectItem value="COMPLETED">Completed</SelectItem>
-                  <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        {/* Projects Table */}
-        <Card>
-          <CardHeader>
-            <CardTitle>All Projects</CardTitle>
-            <CardDescription>
-              {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""} found
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="space-y-2">
-                {[...Array(5)].map((_, i) => (
-                  <Skeleton key={i} className="h-12 w-full" />
-                ))}
-              </div>
-            ) : filteredProjects.length === 0 ? (
-              <EmptyState
-                title="No projects found"
-                description={
-                  searchQuery || statusFilter !== "ALL"
-                    ? "Try adjusting your filters"
-                    : "Get started by creating your first project"
-                }
-                action={
-                  !searchQuery && statusFilter === "ALL" ? (
-                    <Button onClick={() => setIsCreateDialogOpen(true)}>
-                      <Plus className="mr-2 h-4 w-4" />
-                      Create Project
-                    </Button>
-                  ) : null
-                }
-              />
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Start Date</TableHead>
-                    <TableHead>Target Completion</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredProjects.map((project) => (
-                    <TableRow
-                      key={project.id}
-                      className="cursor-pointer hover:bg-muted/50"
-                      onClick={(e) => {
-                        // Don't navigate if clicking on the actions dropdown or its trigger
-                        const target = e.target as HTMLElement
-                        if (
-                          target.closest('[role="menuitem"]') ||
-                          target.closest('button') ||
-                          target.closest('[data-radix-popper-content-wrapper]')
-                        ) {
-                          return
-                        }
-                        router.push(`/projects/${project.id}`)
-                      }}
-                    >
-                      <TableCell className="font-medium">
-                        <div className="hover:underline">{project.name}</div>
-                        {project.description && (
-                          <p className="mt-1 text-sm text-muted-foreground">
-                            {project.description}
-                          </p>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <span
-                          className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium text-white ${
-                            STATUS_COLORS[project.status]
-                          }`}
-                        >
-                          {project.status}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        {project.startDate ? new Date(project.startDate).toLocaleDateString() : "-"}
-                      </TableCell>
-                      <TableCell>
-                        {project.targetCompletionDate
-                          ? new Date(project.targetCompletionDate).toLocaleDateString()
-                          : "-"}
-                      </TableCell>
-                      <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem asChild>
-                              <Link href={`/projects/${project.id}`}>
-                                <Eye className="mr-2 h-4 w-4" />
-                                View
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/projects/${project.id}/edit`}>
-                                <Edit className="mr-2 h-4 w-4" />
-                                Edit
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleDelete(project.id)}
-                              className="text-destructive"
-                            >
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
+          {/* Projects Table */}
+          <Card>
+            <CardHeader>
+              <CardTitle>All Projects</CardTitle>
+              <CardDescription>
+                {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""} found
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <div className="space-y-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Skeleton key={i} className="h-12 w-full" />
                   ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+                </div>
+              ) : filteredProjects.length === 0 ? (
+                <EmptyState
+                  title="No projects found"
+                  description={
+                    searchQuery || statusFilter !== "ALL"
+                      ? "Try adjusting your filters"
+                      : "Get started by creating your first project"
+                  }
+                  action={
+                    !searchQuery && statusFilter === "ALL" ? (
+                      <Button onClick={() => setIsCreateDialogOpen(true)}>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Create Project
+                      </Button>
+                    ) : null
+                  }
+                />
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Start Date</TableHead>
+                      <TableHead>Target Completion</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredProjects.map((project) => (
+                      <TableRow
+                        key={project.id}
+                        className="cursor-pointer hover:bg-muted/50"
+                        onClick={(e) => {
+                          // Don't navigate if clicking on the actions dropdown or its trigger
+                          const target = e.target as HTMLElement
+                          if (
+                            target.closest('[role="menuitem"]') ||
+                            target.closest("button") ||
+                            target.closest("[data-radix-popper-content-wrapper]")
+                          ) {
+                            return
+                          }
+                          router.push(`/projects/${project.id}`)
+                        }}
+                      >
+                        <TableCell className="font-medium">
+                          <div className="hover:underline">{project.name}</div>
+                          {project.description && (
+                            <p className="mt-1 text-sm text-muted-foreground">
+                              {project.description}
+                            </p>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <span
+                            className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium text-white ${
+                              STATUS_COLORS[project.status]
+                            }`}
+                          >
+                            {project.status}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          {project.startDate
+                            ? new Date(project.startDate).toLocaleDateString()
+                            : "-"}
+                        </TableCell>
+                        <TableCell>
+                          {project.targetCompletionDate
+                            ? new Date(project.targetCompletionDate).toLocaleDateString()
+                            : "-"}
+                        </TableCell>
+                        <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem asChild>
+                                <Link href={`/projects/${project.id}`}>
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  View
+                                </Link>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem asChild>
+                                <Link href={`/projects/${project.id}/edit`}>
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Edit
+                                </Link>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(project.id)}
+                                className="text-destructive"
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </CardContent>
+          </Card>
+        </div>
 
-      <CreateProjectDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} />
-    </AppLayout>
+        <CreateProjectDialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen} />
+      </AppLayout>
     </AuthProtection>
   )
 }

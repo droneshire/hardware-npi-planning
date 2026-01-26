@@ -70,7 +70,11 @@ export default function SettingsPage() {
   const [isSavingSettings, setIsSavingSettings] = useState(false)
   const [logoUrl, setLogoUrl] = useState<string | null>(null)
   const [isUploadingLogo, setIsUploadingLogo] = useState(false)
-  const { organizationName: orgNameFromHook, organizationId: orgIdFromHook, isLoading: isLoadingOrgId } = useOrganizationId()
+  const {
+    organizationName: orgNameFromHook,
+    organizationId: orgIdFromHook,
+    isLoading: isLoadingOrgId,
+  } = useOrganizationId()
   const [organizationName, setOrganizationName] = useState("")
   const [formData, setFormData] = useState({
     name: "",
@@ -258,7 +262,11 @@ export default function SettingsPage() {
   }
 
   const handleDelete = (templateId: string) => {
-    if (confirm("Are you sure you want to delete this template? This will also delete all phases in the template.")) {
+    if (
+      confirm(
+        "Are you sure you want to delete this template? This will also delete all phases in the template."
+      )
+    ) {
       deleteMutation.mutate(templateId)
     }
   }
@@ -308,7 +316,7 @@ export default function SettingsPage() {
         title="Settings"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Settings" }]}
       >
-      <div className="space-y-6">
+        <div className="space-y-6">
           <Tabs defaultValue="organization" className="w-full">
             <TabsList>
               <TabsTrigger value="organization">
@@ -342,7 +350,8 @@ export default function SettingsPage() {
                       disabled={isSavingSettings || isLoadingSettings}
                     />
                     <p className="text-sm text-muted-foreground">
-                      The name of your organization. A unique ID is automatically generated and used as the key in the database.
+                      The name of your organization. A unique ID is automatically generated and used
+                      as the key in the database.
                     </p>
                   </div>
 
@@ -351,7 +360,7 @@ export default function SettingsPage() {
                     <Label>Company Logo</Label>
                     {/* Debug info */}
                     {process.env.NODE_ENV === "development" && (
-                      <div className="text-xs text-muted-foreground mb-2">
+                      <div className="mb-2 text-xs text-muted-foreground">
                         Debug: logoUrl = {logoUrl ? `"${logoUrl.substring(0, 50)}..."` : "null"}
                       </div>
                     )}
@@ -448,7 +457,10 @@ export default function SettingsPage() {
                               const sanitizedEmail = user.email.replace(/[@.]/g, "_")
 
                               // Create storage reference
-                              const logoRef = ref(storage, `logos/${sanitizedEmail}/${Date.now()}_${file.name}`)
+                              const logoRef = ref(
+                                storage,
+                                `logos/${sanitizedEmail}/${Date.now()}_${file.name}`
+                              )
 
                               // Upload file directly from client (has auth context)
                               await uploadBytes(logoRef, file)
@@ -484,11 +496,17 @@ export default function SettingsPage() {
 
                               // Refetch settings to sync with server
                               const refetchResult = await refetchSettings()
-                              console.log("Refetched settings after logo upload:", refetchResult.data)
+                              console.log(
+                                "Refetched settings after logo upload:",
+                                refetchResult.data
+                              )
 
                               // Ensure logo URL is still set after refetch
                               if (refetchResult.data?.organization?.logoUrl) {
-                                console.log("Setting logo from refetched data:", refetchResult.data.organization.logoUrl)
+                                console.log(
+                                  "Setting logo from refetched data:",
+                                  refetchResult.data.organization.logoUrl
+                                )
                                 setLogoUrl(refetchResult.data.organization.logoUrl)
                               } else if (downloadURL) {
                                 // Keep the downloadURL we just uploaded if refetch doesn't have it yet
@@ -515,7 +533,7 @@ export default function SettingsPage() {
                           disabled={isUploadingLogo}
                           className="cursor-pointer"
                         />
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="mt-1 text-xs text-muted-foreground">
                           Upload a company logo (max 5MB). Recommended size: 200x200px or larger.
                         </p>
                       </div>
@@ -682,7 +700,7 @@ export default function SettingsPage() {
                     <Database className="mr-2 h-4 w-4" />
                     Seed Sample Data
                   </Button>
-                  <p className="text-xs text-muted-foreground mt-2">
+                  <p className="mt-2 text-xs text-muted-foreground">
                     Creates 3 portfolios, 4 programs, and 5 projects with phases for testing.
                   </p>
                 </CardContent>
@@ -749,9 +767,7 @@ export default function SettingsPage() {
                               <Input
                                 id="name"
                                 value={formData.name}
-                                onChange={(e) =>
-                                  setFormData({ ...formData, name: e.target.value })
-                                }
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 placeholder="e.g., Standard NPI"
                               />
                             </div>
@@ -877,8 +893,8 @@ export default function SettingsPage() {
               </Card>
             </TabsContent>
           </Tabs>
-      </div>
-    </AppLayout>
+        </div>
+      </AppLayout>
     </AuthProtection>
   )
 }

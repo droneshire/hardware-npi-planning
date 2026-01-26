@@ -13,10 +13,7 @@ import { phaseTemplateService } from "@/services/phaseTemplate.service"
 import { portfolioService } from "@/services/portfolio.service"
 import { programService } from "@/services/program.service"
 import { projectService } from "@/services/project.service"
-import {
-  createOrganization,
-  updateOrganization,
-} from "@firebasegen/default-connector"
+import { createOrganization, updateOrganization } from "@firebasegen/default-connector"
 import { format, addWeeks } from "date-fns"
 
 // Mock organization ID - in production, this would come from authentication
@@ -56,7 +53,11 @@ export async function POST(request: NextRequest) {
       // Check if templates already exist
       const existingTemplates = await phaseTemplateService.listTemplates(organizationId)
       if (existingTemplates.length > 0) {
-        results.templates = existingTemplates.map((t) => ({ id: t.id, name: t.name, action: "existing" }))
+        results.templates = existingTemplates.map((t) => ({
+          id: t.id,
+          name: t.name,
+          action: "existing",
+        }))
       } else {
         const templates = await phaseTemplateService.initializeDefaultTemplates(organizationId)
         results.templates = templates.map((t) => ({ id: t.id, name: t.name, action: "created" }))
@@ -88,7 +89,11 @@ export async function POST(request: NextRequest) {
         const existing = await portfolioService.listPortfolios(organizationId)
         const existingPortfolio = existing.find((p) => p.name === portfolio.name)
         if (existingPortfolio) {
-          results.portfolios.push({ id: existingPortfolio.id, name: portfolio.name, action: "existing" })
+          results.portfolios.push({
+            id: existingPortfolio.id,
+            name: portfolio.name,
+            action: "existing",
+          })
         } else {
           const created = await portfolioService.createPortfolio({
             organizationId,
@@ -135,7 +140,11 @@ export async function POST(request: NextRequest) {
           const existing = await programService.listPrograms(portfolioId)
           const existingProgram = existing.find((p) => p.name === program.name)
           if (existingProgram) {
-            results.programs.push({ id: existingProgram.id, name: program.name, action: "existing" })
+            results.programs.push({
+              id: existingProgram.id,
+              name: program.name,
+              action: "existing",
+            })
           } else {
             const created = await programService.createProgram({
               portfolioId,
@@ -223,18 +232,22 @@ export async function POST(request: NextRequest) {
           description: project.description,
           status: project.status,
           startDate: project.startDate,
-          targetCompletionDate: format(
-            addWeeks(new Date(project.startDate), 40),
-            "yyyy-MM-dd"
-          ),
+          targetCompletionDate: format(addWeeks(new Date(project.startDate), 40), "yyyy-MM-dd"),
           templateId,
         })
         results.projects.push({ id: created.id, name: project.name, action: "created" })
       } catch (error: any) {
         console.error(`Project creation error for ${project.name}:`, error)
         // Check if it's a duplicate error
-        if (error.message?.toLowerCase().includes("already exists") || error.message?.toLowerCase().includes("duplicate")) {
-          results.projects.push({ name: project.name, action: "existing", error: "Project already exists" })
+        if (
+          error.message?.toLowerCase().includes("already exists") ||
+          error.message?.toLowerCase().includes("duplicate")
+        ) {
+          results.projects.push({
+            name: project.name,
+            action: "existing",
+            error: "Project already exists",
+          })
         } else {
           results.projects.push({ name: project.name, error: error.message || String(error) })
         }
@@ -243,7 +256,9 @@ export async function POST(request: NextRequest) {
 
     // Count created vs existing
     const createdCounts = {
-      templates: Array.isArray(results.templates) ? results.templates.filter((t: any) => t.action === "created").length : 0,
+      templates: Array.isArray(results.templates)
+        ? results.templates.filter((t: any) => t.action === "created").length
+        : 0,
       portfolios: results.portfolios.filter((p: any) => p.action === "created").length,
       programs: results.programs.filter((p: any) => p.action === "created").length,
       projects: results.projects.filter((p: any) => p.action === "created").length,

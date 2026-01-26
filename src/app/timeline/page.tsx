@@ -86,16 +86,18 @@ export default function TimelinePage() {
     queryFn: async () => {
       const allProjects: ProjectWithDetails[] = []
 
-      const programsToFetch = programFilter === "ALL" ? programs : programs.filter((p) => p.id === programFilter)
+      const programsToFetch =
+        programFilter === "ALL" ? programs : programs.filter((p) => p.id === programFilter)
 
       for (const program of programsToFetch) {
         try {
           const programProjects = await projectService.listProjects(program.id)
 
           // Filter by status if needed
-          const filteredProjects = statusFilter === "ALL"
-            ? programProjects
-            : programProjects.filter((p) => p.status === statusFilter)
+          const filteredProjects =
+            statusFilter === "ALL"
+              ? programProjects
+              : programProjects.filter((p) => p.status === statusFilter)
 
           // Fetch phases for each project
           for (const project of filteredProjects) {
@@ -161,7 +163,7 @@ export default function TimelinePage() {
               <CardDescription>Customize the timeline view</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {/* Portfolio Filter */}
                 <div className="space-y-2">
                   <Label>Portfolio</Label>
@@ -238,13 +240,13 @@ export default function TimelinePage() {
               </div>
 
               {/* Fiscal Year Toggle */}
-              <div className="flex items-center space-x-2 mt-4 pt-4 border-t">
+              <div className="mt-4 flex items-center space-x-2 border-t pt-4">
                 <Switch
                   id="fiscal-year"
                   checked={useFiscalYear}
                   onCheckedChange={setUseFiscalYear}
                 />
-                <Label htmlFor="fiscal-year" className="flex items-center gap-2 cursor-pointer">
+                <Label htmlFor="fiscal-year" className="flex cursor-pointer items-center gap-2">
                   <Calendar className="h-4 w-4" />
                   Use Fiscal Year
                 </Label>
@@ -257,7 +259,8 @@ export default function TimelinePage() {
             <CardHeader>
               <CardTitle>Project Timeline</CardTitle>
               <CardDescription>
-                {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""} displayed
+                {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""}{" "}
+                displayed
               </CardDescription>
             </CardHeader>
             <CardContent>

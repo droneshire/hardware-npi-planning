@@ -621,6 +621,7 @@ tests/
 ## Next Steps
 
 ### Last Completed
+
 - **Drag-and-Drop & Auto-Snapping Complete**: Implemented drag-and-drop functionality for phase adjustments in the Gantt chart with mouse drag handlers, real-time visual feedback during dragging, automatic collision detection between phases, auto-snapping to avoid overlaps, and phase date updates via mutations. All future enhancements for timeline interactions are now complete.
 
 ### 1. Firebase Data Connect Deployment

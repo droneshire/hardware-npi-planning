@@ -22,8 +22,27 @@ import { EmptyState } from "@/components/ui/empty-state"
 import { dataConnect } from "@/lib/firebase"
 import { listUserAssignments, getUser } from "@firebasegen/default-connector"
 import { CapacityBadge } from "@/components/resources/capacity-badge"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
-import { format, startOfQuarter, endOfQuarter, eachQuarterOfInterval, startOfYear, endOfYear, addQuarters, isWithinInterval, parseISO } from "date-fns"
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts"
+import {
+  format,
+  startOfQuarter,
+  endOfQuarter,
+  eachQuarterOfInterval,
+  startOfYear,
+  endOfYear,
+  addQuarters,
+  isWithinInterval,
+  parseISO,
+} from "date-fns"
 import { ArrowLeft, AlertTriangle, Calendar, Users } from "lucide-react"
 import Link from "next/link"
 
@@ -247,11 +266,7 @@ export default function PersonViewPage() {
   }
 
   const capacityStatus: "normal" | "warning" | "critical" =
-    currentTotalAllocation > 100
-      ? "critical"
-      : currentTotalAllocation > 90
-        ? "warning"
-        : "normal"
+    currentTotalAllocation > 100 ? "critical" : currentTotalAllocation > 90 ? "warning" : "normal"
 
   return (
     <AuthProtection>
@@ -305,7 +320,7 @@ export default function PersonViewPage() {
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="mb-2 flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">Total Allocation</span>
                       <span className="text-2xl font-bold">{currentTotalAllocation}%</span>
                     </div>
@@ -330,9 +345,7 @@ export default function PersonViewPage() {
           <Card>
             <CardHeader>
               <CardTitle>Quarterly Allocation Breakdown</CardTitle>
-              <CardDescription>
-                Total allocation percentage by quarter over time
-              </CardDescription>
+              <CardDescription>Total allocation percentage by quarter over time</CardDescription>
             </CardHeader>
             <CardContent>
               {quarterlyBreakdown.length === 0 ? (
@@ -345,7 +358,10 @@ export default function PersonViewPage() {
                   <BarChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="quarter" />
-                    <YAxis domain={[0, 150]} label={{ value: "Allocation %", angle: -90, position: "insideLeft" }} />
+                    <YAxis
+                      domain={[0, 150]}
+                      label={{ value: "Allocation %", angle: -90, position: "insideLeft" }}
+                    />
                     <Tooltip
                       formatter={(value: number) => [`${value}%`, "Allocation"]}
                       labelFormatter={(label) => `Quarter: ${label}`}
@@ -376,11 +392,13 @@ export default function PersonViewPage() {
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={projectChartData} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" domain={[0, 150]} label={{ value: "Allocation %", position: "insideBottom", offset: -5 }} />
-                    <YAxis dataKey="name" type="category" width={150} />
-                    <Tooltip
-                      formatter={(value: number) => [`${value}%`, "Allocation"]}
+                    <XAxis
+                      type="number"
+                      domain={[0, 150]}
+                      label={{ value: "Allocation %", position: "insideBottom", offset: -5 }}
                     />
+                    <YAxis dataKey="name" type="category" width={150} />
+                    <Tooltip formatter={(value: number) => [`${value}%`, "Allocation"]} />
                     <Legend />
                     <Bar dataKey="allocation" fill="#10b981" name="Allocation %" />
                   </BarChart>
@@ -393,9 +411,7 @@ export default function PersonViewPage() {
           <Card>
             <CardHeader>
               <CardTitle>Historical Assignments</CardTitle>
-              <CardDescription>
-                Complete history of all project assignments
-              </CardDescription>
+              <CardDescription>Complete history of all project assignments</CardDescription>
             </CardHeader>
             <CardContent>
               {assignments.length === 0 ? (
@@ -425,9 +441,7 @@ export default function PersonViewPage() {
                         const start = parseISO(assignment.startDate)
                         const end = assignment.endDate ? parseISO(assignment.endDate) : null
                         const now = new Date()
-                        const isActive = end
-                          ? isWithinInterval(now, { start, end })
-                          : now >= start
+                        const isActive = end ? isWithinInterval(now, { start, end }) : now >= start
                         const isPast = end ? now > end : false
                         const isFuture = now < start
 
@@ -459,9 +473,7 @@ export default function PersonViewPage() {
                               <Badge variant="outline">{assignment.allocationPercent}%</Badge>
                             </TableCell>
                             <TableCell>{format(start, "MMM d, yyyy")}</TableCell>
-                            <TableCell>
-                              {end ? format(end, "MMM d, yyyy") : "Ongoing"}
-                            </TableCell>
+                            <TableCell>{end ? format(end, "MMM d, yyyy") : "Ongoing"}</TableCell>
                             <TableCell>
                               {isActive ? (
                                 <Badge className="bg-green-500">Active</Badge>

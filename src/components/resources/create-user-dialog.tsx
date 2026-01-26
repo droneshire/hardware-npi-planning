@@ -119,9 +119,7 @@ export function CreateUserDialog({ organizationId, onSuccess }: CreateUserDialog
                 placeholder="John Doe"
                 disabled={isSubmitting}
               />
-              {errors.name && (
-                <p className="text-sm text-destructive">{errors.name.message}</p>
-              )}
+              {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -133,9 +131,7 @@ export function CreateUserDialog({ organizationId, onSuccess }: CreateUserDialog
                 placeholder="john@example.com"
                 disabled={isSubmitting}
               />
-              {errors.email && (
-                <p className="text-sm text-destructive">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -154,13 +150,16 @@ export function CreateUserDialog({ organizationId, onSuccess }: CreateUserDialog
                   <SelectItem value="VIEWER">Viewer</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.role && (
-                <p className="text-sm text-destructive">{errors.role.message}</p>
-              )}
+              {errors.role && <p className="text-sm text-destructive">{errors.role.message}</p>}
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isSubmitting}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+              disabled={isSubmitting}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>

@@ -74,8 +74,17 @@ export async function GET(request: NextRequest) {
     })
   } catch (error: any) {
     console.error("Get settings error:", error)
+    console.error("Error details:", {
+      message: error.message,
+      code: error.code,
+      stack: error.stack,
+    })
     return NextResponse.json(
-      { error: error.message || "Failed to get settings" },
+      {
+        error: error.message || "Failed to get settings",
+        code: error.code,
+        details: process.env.NODE_ENV === "development" ? error.stack : undefined,
+      },
       { status: 500 }
     )
   }

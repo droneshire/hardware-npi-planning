@@ -35,6 +35,6 @@ export function useOrganizationId() {
   return {
     organizationId: data?.organizationId || null,
     organizationName: data?.organizationName || null,
-    isLoading
+    isLoading,
   }
 }

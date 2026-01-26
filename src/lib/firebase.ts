@@ -2,10 +2,7 @@ import { initializeApp, getApps, getApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore"
 import { getStorage, connectStorageEmulator } from "firebase/storage"
-import {
-  connectDataConnectEmulator,
-  getDataConnect,
-} from "firebase/data-connect"
+import { connectDataConnectEmulator, getDataConnect } from "firebase/data-connect"
 import { connectorConfig } from "@firebasegen/default-connector"
 
 const firebaseConfig = {

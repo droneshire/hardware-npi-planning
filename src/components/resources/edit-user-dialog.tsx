@@ -111,9 +111,7 @@ export function EditUserDialog({ open, onOpenChange, user, onSuccess }: EditUser
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>Edit User</DialogTitle>
-            <DialogDescription>
-              Update user information. Email cannot be changed.
-            </DialogDescription>
+            <DialogDescription>Update user information. Email cannot be changed.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -130,9 +128,7 @@ export function EditUserDialog({ open, onOpenChange, user, onSuccess }: EditUser
                 placeholder="John Doe"
                 disabled={isSubmitting}
               />
-              {errors.name && (
-                <p className="text-sm text-destructive">{errors.name.message}</p>
-              )}
+              {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
             </div>
 
             <div className="space-y-2">
@@ -151,13 +147,16 @@ export function EditUserDialog({ open, onOpenChange, user, onSuccess }: EditUser
                   <SelectItem value="VIEWER">Viewer</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.role && (
-                <p className="text-sm text-destructive">{errors.role.message}</p>
-              )}
+              {errors.role && <p className="text-sm text-destructive">{errors.role.message}</p>}
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isSubmitting}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              disabled={isSubmitting}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>

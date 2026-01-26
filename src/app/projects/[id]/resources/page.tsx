@@ -53,7 +53,7 @@ import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 
 // Mock organization ID for development
-const MOCK_ORGANIZATION_ID = "org-1"
+const MOCK_ORGANIZATION_ID = "00000000-0000-0000-0000-000000000001"
 
 export default function ProjectAssignmentsPage() {
   const params = useParams()
@@ -143,15 +143,20 @@ export default function ProjectAssignmentsPage() {
         }
 
         const assignmentStart = parseISO(assignment.startDate)
-        const assignmentEnd = assignment.endDate ? parseISO(assignment.endDate) : new Date("2099-12-31")
+        const assignmentEnd = assignment.endDate
+          ? parseISO(assignment.endDate)
+          : new Date("2099-12-31")
 
-        const overlaps = isWithinInterval(startDate, {
-          start: assignmentStart,
-          end: assignmentEnd,
-        }) || isWithinInterval(endDate, {
-          start: assignmentStart,
-          end: assignmentEnd,
-        }) || (startDate <= assignmentStart && endDate >= assignmentEnd)
+        const overlaps =
+          isWithinInterval(startDate, {
+            start: assignmentStart,
+            end: assignmentEnd,
+          }) ||
+          isWithinInterval(endDate, {
+            start: assignmentStart,
+            end: assignmentEnd,
+          }) ||
+          (startDate <= assignmentStart && endDate >= assignmentEnd)
 
         if (overlaps) {
           totalAllocation += assignment.allocationPercent
@@ -361,16 +366,18 @@ export default function ProjectAssignmentsPage() {
             </Button>
             <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
               <DialogTrigger asChild>
-                <Button onClick={() => {
-                  setEditingAssignment(null)
-                  setFormData({
-                    userId: "",
-                    allocationPercent: 50,
-                    startDate: "",
-                    endDate: "",
-                    notes: "",
-                  })
-                }}>
+                <Button
+                  onClick={() => {
+                    setEditingAssignment(null)
+                    setFormData({
+                      userId: "",
+                      allocationPercent: 50,
+                      startDate: "",
+                      endDate: "",
+                      notes: "",
+                    })
+                  }}
+                >
                   <Plus className="mr-2 h-4 w-4" />
                   Assign Resource
                 </Button>
@@ -381,7 +388,8 @@ export default function ProjectAssignmentsPage() {
                     {editingAssignment ? "Edit Assignment" : "Assign Resource"}
                   </DialogTitle>
                   <DialogDescription>
-                    Assign a team member to this project with an allocation percentage and date range.
+                    Assign a team member to this project with an allocation percentage and date
+                    range.
                   </DialogDescription>
                 </DialogHeader>
 
@@ -468,9 +476,9 @@ export default function ProjectAssignmentsPage() {
                       <AlertDescription>
                         This assignment would result in {allocationWarning.totalAllocation}% total
                         allocation for this user in the selected date range. The user is already
-                        assigned to {allocationWarning.overlappingAssignments.length} other
-                        project{allocationWarning.overlappingAssignments.length !== 1 ? "s" : ""} in
-                        this period.
+                        assigned to {allocationWarning.overlappingAssignments.length} other project
+                        {allocationWarning.overlappingAssignments.length !== 1 ? "s" : ""} in this
+                        period.
                       </AlertDescription>
                     </Alert>
                   )}
@@ -543,9 +551,7 @@ export default function ProjectAssignmentsPage() {
                   <TableBody>
                     {assignments.map((assignment) => (
                       <TableRow key={assignment.id}>
-                        <TableCell className="font-medium">
-                          {assignment.user.name}
-                        </TableCell>
+                        <TableCell className="font-medium">{assignment.user.name}</TableCell>
                         <TableCell>{assignment.user.email}</TableCell>
                         <TableCell>
                           <Badge variant="outline">{assignment.allocationPercent}%</Badge>

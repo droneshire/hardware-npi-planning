@@ -160,7 +160,9 @@ const signInWithProvider = async (providerFactory: () => GoogleAuthProvider) => 
           console.log("User closed the popup")
           break
         case "auth/network-request-failed":
-          throw new Error("Network error occurred. Please check your internet connection and try again.")
+          throw new Error(
+            "Network error occurred. Please check your internet connection and try again."
+          )
         default:
           console.error("Authentication error:", error.message)
           throw error

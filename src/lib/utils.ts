@@ -78,8 +78,15 @@ export function validateNonEmptyString(value: string | undefined, fieldName: str
 /**
  * Validates that a required value is provided
  */
-export function validateRequired<T>(value: T | undefined | null, fieldName: string): asserts value is T {
-  if (value === undefined || value === null || (typeof value === "string" && value.trim().length === 0)) {
+export function validateRequired<T>(
+  value: T | undefined | null,
+  fieldName: string
+): asserts value is T {
+  if (
+    value === undefined ||
+    value === null ||
+    (typeof value === "string" && value.trim().length === 0)
+  ) {
     throw new Error(`${fieldName} is required`)
   }
 }

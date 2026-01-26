@@ -15,7 +15,6 @@ import {
   updateUser,
   deleteUser,
 } from "@firebasegen/default-connector"
-import { validateRequired, validateNonEmptyString, validateEmail } from "@/lib/utils"
 
 type UUID = string
 
@@ -103,6 +102,7 @@ export class UserService {
    */
   async createUser(input: CreateUserInput): Promise<User> {
     // Validate input
+<<<<<<< HEAD
     validateRequired(input.email, "Email")
     validateRequired(input.name, "Name")
     validateRequired(input.organizationId, "Organization ID")
@@ -111,6 +111,29 @@ export class UserService {
     // Generate a temporary Firebase UID if not provided
     // In production, this would be created via Firebase Auth first
     const firebaseUid = input.firebaseUid || `temp-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
+=======
+    if (!input.email || input.email.trim().length === 0) {
+      throw new Error("Email is required")
+    }
+
+    if (!input.name || input.name.trim().length === 0) {
+      throw new Error("Name is required")
+    }
+
+    if (!input.organizationId) {
+      throw new Error("Organization ID is required")
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(input.email)) {
+      throw new Error("Invalid email format")
+    }
+
+    // Generate a temporary Firebase UID if not provided
+    // In production, this would be created via Firebase Auth first
+    const firebaseUid = input.firebaseUid || `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+>>>>>>> a2b1529 (wip)
 
     const result = await createUser(dataConnect, {
       organizationId: input.organizationId,
@@ -138,8 +161,18 @@ export class UserService {
    */
   async updateUser(input: UpdateUserInput): Promise<User> {
     // Validate input
+<<<<<<< HEAD
     validateRequired(input.id, "User ID")
     validateNonEmptyString(input.name, "Name")
+=======
+    if (!input.id) {
+      throw new Error("User ID is required")
+    }
+
+    if (input.name !== undefined && input.name.trim().length === 0) {
+      throw new Error("Name cannot be empty")
+    }
+>>>>>>> a2b1529 (wip)
 
     await updateUser(dataConnect, {
       id: input.id,

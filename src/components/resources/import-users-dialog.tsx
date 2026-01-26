@@ -177,7 +177,8 @@ export function ImportUsersDialog({ organizationId, onSuccess }: ImportUsersDial
   }
 
   const downloadTemplate = () => {
-    const csv = "name,email,role\nJohn Doe,john@example.com,MEMBER\nJane Smith,jane@example.com,ADMIN"
+    const csv =
+      "name,email,role\nJohn Doe,john@example.com,MEMBER\nJane Smith,jane@example.com,ADMIN"
     const blob = new Blob([csv], { type: "text/csv" })
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
@@ -195,7 +196,7 @@ export function ImportUsersDialog({ organizationId, onSuccess }: ImportUsersDial
           Import CSV
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Import Users from CSV</DialogTitle>
           <DialogDescription>
@@ -227,7 +228,7 @@ export function ImportUsersDialog({ organizationId, onSuccess }: ImportUsersDial
                 <FileText className="h-4 w-4" />
                 <span className="text-sm font-medium">Preview ({preview.length} rows)</span>
               </div>
-              <div className="border rounded-md overflow-auto max-h-64">
+              <div className="max-h-64 overflow-auto rounded-md border">
                 <table className="w-full text-sm">
                   <thead className="bg-muted">
                     <tr>
@@ -262,8 +263,8 @@ export function ImportUsersDialog({ organizationId, onSuccess }: ImportUsersDial
                 <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
-                    <div className="font-semibold mb-2">{importResult.errors.length} errors:</div>
-                    <ul className="list-disc list-inside space-y-1 text-sm">
+                    <div className="mb-2 font-semibold">{importResult.errors.length} errors:</div>
+                    <ul className="list-inside list-disc space-y-1 text-sm">
                       {importResult.errors.slice(0, 5).map((error, i) => (
                         <li key={i}>
                           {error.email}: {error.error}
@@ -279,11 +280,11 @@ export function ImportUsersDialog({ organizationId, onSuccess }: ImportUsersDial
             </div>
           )}
 
-          <div className="text-xs text-muted-foreground space-y-1">
+          <div className="space-y-1 text-xs text-muted-foreground">
             <p>
               <strong>CSV Format:</strong>
             </p>
-            <ul className="list-disc list-inside space-y-1 ml-2">
+            <ul className="ml-2 list-inside list-disc space-y-1">
               <li>Required columns: name, email</li>
               <li>Optional column: role (ADMIN, MEMBER, or VIEWER)</li>
               <li>First row should be headers</li>

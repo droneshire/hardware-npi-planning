@@ -1,14 +1,13 @@
 /**
  * Server-side Firestore utilities
  * These functions can be used in API routes and server components
+ *
+ * NOTE: These functions use the client SDK which requires authentication.
+ * For server-side operations without auth context, use Firebase Admin SDK instead.
+ * For now, we rely on Firestore security rules to allow authenticated users.
  */
 
-import {
-  collection,
-  doc,
-  getDoc,
-  setDoc,
-} from "firebase/firestore"
+import { collection, doc, getDoc, setDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { UserDocument, AdminDocument } from "@/types/firestore"
 import { FIRESTORE_COLLECTIONS } from "@/constants/firestore"

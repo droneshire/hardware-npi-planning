@@ -111,10 +111,7 @@ export default function DashboardPage() {
     <AuthProtection>
       <AppLayout
         title="Dashboard"
-        breadcrumbs={[
-          { label: "Home", href: "/" },
-          { label: "Dashboard" },
-        ]}
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Dashboard" }]}
       >
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {/* Active Projects Card */}
@@ -132,7 +129,7 @@ export default function DashboardPage() {
                   <p className="text-xs text-muted-foreground">Currently in progress</p>
                   <Link
                     href="/projects"
-                    className="text-xs text-primary hover:underline mt-2 inline-block"
+                    className="mt-2 inline-block text-xs text-primary hover:underline"
                   >
                     View all projects →
                   </Link>
@@ -153,12 +150,10 @@ export default function DashboardPage() {
               ) : (
                 <>
                   <div className="text-3xl font-bold">{resourceStats.averageUtilization}%</div>
-                  <p className="text-xs text-muted-foreground">
-                    Organization-wide average
-                  </p>
+                  <p className="text-xs text-muted-foreground">Organization-wide average</p>
                   <Link
                     href="/resources"
-                    className="text-xs text-primary hover:underline mt-2 inline-block"
+                    className="mt-2 inline-block text-xs text-primary hover:underline"
                   >
                     View resources →
                   </Link>
@@ -185,7 +180,7 @@ export default function DashboardPage() {
                   {resourceStats.overAllocatedCount > 0 && (
                     <Link
                       href="/resources"
-                      className="text-xs text-primary hover:underline mt-2 inline-block"
+                      className="mt-2 inline-block text-xs text-primary hover:underline"
                     >
                       Review allocations →
                     </Link>
@@ -216,7 +211,7 @@ export default function DashboardPage() {
                   {recentProjects.map((project) => (
                     <div
                       key={project.id}
-                      className="flex items-center justify-between p-2 rounded-md hover:bg-muted"
+                      className="flex items-center justify-between rounded-md p-2 hover:bg-muted"
                     >
                       <div>
                         <Link
@@ -236,7 +231,7 @@ export default function DashboardPage() {
                   ))}
                   <Link
                     href="/projects"
-                    className="text-sm text-primary hover:underline mt-4 inline-block"
+                    className="mt-4 inline-block text-sm text-primary hover:underline"
                   >
                     View all projects →
                   </Link>

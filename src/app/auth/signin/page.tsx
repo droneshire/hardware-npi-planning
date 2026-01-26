@@ -32,10 +32,7 @@ export default function SignInPage() {
   const getValidCallbackUrl = () => {
     const rawCallbackUrl = searchParams.get("callbackUrl") || DEFAULT_SIGNIN_REDIRECT
     // Prevent redirecting to auth pages or current page
-    if (
-      rawCallbackUrl.startsWith(ROUTES.AUTH.BASE) ||
-      rawCallbackUrl === pathname
-    ) {
+    if (rawCallbackUrl.startsWith(ROUTES.AUTH.BASE) || rawCallbackUrl === pathname) {
       return DEFAULT_SIGNIN_REDIRECT
     }
     return rawCallbackUrl
@@ -127,7 +124,6 @@ export default function SignInPage() {
     )
   }
 
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
@@ -136,7 +132,6 @@ export default function SignInPage() {
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-
           <Button
             type="button"
             variant="outline"

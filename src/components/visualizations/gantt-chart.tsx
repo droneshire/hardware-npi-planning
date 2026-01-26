@@ -407,15 +407,15 @@ export function GanttChart({
     <div className="w-full overflow-x-auto" ref={timelineRef}>
       <div className="min-w-[800px]">
         {/* Header with time periods - grouped by year */}
-        <div className="sticky top-0 z-10 bg-background border-b">
+        <div className="sticky top-0 z-10 border-b bg-background">
           {/* Year row */}
           <div className="flex border-b">
-            <div className="w-64 flex-shrink-0 border-r p-2 font-medium bg-muted/30"></div>
+            <div className="w-64 flex-shrink-0 border-r bg-muted/30 p-2 font-medium"></div>
             <div className="flex">
               {yearGroups.map((group) => (
                 <div
                   key={group.year}
-                  className="border-r last:border-r-0 px-2 py-2 text-center font-semibold bg-muted/30 whitespace-nowrap"
+                  className="whitespace-nowrap border-r bg-muted/30 px-2 py-2 text-center font-semibold last:border-r-0"
                   style={{ minWidth: `${group.quarters.length * 50}px` }}
                 >
                   {group.year}
@@ -434,7 +434,7 @@ export function GanttChart({
                 return (
                   <div
                     key={index}
-                    className="border-r last:border-r-0 px-2 py-2 text-center text-sm whitespace-nowrap"
+                    className="whitespace-nowrap border-r px-2 py-2 text-center text-sm last:border-r-0"
                     style={{
                       backgroundColor: isEven ? "rgba(59, 130, 246, 0.05)" : "transparent",
                       minWidth: "50px",
@@ -464,12 +464,12 @@ export function GanttChart({
 
             return (
               <div key={project.id} className="group hover:bg-muted/50">
-                <div className="flex items-center min-h-[60px]">
+                <div className="flex min-h-[60px] items-center">
                   {/* Project name column */}
                   <div className="w-64 flex-shrink-0 border-r p-2">
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-3 h-3 rounded-full"
+                        className="h-3 w-3 rounded-full"
                         style={{
                           backgroundColor: STATUS_COLORS[project.status] || "#9ca3af",
                         }}
@@ -489,7 +489,7 @@ export function GanttChart({
                       </Link>
                     </div>
                     {project.programName && (
-                      <div className="text-xs text-muted-foreground mt-1">
+                      <div className="mt-1 text-xs text-muted-foreground">
                         {project.portfolioName && `${project.portfolioName} → `}
                         {project.programName}
                       </div>
@@ -497,9 +497,9 @@ export function GanttChart({
                   </div>
 
                   {/* Timeline area */}
-                  <div className="flex-1 relative h-full min-h-[48px]">
+                  <div className="relative h-full min-h-[48px] flex-1">
                     {/* Quarter background grid */}
-                    <div className="absolute inset-0 flex pointer-events-none">
+                    <div className="pointer-events-none absolute inset-0 flex">
                       {periods.map((period, index) => {
                         const quarterStart = startOfQuarter(period)
                         const quarterEnd = endOfQuarter(period)
@@ -521,11 +521,13 @@ export function GanttChart({
 
                     {/* Phase bars - no project bar, just phases */}
                     {project.phases && project.phases.length > 0 && (
-                      <div className="absolute top-2 left-0 right-0 h-6 flex">
+                      <div className="absolute left-0 right-0 top-2 flex h-6">
                         {project.phases
                           .sort((a, b) => a.order - b.order)
                           .map((phase) => {
-                            const phaseStart = phase.startDate ? new Date(phase.startDate) : undefined
+                            const phaseStart = phase.startDate
+                              ? new Date(phase.startDate)
+                              : undefined
                             const phaseEnd =
                               phase.actualEndDate || phase.targetEndDate
                                 ? new Date(phase.actualEndDate || phase.targetEndDate!)
@@ -548,7 +550,10 @@ export function GanttChart({
                               const containerWidth = rect.width - 256
                               const adjustedPosition = Math.max(
                                 0,
-                                Math.min(containerWidth, dragPosition - (draggingPhase?.startOffset || 0))
+                                Math.min(
+                                  containerWidth,
+                                  dragPosition - (draggingPhase?.startOffset || 0)
+                                )
                               )
                               displayStart = pixelToDate(adjustedPosition, containerWidth)
                               const phaseDuration = differenceInDays(phaseEnd, phaseStart)
@@ -562,8 +567,8 @@ export function GanttChart({
                             return (
                               <div
                                 key={phase.id}
-                                className={`rounded-sm text-xs flex items-center justify-center text-white font-semibold truncate px-1 cursor-move transition-all border border-white/20 ${
-                                  isDragging ? "opacity-80 shadow-lg z-20" : "hover:opacity-90"
+                                className={`flex cursor-move items-center justify-center truncate rounded-sm border border-white/20 px-1 text-xs font-semibold text-white transition-all ${
+                                  isDragging ? "z-20 opacity-80 shadow-lg" : "hover:opacity-90"
                                 }`}
                                 style={{
                                   left: `${displayBar.left}%`,
