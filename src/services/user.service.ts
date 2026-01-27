@@ -4,17 +4,19 @@
  * Handles all User CRUD operations using Firebase Data Connect.
  */
 
-import { User, UserRole } from "@/types"
+import { User } from "@/types"
+import type { UserRole as AppUserRole } from "@/types"
 import { dataConnect } from "@/lib/firebase"
 import {
   listUsers,
   getUser,
   getUserByEmail,
-  getUserByFirebaseUid,
   createUser,
   updateUser,
   deleteUser,
+  UserRole,
 } from "@firebasegen/default-connector"
+import { validateRequired, validateEmail, validateNonEmptyString } from "@/lib/utils"
 
 type UUID = string
 
@@ -22,14 +24,14 @@ interface CreateUserInput {
   organizationId: UUID
   email: string
   name: string
-  role?: UserRole
+  role?: AppUserRole
   firebaseUid?: string // Optional for CSV imports - will be generated if not provided
 }
 
 interface UpdateUserInput {
   id: UUID
   name?: string
-  role?: UserRole
+  role?: AppUserRole
 }
 
 /**
@@ -43,10 +45,10 @@ export class UserService {
     const result = await listUsers(dataConnect, { organizationId })
     return result.data.users.map((u) => ({
       id: u.id,
-      organizationId: u.organizationId || organizationId,
+      organizationId: organizationId, // organizationId is not in list query result, use parameter
       email: u.email,
       name: u.name,
-      role: u.role as UserRole,
+      role: u.role as AppUserRole,
       firebaseUid: "", // Not returned in list query
       createdAt: u.createdAt,
       updatedAt: u.updatedAt,
@@ -68,7 +70,7 @@ export class UserService {
       organizationId: user.organizationId,
       email: user.email,
       name: user.name,
-      role: user.role as UserRole,
+      role: user.role as AppUserRole,
       firebaseUid: user.firebaseUid || "",
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
@@ -90,7 +92,7 @@ export class UserService {
       organizationId: user.organizationId,
       email: user.email,
       name: user.name,
-      role: user.role as UserRole,
+      role: user.role as AppUserRole,
       firebaseUid: user.firebaseUid || "",
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
@@ -112,25 +114,22 @@ export class UserService {
     const firebaseUid =
       input.firebaseUid || `temp-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
 
+    const roleValue: UserRole | null | undefined = input.role ? (input.role as UserRole) : UserRole.MEMBER
     const result = await createUser(dataConnect, {
       organizationId: input.organizationId,
       email: input.email,
       name: input.name,
-      role: input.role || "MEMBER",
+      role: roleValue,
       firebaseUid,
     })
 
     const user = result.data.user_insert
-    return {
-      id: user.id,
-      organizationId: input.organizationId,
-      email: input.email,
-      name: input.name,
-      role: (input.role || "MEMBER") as UserRole,
-      firebaseUid,
-      createdAt: user.createdAt || new Date().toISOString(),
-      updatedAt: user.updatedAt || new Date().toISOString(),
+    // user_insert only returns User_Key (id), so we need to fetch the full user
+    const createdUser = await this.getUser(user.id)
+    if (!createdUser) {
+      throw new Error("Failed to fetch created user")
     }
+    return createdUser
   }
 
   /**
@@ -141,10 +140,11 @@ export class UserService {
     validateRequired(input.id, "User ID")
     validateNonEmptyString(input.name, "Name")
 
+    const roleValue: UserRole | null | undefined = input.role ? (input.role as UserRole) : null
     await updateUser(dataConnect, {
       id: input.id,
       name: input.name ?? null,
-      role: input.role ?? null,
+      role: roleValue,
     })
 
     // Fetch the updated user
@@ -182,7 +182,7 @@ export class UserService {
    */
   async bulkCreateUsers(
     organizationId: UUID,
-    users: Array<{ email: string; name: string; role?: UserRole }>
+    users: Array<{ email: string; name: string; role?: AppUserRole }>
   ): Promise<{ created: User[]; errors: Array<{ email: string; error: string }> }> {
     const created: User[] = []
     const errors: Array<{ email: string; error: string }> = []
@@ -203,13 +203,14 @@ export class UserService {
           organizationId,
           email: userData.email,
           name: userData.name,
-          role: userData.role || "MEMBER",
+          role: userData.role || ("MEMBER" as AppUserRole),
         })
         created.push(user)
-      } catch (error: any) {
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Failed to create user"
         errors.push({
           email: userData.email,
-          error: error.message || "Failed to create user",
+          error: errorMessage,
         })
       }
     }

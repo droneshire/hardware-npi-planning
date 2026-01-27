@@ -71,3 +71,24 @@ if (process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST) {
 }
 
 export { app, auth, db, storage }
+
+/**
+ * Get the current user's Firebase ID token for API authentication
+ * Returns null if no user is authenticated
+ */
+export async function getFirebaseIdToken(): Promise<string | null> {
+  if (typeof window === "undefined") {
+    return null // Server-side, no token available
+  }
+
+  try {
+    const currentUser = auth.currentUser
+    if (!currentUser) {
+      return null
+    }
+    return await currentUser.getIdToken()
+  } catch (error) {
+    console.error("Error getting Firebase ID token:", error)
+    return null
+  }
+}

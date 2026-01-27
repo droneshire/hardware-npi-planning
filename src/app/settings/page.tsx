@@ -52,7 +52,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useAuthStateWatcher } from "@/hooks/use-auth"
 import { getUserDocument } from "@/hooks/use-firestore"
 import { useOrganizationId } from "@/hooks/use-organization-id"
-import { storage } from "@/lib/firebase"
+import { storage, getFirebaseIdToken } from "@/lib/firebase"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import Image from "next/image"
 
@@ -92,7 +92,15 @@ export default function SettingsPage() {
       }
 
       try {
-        const response = await fetch(`/api/settings?userEmail=${encodeURIComponent(user.email)}`)
+        const idToken = await getFirebaseIdToken()
+        const headers: HeadersInit = {}
+        if (idToken) {
+          headers.Authorization = `Bearer ${idToken}`
+        }
+
+        const response = await fetch(`/api/settings?userEmail=${encodeURIComponent(user.email)}`, {
+          headers,
+        })
         if (!response.ok) {
           throw new Error("Failed to load settings")
         }
@@ -382,9 +390,15 @@ export default function SettingsPage() {
                             onClick={async () => {
                               if (!user?.email) return
                               try {
+                                const idToken = await getFirebaseIdToken()
+                                const headers: HeadersInit = { "Content-Type": "application/json" }
+                                if (idToken) {
+                                  headers.Authorization = `Bearer ${idToken}`
+                                }
+
                                 const response = await fetch("/api/logo", {
                                   method: "POST",
-                                  headers: { "Content-Type": "application/json" },
+                                  headers,
                                   body: JSON.stringify({
                                     userEmail: user.email,
                                     logoUrl: null, // Set to null to remove
@@ -470,9 +484,15 @@ export default function SettingsPage() {
                               console.log("Logo uploaded, download URL:", downloadURL)
 
                               // Save logo URL to user document via API
+                              const idToken = await getFirebaseIdToken()
+                              const headers: HeadersInit = { "Content-Type": "application/json" }
+                              if (idToken) {
+                                headers.Authorization = `Bearer ${idToken}`
+                              }
+
                               const response = await fetch("/api/logo", {
                                 method: "POST",
-                                headers: { "Content-Type": "application/json" },
+                                headers,
                                 body: JSON.stringify({
                                   userEmail: user.email,
                                   logoUrl: downloadURL,
@@ -580,9 +600,15 @@ export default function SettingsPage() {
                         // Generate UUID if it doesn't exist
                         const organizationId = orgIdFromHook || crypto.randomUUID()
 
+                        const idToken = await getFirebaseIdToken()
+                        const headers: HeadersInit = { "Content-Type": "application/json" }
+                        if (idToken) {
+                          headers.Authorization = `Bearer ${idToken}`
+                        }
+
                         const response = await fetch("/api/settings", {
                           method: "POST",
-                          headers: { "Content-Type": "application/json" },
+                          headers,
                           body: JSON.stringify({
                             userEmail: user.email,
                             settings: {

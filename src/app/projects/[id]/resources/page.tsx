@@ -104,7 +104,7 @@ export default function ProjectAssignmentsPage() {
       const result = await listProjectAssignments(dataConnect, { projectId })
       return result.data.projectAssignments.map((a) => ({
         id: a.id,
-        projectId: a.projectId,
+        projectId: projectId, // projectId is not in query result, use from query variable
         userId: a.userId,
         allocationPercent: a.allocationPercent,
         startDate: a.startDate,
