@@ -52,7 +52,7 @@ export function AppLayout({ children, title, breadcrumbs, actions }: AppLayoutPr
 
           <main className="flex-1 overflow-y-auto">
             {breadcrumbs && breadcrumbs.length > 0 && (
-              <div className="border-b bg-background px-6 py-3">
+              <div className="border-b border-border/50 bg-background/50 px-6 py-3">
                 <Breadcrumbs items={breadcrumbs} />
               </div>
             )}

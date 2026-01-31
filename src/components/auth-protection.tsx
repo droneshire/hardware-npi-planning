@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuthStateWatcher } from "@/hooks/use-auth"
 import { ROUTES, DEFAULT_REDIRECT } from "@/constants/routes"
+import { Loader2 } from "lucide-react"
 
 interface AuthProtectionProps {
   children: React.ReactNode
@@ -32,7 +33,10 @@ export function AuthProtection({
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-muted-foreground">Loading...</div>
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </div>
       </div>
     )
   }

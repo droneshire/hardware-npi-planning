@@ -20,6 +20,7 @@ export const ROUTES = {
   TIMELINE: "/timeline",
   PROJECTS: "/projects",
   RESOURCES: "/resources",
+  INSTRUCTIONS: "/instructions",
   SETTINGS: "/settings",
 
   // Dynamic routes
