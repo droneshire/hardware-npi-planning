@@ -31,7 +31,7 @@ describe("cn - Tailwind class merger", () => {
 
 describe("formatDate", () => {
   it("should format Date objects", () => {
-    const date = new Date("2024-03-15")
+    const date = new Date(2024, 2, 15) // March 15, 2024 (local)
     const formatted = formatDate(date)
     expect(formatted).toContain("Mar")
     expect(formatted).toContain("15")
@@ -55,29 +55,29 @@ describe("formatDate", () => {
 
 describe("getFiscalYear", () => {
   it("should calculate fiscal year with January start (calendar year)", () => {
-    const date = new Date("2024-06-15")
+    const date = new Date(2024, 5, 15) // June 15, 2024 (local)
     expect(getFiscalYear(date, 1)).toBe(2025) // FY2025
   })
 
   it("should calculate fiscal year with July start", () => {
-    const dateBeforeJuly = new Date("2024-06-15")
+    const dateBeforeJuly = new Date(2024, 5, 15) // June 15 (local)
     expect(getFiscalYear(dateBeforeJuly, 7)).toBe(2024) // Still in FY2024
 
-    const dateAfterJuly = new Date("2024-07-15")
+    const dateAfterJuly = new Date(2024, 6, 15) // July 15 (local)
     expect(getFiscalYear(dateAfterJuly, 7)).toBe(2025) // Now in FY2025
   })
 
   it("should calculate fiscal year with October start", () => {
-    const dateBefore = new Date("2024-09-30")
+    const dateBefore = new Date(2024, 8, 30) // Sep 30, 2024 (local)
     expect(getFiscalYear(dateBefore, 10)).toBe(2024)
 
-    const dateAfter = new Date("2024-10-01")
+    const dateAfter = new Date(2024, 9, 1) // Oct 1, 2024 (local)
     expect(getFiscalYear(dateAfter, 10)).toBe(2025)
   })
 
   it("should handle edge case at fiscal year boundary", () => {
-    const april30 = new Date("2024-04-30")
-    const may1 = new Date("2024-05-01")
+    const april30 = new Date(2024, 3, 30) // Apr 30 (local)
+    const may1 = new Date(2024, 4, 1) // May 1 (local)
 
     expect(getFiscalYear(april30, 5)).toBe(2024)
     expect(getFiscalYear(may1, 5)).toBe(2025)

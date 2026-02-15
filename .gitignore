@@ -61,3 +61,9 @@ dataconnect/**/__generated__/
 *.sw?
 # Ralph config (may contain API key)
 .cursor/ralph-config.json
+
+playwright-report/
+playwright-videos/
+playwright-trace/
+dist/
+test-results/

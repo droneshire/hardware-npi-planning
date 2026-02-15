@@ -2,7 +2,7 @@
   "name": "hw-npi-planning",
   "version": "0.1.0",
   "private": true,
-  "description": "A comprehensive web application for managing hardware New Product Introduction (NPI) planning, built with Next.js and Firebase. Plan projects, allocate resources, and track progress across portfolios, programs, and projects with fiscal-year awareness.",
+  "description": "A comprehensive web application for managing hardware New Product Introduction (NPI) planning, built with React, Vite, and Firebase. Plan projects, allocate resources, and track progress across portfolios, programs, and projects with fiscal-year awareness.",
   "homepage": "https://github.com/droneshire/hardware-npi-planning#readme",
   "bugs": {
     "url": "https://github.com/droneshire/hardware-npi-planning/issues"
@@ -13,8 +13,7 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
-  "main": "next.config.js",
+  "type": "module",
   "directories": {
     "doc": "docs",
     "example": "examples",

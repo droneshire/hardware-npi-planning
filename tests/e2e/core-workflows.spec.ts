@@ -12,7 +12,7 @@ import { test, expect } from "@playwright/test"
 test.describe("Core Workflows", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the app
-    await page.goto("http://localhost:3000")
+    await page.goto("http://localhost:5173")
 
     // Wait for page to load
     await page.waitForLoadState("networkidle")
@@ -42,7 +42,7 @@ test.describe("Core Workflows", () => {
       return
     }
 
-    await page.goto("http://localhost:3000/projects")
+    await page.goto("http://localhost:5173/projects")
     await page.waitForLoadState("networkidle")
 
     // Check for projects table or empty state
@@ -61,7 +61,7 @@ test.describe("Core Workflows", () => {
       return
     }
 
-    await page.goto("http://localhost:3000/timeline")
+    await page.goto("http://localhost:5173/timeline")
     await page.waitForLoadState("networkidle")
 
     // Check for timeline content
@@ -77,7 +77,7 @@ test.describe("Core Workflows", () => {
       return
     }
 
-    await page.goto("http://localhost:3000/resources")
+    await page.goto("http://localhost:5173/resources")
     await page.waitForLoadState("networkidle")
 
     // Check for resources content
@@ -93,7 +93,7 @@ test.describe("Core Workflows", () => {
       return
     }
 
-    await page.goto("http://localhost:3000/settings")
+    await page.goto("http://localhost:5173/settings")
     await page.waitForLoadState("networkidle")
 
     // Check for settings content
@@ -109,7 +109,7 @@ test.describe("Core Workflows", () => {
       return
     }
 
-    await page.goto("http://localhost:3000/dashboard")
+    await page.goto("http://localhost:5173/dashboard")
     await page.waitForLoadState("networkidle")
 
     // Check for dashboard cards
@@ -129,7 +129,7 @@ test.describe("Core Workflows", () => {
       return
     }
 
-    await page.goto("http://localhost:3000/dashboard")
+    await page.goto("http://localhost:5173/dashboard")
     await page.waitForLoadState("networkidle")
 
     // Check for sidebar navigation links
@@ -154,7 +154,7 @@ test.describe("Project Workflow", () => {
 
     // Try to navigate to a project detail page
     // In a real scenario, you'd create a project first or use an existing one
-    await page.goto("http://localhost:3000/projects")
+    await page.goto("http://localhost:5173/projects")
     await page.waitForLoadState("networkidle")
 
     // Check if there are any project links
@@ -189,7 +189,7 @@ test.describe("Timeline View", () => {
       return
     }
 
-    await page.goto("http://localhost:3000/timeline")
+    await page.goto("http://localhost:5173/timeline")
     await page.waitForLoadState("networkidle")
 
     // Check for filter controls
@@ -209,7 +209,7 @@ test.describe("Timeline View", () => {
       return
     }
 
-    await page.goto("http://localhost:3000/timeline")
+    await page.goto("http://localhost:5173/timeline")
     await page.waitForLoadState("networkidle")
 
     // Check for fiscal year toggle
@@ -227,7 +227,7 @@ test.describe("Settings Page", () => {
       return
     }
 
-    await page.goto("http://localhost:3000/settings")
+    await page.goto("http://localhost:5173/settings")
     await page.waitForLoadState("networkidle")
 
     // Check for tabs
@@ -245,7 +245,7 @@ test.describe("Settings Page", () => {
       return
     }
 
-    await page.goto("http://localhost:3000/settings")
+    await page.goto("http://localhost:5173/settings")
     await page.waitForLoadState("networkidle")
 
     // Click on templates tab if it exists

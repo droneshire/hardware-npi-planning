@@ -257,9 +257,10 @@ describe("findOverlappingAssignments", () => {
       "2024-04-15"
     )
 
-    // Should find assignments 1 and 3 (assignment 2 doesn't overlap)
-    expect(overlapping).toHaveLength(2)
+    // Range Feb 15 - Apr 15: assignment 1 (Jan-Mar), 2 (Apr-Jun), 3 (Feb-May) all overlap
+    expect(overlapping).toHaveLength(3)
     expect(overlapping.map((a) => a.id)).toContain("1")
+    expect(overlapping.map((a) => a.id)).toContain("2")
     expect(overlapping.map((a) => a.id)).toContain("3")
   })
 

@@ -187,22 +187,24 @@ describe("validatePhaseSchedule", () => {
 
 describe("calculatePhaseProgress", () => {
   it("should return 0 for phases not yet started", () => {
-    const futureDate = new Date("2025-01-01")
+    // Use a date clearly before the phase start (phase is 2024-01-01 to 2024-02-01)
+    const beforePhase = new Date(2023, 0, 1) // Jan 1, 2023 local
     const progress = calculatePhaseProgress(
       "2024-01-01",
       "2024-02-01",
-      futureDate
+      beforePhase
     )
 
     expect(progress).toBe(0)
   })
 
   it("should return 100 for completed phases", () => {
-    const pastDate = new Date("2023-12-01")
+    // Use a date clearly after the phase end (phase is 2024-01-01 to 2024-02-01)
+    const afterPhase = new Date(2024, 2, 1) // March 1, 2024 local
     const progress = calculatePhaseProgress(
       "2024-01-01",
       "2024-02-01",
-      pastDate
+      afterPhase
     )
 
     expect(progress).toBe(100)
