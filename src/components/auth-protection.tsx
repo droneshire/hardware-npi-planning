@@ -1,7 +1,5 @@
-"use client"
-
 import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useNavigate } from "react-router-dom"
 import { useAuthStateWatcher } from "@/hooks/use-auth"
 import { ROUTES, DEFAULT_REDIRECT } from "@/constants/routes"
 
@@ -17,17 +15,17 @@ export function AuthProtection({
   redirectTo = ROUTES.AUTH.SIGNIN,
 }: AuthProtectionProps) {
   const { user, isLoading } = useAuthStateWatcher()
-  const router = useRouter()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!isLoading) {
       if (requireAuth && !user) {
-        router.push(redirectTo as any)
+        navigate(redirectTo, { replace: true })
       } else if (!requireAuth && user) {
-        router.push(DEFAULT_REDIRECT as any)
+        navigate(DEFAULT_REDIRECT, { replace: true })
       }
     }
-  }, [user, isLoading, requireAuth, redirectTo, router])
+  }, [user, isLoading, requireAuth, redirectTo, navigate])
 
   if (isLoading) {
     return (

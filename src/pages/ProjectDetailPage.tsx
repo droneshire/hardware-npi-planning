@@ -1,8 +1,5 @@
-"use client"
-
 import { useQuery } from "@tanstack/react-query"
 import { AppLayout } from "@/components/layout/app-layout"
-import { AuthProtection } from "@/components/auth-protection"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -23,8 +20,7 @@ import { listProjectAssignments } from "@firebasegen/default-connector"
 import { ProjectStatus, PhaseStatus, Project } from "@/types"
 import { format } from "date-fns"
 import { ArrowLeft, Calendar, FileText, Users, Edit, Trash2 } from "lucide-react"
-import Link from "next/link"
-import { useParams } from "next/navigation"
+import { Link, useParams } from "react-router-dom"
 
 // Mock data for development - matches the mock data in projects page
 const MOCK_PROJECTS: Project[] = [
@@ -130,46 +126,42 @@ export default function ProjectDetailPage() {
 
   if (isLoadingProject) {
     return (
-      <AuthProtection>
-        <AppLayout
-          title="Project Details"
-          breadcrumbs={[
-            { label: "Home", href: "/" },
-            { label: "Projects", href: "/projects" },
-            { label: "Loading..." },
-          ]}
-        >
-          <div className="space-y-6">
-            <Skeleton className="h-32 w-full" />
-            <Skeleton className="h-64 w-full" />
-          </div>
-        </AppLayout>
-      </AuthProtection>
+      <AppLayout
+        title="Project Details"
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Projects", href: "/projects" },
+          { label: "Loading..." },
+        ]}
+      >
+        <div className="space-y-6">
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-64 w-full" />
+        </div>
+      </AppLayout>
     )
   }
 
   if (projectError || !project) {
     return (
-      <AuthProtection>
-        <AppLayout
-          title="Project Not Found"
-          breadcrumbs={[
-            { label: "Home", href: "/" },
-            { label: "Projects", href: "/projects" },
-            { label: "Not Found" },
-          ]}
-        >
-          <EmptyState
-            title="Project not found"
-            description="The project you're looking for doesn't exist or has been deleted."
-            action={
-              <Button asChild>
-                <Link href="/projects">Back to Projects</Link>
-              </Button>
-            }
-          />
-        </AppLayout>
-      </AuthProtection>
+      <AppLayout
+        title="Project Not Found"
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Projects", href: "/projects" },
+          { label: "Not Found" },
+        ]}
+      >
+        <EmptyState
+          title="Project not found"
+          description="The project you're looking for doesn't exist or has been deleted."
+          action={
+            <Button asChild>
+              <Link to="/projects">Back to Projects</Link>
+            </Button>
+          }
+        />
+      </AppLayout>
     )
   }
 
@@ -177,7 +169,6 @@ export default function ProjectDetailPage() {
   const sortedPhases = [...phases].sort((a, b) => a.order - b.order)
 
   return (
-    <AuthProtection>
       <AppLayout
         title={project.name}
         breadcrumbs={[
@@ -190,7 +181,7 @@ export default function ProjectDetailPage() {
           {/* Header Actions */}
           <div className="flex items-center justify-between">
             <Button variant="outline" asChild>
-              <Link href="/projects">
+              <Link to="/projects">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Projects
               </Link>
@@ -395,7 +386,7 @@ export default function ProjectDetailPage() {
                       </CardDescription>
                     </div>
                     <Button asChild>
-                      <Link href={`/projects/${projectId}/resources`}>
+                      <Link to={`/projects/${projectId}/resources`}>
                         <Users className="mr-2 h-4 w-4" />
                         Manage Assignments
                       </Link>
@@ -414,7 +405,7 @@ export default function ProjectDetailPage() {
                       description="No resources have been assigned to this project yet."
                       action={
                         <Button asChild>
-                          <Link href={`/projects/${projectId}/resources`}>Assign Resources</Link>
+                          <Link to={`/projects/${projectId}/resources`}>Assign Resources</Link>
                         </Button>
                       }
                     />
@@ -460,6 +451,5 @@ export default function ProjectDetailPage() {
           </Tabs>
         </div>
       </AppLayout>
-    </AuthProtection>
   )
 }

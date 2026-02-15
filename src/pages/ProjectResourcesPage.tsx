@@ -1,10 +1,9 @@
-"use client"
+
 
 import { useState } from "react"
-import { useParams } from "next/navigation"
+import { useParams } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { AppLayout } from "@/components/layout/app-layout"
-import { AuthProtection } from "@/components/auth-protection"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -49,7 +48,7 @@ import {
 } from "@firebasegen/default-connector"
 import { format, isWithinInterval, parseISO } from "date-fns"
 import { ArrowLeft, Users, Plus, AlertTriangle, Edit, Trash2 } from "lucide-react"
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import { useToast } from "@/hooks/use-toast"
 
 // Mock organization ID for development
@@ -304,7 +303,7 @@ export default function ProjectAssignmentsPage() {
 
   if (isLoadingProject) {
     return (
-      <AuthProtection>
+
         <AppLayout
           title="Project Resources"
           breadcrumbs={[
@@ -315,13 +314,13 @@ export default function ProjectAssignmentsPage() {
         >
           <Skeleton className="h-64 w-full" />
         </AppLayout>
-      </AuthProtection>
+
     )
   }
 
   if (!project) {
     return (
-      <AuthProtection>
+
         <AppLayout
           title="Project Not Found"
           breadcrumbs={[
@@ -335,17 +334,17 @@ export default function ProjectAssignmentsPage() {
             description="The project you're looking for doesn't exist."
             action={
               <Button asChild>
-                <Link href="/projects">Back to Projects</Link>
+                <Link to="/projects">Back to Projects</Link>
               </Button>
             }
           />
         </AppLayout>
-      </AuthProtection>
+
     )
   }
 
   return (
-    <AuthProtection>
+
       <AppLayout
         title={`${project.name} - Resources`}
         breadcrumbs={[
@@ -359,7 +358,7 @@ export default function ProjectAssignmentsPage() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <Button variant="outline" asChild>
-              <Link href={`/projects/${projectId}` as any}>
+              <Link to={`/projects/${projectId}` as any}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Project
               </Link>
@@ -594,6 +593,6 @@ export default function ProjectAssignmentsPage() {
           </Card>
         </div>
       </AppLayout>
-    </AuthProtection>
+
   )
 }

@@ -17,38 +17,38 @@ You can also follow the instructions from the [Data Connect documentation](https
 - [**Accessing the connector**](#accessing-the-connector)
   - [*Connecting to the local Emulator*](#connecting-to-the-local-emulator)
 - [**Queries**](#queries)
+  - [*ListPrograms*](#listprograms)
+  - [*GetProgram*](#getprogram)
   - [*ListProjectAssignments*](#listprojectassignments)
   - [*ListUserAssignments*](#listuserassignments)
   - [*ListAssignmentsByDateRange*](#listassignmentsbydaterange)
-  - [*ListProjectPhases*](#listprojectphases)
-  - [*GetProjectPhase*](#getprojectphase)
   - [*ListTeams*](#listteams)
   - [*GetTeam*](#getteam)
   - [*ListUsers*](#listusers)
   - [*GetUser*](#getuser)
   - [*GetUserByEmail*](#getuserbyemail)
   - [*GetUserByFirebaseUid*](#getuserbyfirebaseuid)
+  - [*GetOrganization*](#getorganization)
   - [*ListPhaseTemplates*](#listphasetemplates)
   - [*GetPhaseTemplate*](#getphasetemplate)
   - [*ListPhaseTemplatePhases*](#listphasetemplatephases)
   - [*GetDefaultTemplates*](#getdefaulttemplates)
-  - [*ListPrograms*](#listprograms)
-  - [*GetProgram*](#getprogram)
-  - [*ListProjects*](#listprojects)
-  - [*GetProject*](#getproject)
-  - [*ListProjectsByStatus*](#listprojectsbystatus)
-  - [*GetOrganization*](#getorganization)
   - [*ListPortfolios*](#listportfolios)
   - [*GetPortfolio*](#getportfolio)
   - [*ListProductTypes*](#listproducttypes)
   - [*GetProductType*](#getproducttype)
+  - [*ListProjects*](#listprojects)
+  - [*GetProject*](#getproject)
+  - [*ListProjectsByStatus*](#listprojectsbystatus)
+  - [*ListProjectPhases*](#listprojectphases)
+  - [*GetProjectPhase*](#getprojectphase)
 - [**Mutations**](#mutations)
+  - [*CreateProgram*](#createprogram)
+  - [*UpdateProgram*](#updateprogram)
+  - [*DeleteProgram*](#deleteprogram)
   - [*CreateProjectAssignment*](#createprojectassignment)
   - [*UpdateProjectAssignment*](#updateprojectassignment)
   - [*DeleteProjectAssignment*](#deleteprojectassignment)
-  - [*CreateProjectPhase*](#createprojectphase)
-  - [*UpdateProjectPhase*](#updateprojectphase)
-  - [*DeleteProjectPhase*](#deleteprojectphase)
   - [*CreateTeam*](#createteam)
   - [*UpdateTeam*](#updateteam)
   - [*DeleteTeam*](#deleteteam)
@@ -58,20 +58,14 @@ You can also follow the instructions from the [Data Connect documentation](https
   - [*CreateUser*](#createuser)
   - [*UpdateUser*](#updateuser)
   - [*DeleteUser*](#deleteuser)
+  - [*CreateOrganization*](#createorganization)
+  - [*UpdateOrganization*](#updateorganization)
   - [*CreatePhaseTemplate*](#createphasetemplate)
   - [*UpdatePhaseTemplate*](#updatephasetemplate)
   - [*DeletePhaseTemplate*](#deletephasetemplate)
   - [*CreatePhaseTemplatePhase*](#createphasetemplatephase)
   - [*UpdatePhaseTemplatePhase*](#updatephasetemplatephase)
   - [*DeletePhaseTemplatePhase*](#deletephasetemplatephase)
-  - [*CreateProgram*](#createprogram)
-  - [*UpdateProgram*](#updateprogram)
-  - [*DeleteProgram*](#deleteprogram)
-  - [*CreateProject*](#createproject)
-  - [*UpdateProject*](#updateproject)
-  - [*DeleteProject*](#deleteproject)
-  - [*CreateOrganization*](#createorganization)
-  - [*UpdateOrganization*](#updateorganization)
   - [*CreatePortfolio*](#createportfolio)
   - [*UpdatePortfolio*](#updateportfolio)
   - [*DeletePortfolio*](#deleteportfolio)
@@ -80,6 +74,12 @@ You can also follow the instructions from the [Data Connect documentation](https
   - [*DeleteProductType*](#deleteproducttype)
   - [*CreateProductTypePhaseConfig*](#createproducttypephaseconfig)
   - [*DeleteProductTypePhaseConfig*](#deleteproducttypephaseconfig)
+  - [*CreateProject*](#createproject)
+  - [*UpdateProject*](#updateproject)
+  - [*DeleteProject*](#deleteproject)
+  - [*CreateProjectPhase*](#createprojectphase)
+  - [*UpdateProjectPhase*](#updateprojectphase)
+  - [*DeleteProjectPhase*](#deleteprojectphase)
 
 # TanStack Query Firebase & TanStack React Query
 This SDK provides [React](https://react.dev/) hooks generated specific to your application, for the operations found in the connector `default`. These hooks are generated using [TanStack Query Firebase](https://react-query-firebase.invertase.dev/) by our partners at Invertase, a library built on top of [TanStack React Query v5](https://tanstack.com/query/v5/docs/framework/react/overview).
@@ -170,6 +170,201 @@ Here's a general overview of how to use the generated Query hooks in your code:
   - ***Special case:***  If the Query has all optional variables and you would like to provide an `options` argument to the Query hook function without providing any variables, you must pass `undefined` where you would normally pass the Query's variables, and then may provide the `options` argument.
 
 Below are examples of how to use the `default` connector's generated Query hook functions to execute each Query. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#operations-react-angular).
+
+## ListPrograms
+You can execute the `ListPrograms` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
+
+```javascript
+useListPrograms(dc: DataConnect, vars: ListProgramsVariables, options?: useDataConnectQueryOptions<ListProgramsData>): UseDataConnectQueryResult<ListProgramsData, ListProgramsVariables>;
+```
+You can also pass in a `DataConnect` instance to the Query hook function.
+```javascript
+useListPrograms(vars: ListProgramsVariables, options?: useDataConnectQueryOptions<ListProgramsData>): UseDataConnectQueryResult<ListProgramsData, ListProgramsVariables>;
+```
+
+### Variables
+The `ListPrograms` Query requires an argument of type `ListProgramsVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface ListProgramsVariables {
+  portfolioId: UUIDString;
+}
+```
+### Return Type
+Recall that calling the `ListPrograms` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
+
+To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
+
+To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `ListPrograms` Query is of type `ListProgramsData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface ListProgramsData {
+  programs: ({
+    id: UUIDString;
+    name: string;
+    description?: string | null;
+    ownerId?: UUIDString | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+    owner?: {
+      id: UUIDString;
+      name: string;
+      email: string;
+    } & User_Key;
+  } & Program_Key)[];
+}
+```
+
+To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
+
+### Using `ListPrograms`'s Query hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, ListProgramsVariables } from '@firebasegen/default-connector';
+import { useListPrograms } from '@firebasegen/default-connector/react'
+
+export default function ListProgramsComponent() {
+  // The `useListPrograms` Query hook requires an argument of type `ListProgramsVariables`:
+  const listProgramsVars: ListProgramsVariables = {
+    portfolioId: ..., 
+  };
+
+  // You don't have to do anything to "execute" the Query.
+  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
+  const query = useListPrograms(listProgramsVars);
+  // Variables can be defined inline as well.
+  const query = useListPrograms({ portfolioId: ..., });
+
+  // You can also pass in a `DataConnect` instance to the Query hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const query = useListPrograms(dataConnect, listProgramsVars);
+
+  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
+  const options = { staleTime: 5 * 1000 };
+  const query = useListPrograms(listProgramsVars, options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = { staleTime: 5 * 1000 };
+  const query = useListPrograms(dataConnect, listProgramsVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Query.
+  if (query.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (query.isError) {
+    return <div>Error: {query.error.message}</div>;
+  }
+
+  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
+  if (query.isSuccess) {
+    console.log(query.data.programs);
+  }
+  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## GetProgram
+You can execute the `GetProgram` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
+
+```javascript
+useGetProgram(dc: DataConnect, vars: GetProgramVariables, options?: useDataConnectQueryOptions<GetProgramData>): UseDataConnectQueryResult<GetProgramData, GetProgramVariables>;
+```
+You can also pass in a `DataConnect` instance to the Query hook function.
+```javascript
+useGetProgram(vars: GetProgramVariables, options?: useDataConnectQueryOptions<GetProgramData>): UseDataConnectQueryResult<GetProgramData, GetProgramVariables>;
+```
+
+### Variables
+The `GetProgram` Query requires an argument of type `GetProgramVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface GetProgramVariables {
+  id: UUIDString;
+}
+```
+### Return Type
+Recall that calling the `GetProgram` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
+
+To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
+
+To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `GetProgram` Query is of type `GetProgramData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface GetProgramData {
+  program?: {
+    id: UUIDString;
+    portfolioId: UUIDString;
+    name: string;
+    description?: string | null;
+    ownerId?: UUIDString | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+    owner?: {
+      id: UUIDString;
+      name: string;
+      email: string;
+      role: UserRole;
+    } & User_Key;
+      portfolio: {
+        id: UUIDString;
+        name: string;
+        organizationId: UUIDString;
+      } & Portfolio_Key;
+  } & Program_Key;
+}
+```
+
+To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
+
+### Using `GetProgram`'s Query hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, GetProgramVariables } from '@firebasegen/default-connector';
+import { useGetProgram } from '@firebasegen/default-connector/react'
+
+export default function GetProgramComponent() {
+  // The `useGetProgram` Query hook requires an argument of type `GetProgramVariables`:
+  const getProgramVars: GetProgramVariables = {
+    id: ..., 
+  };
+
+  // You don't have to do anything to "execute" the Query.
+  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
+  const query = useGetProgram(getProgramVars);
+  // Variables can be defined inline as well.
+  const query = useGetProgram({ id: ..., });
+
+  // You can also pass in a `DataConnect` instance to the Query hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const query = useGetProgram(dataConnect, getProgramVars);
+
+  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
+  const options = { staleTime: 5 * 1000 };
+  const query = useGetProgram(getProgramVars, options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = { staleTime: 5 * 1000 };
+  const query = useGetProgram(dataConnect, getProgramVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Query.
+  if (query.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (query.isError) {
+    return <div>Error: {query.error.message}</div>;
+  }
+
+  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
+  if (query.isSuccess) {
+    console.log(query.data.program);
+  }
+  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
 
 ## ListProjectAssignments
 You can execute the `ListProjectAssignments` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
@@ -465,200 +660,6 @@ export default function ListAssignmentsByDateRangeComponent() {
   // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
   if (query.isSuccess) {
     console.log(query.data.projectAssignments);
-  }
-  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## ListProjectPhases
-You can execute the `ListProjectPhases` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
-
-```javascript
-useListProjectPhases(dc: DataConnect, vars: ListProjectPhasesVariables, options?: useDataConnectQueryOptions<ListProjectPhasesData>): UseDataConnectQueryResult<ListProjectPhasesData, ListProjectPhasesVariables>;
-```
-You can also pass in a `DataConnect` instance to the Query hook function.
-```javascript
-useListProjectPhases(vars: ListProjectPhasesVariables, options?: useDataConnectQueryOptions<ListProjectPhasesData>): UseDataConnectQueryResult<ListProjectPhasesData, ListProjectPhasesVariables>;
-```
-
-### Variables
-The `ListProjectPhases` Query requires an argument of type `ListProjectPhasesVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface ListProjectPhasesVariables {
-  projectId: UUIDString;
-}
-```
-### Return Type
-Recall that calling the `ListProjectPhases` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
-
-To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
-
-To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `ListProjectPhases` Query is of type `ListProjectPhasesData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface ListProjectPhasesData {
-  projectPhases: ({
-    id: UUIDString;
-    name: string;
-    description?: string | null;
-    status: PhaseStatus;
-    startDate?: DateString | null;
-    targetEndDate?: DateString | null;
-    actualEndDate?: DateString | null;
-    order: number;
-    percentComplete?: number | null;
-    createdAt: TimestampString;
-    updatedAt: TimestampString;
-  } & ProjectPhase_Key)[];
-}
-```
-
-To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
-
-### Using `ListProjectPhases`'s Query hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, ListProjectPhasesVariables } from '@firebasegen/default-connector';
-import { useListProjectPhases } from '@firebasegen/default-connector/react'
-
-export default function ListProjectPhasesComponent() {
-  // The `useListProjectPhases` Query hook requires an argument of type `ListProjectPhasesVariables`:
-  const listProjectPhasesVars: ListProjectPhasesVariables = {
-    projectId: ..., 
-  };
-
-  // You don't have to do anything to "execute" the Query.
-  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
-  const query = useListProjectPhases(listProjectPhasesVars);
-  // Variables can be defined inline as well.
-  const query = useListProjectPhases({ projectId: ..., });
-
-  // You can also pass in a `DataConnect` instance to the Query hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const query = useListProjectPhases(dataConnect, listProjectPhasesVars);
-
-  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
-  const options = { staleTime: 5 * 1000 };
-  const query = useListProjectPhases(listProjectPhasesVars, options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = { staleTime: 5 * 1000 };
-  const query = useListProjectPhases(dataConnect, listProjectPhasesVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Query.
-  if (query.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (query.isError) {
-    return <div>Error: {query.error.message}</div>;
-  }
-
-  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
-  if (query.isSuccess) {
-    console.log(query.data.projectPhases);
-  }
-  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## GetProjectPhase
-You can execute the `GetProjectPhase` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
-
-```javascript
-useGetProjectPhase(dc: DataConnect, vars: GetProjectPhaseVariables, options?: useDataConnectQueryOptions<GetProjectPhaseData>): UseDataConnectQueryResult<GetProjectPhaseData, GetProjectPhaseVariables>;
-```
-You can also pass in a `DataConnect` instance to the Query hook function.
-```javascript
-useGetProjectPhase(vars: GetProjectPhaseVariables, options?: useDataConnectQueryOptions<GetProjectPhaseData>): UseDataConnectQueryResult<GetProjectPhaseData, GetProjectPhaseVariables>;
-```
-
-### Variables
-The `GetProjectPhase` Query requires an argument of type `GetProjectPhaseVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface GetProjectPhaseVariables {
-  id: UUIDString;
-}
-```
-### Return Type
-Recall that calling the `GetProjectPhase` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
-
-To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
-
-To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `GetProjectPhase` Query is of type `GetProjectPhaseData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface GetProjectPhaseData {
-  projectPhase?: {
-    id: UUIDString;
-    projectId: UUIDString;
-    name: string;
-    description?: string | null;
-    status: PhaseStatus;
-    startDate?: DateString | null;
-    targetEndDate?: DateString | null;
-    actualEndDate?: DateString | null;
-    order: number;
-    percentComplete?: number | null;
-    createdAt: TimestampString;
-    updatedAt: TimestampString;
-    project: {
-      id: UUIDString;
-      name: string;
-      status: ProjectStatus;
-    } & Project_Key;
-  } & ProjectPhase_Key;
-}
-```
-
-To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
-
-### Using `GetProjectPhase`'s Query hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, GetProjectPhaseVariables } from '@firebasegen/default-connector';
-import { useGetProjectPhase } from '@firebasegen/default-connector/react'
-
-export default function GetProjectPhaseComponent() {
-  // The `useGetProjectPhase` Query hook requires an argument of type `GetProjectPhaseVariables`:
-  const getProjectPhaseVars: GetProjectPhaseVariables = {
-    id: ..., 
-  };
-
-  // You don't have to do anything to "execute" the Query.
-  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
-  const query = useGetProjectPhase(getProjectPhaseVars);
-  // Variables can be defined inline as well.
-  const query = useGetProjectPhase({ id: ..., });
-
-  // You can also pass in a `DataConnect` instance to the Query hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const query = useGetProjectPhase(dataConnect, getProjectPhaseVars);
-
-  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
-  const options = { staleTime: 5 * 1000 };
-  const query = useGetProjectPhase(getProjectPhaseVars, options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = { staleTime: 5 * 1000 };
-  const query = useGetProjectPhase(dataConnect, getProjectPhaseVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Query.
-  if (query.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (query.isError) {
-    return <div>Error: {query.error.message}</div>;
-  }
-
-  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
-  if (query.isSuccess) {
-    console.log(query.data.projectPhase);
   }
   return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
 }
@@ -1208,6 +1209,94 @@ export default function GetUserByFirebaseUidComponent() {
 }
 ```
 
+## GetOrganization
+You can execute the `GetOrganization` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
+
+```javascript
+useGetOrganization(dc: DataConnect, vars: GetOrganizationVariables, options?: useDataConnectQueryOptions<GetOrganizationData>): UseDataConnectQueryResult<GetOrganizationData, GetOrganizationVariables>;
+```
+You can also pass in a `DataConnect` instance to the Query hook function.
+```javascript
+useGetOrganization(vars: GetOrganizationVariables, options?: useDataConnectQueryOptions<GetOrganizationData>): UseDataConnectQueryResult<GetOrganizationData, GetOrganizationVariables>;
+```
+
+### Variables
+The `GetOrganization` Query requires an argument of type `GetOrganizationVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface GetOrganizationVariables {
+  id: UUIDString;
+}
+```
+### Return Type
+Recall that calling the `GetOrganization` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
+
+To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
+
+To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `GetOrganization` Query is of type `GetOrganizationData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface GetOrganizationData {
+  organization?: {
+    id: UUIDString;
+    name: string;
+    fiscalYearStartMonth: number;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+  } & Organization_Key;
+}
+```
+
+To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
+
+### Using `GetOrganization`'s Query hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, GetOrganizationVariables } from '@firebasegen/default-connector';
+import { useGetOrganization } from '@firebasegen/default-connector/react'
+
+export default function GetOrganizationComponent() {
+  // The `useGetOrganization` Query hook requires an argument of type `GetOrganizationVariables`:
+  const getOrganizationVars: GetOrganizationVariables = {
+    id: ..., 
+  };
+
+  // You don't have to do anything to "execute" the Query.
+  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
+  const query = useGetOrganization(getOrganizationVars);
+  // Variables can be defined inline as well.
+  const query = useGetOrganization({ id: ..., });
+
+  // You can also pass in a `DataConnect` instance to the Query hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const query = useGetOrganization(dataConnect, getOrganizationVars);
+
+  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
+  const options = { staleTime: 5 * 1000 };
+  const query = useGetOrganization(getOrganizationVars, options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = { staleTime: 5 * 1000 };
+  const query = useGetOrganization(dataConnect, getOrganizationVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Query.
+  if (query.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (query.isError) {
+    return <div>Error: {query.error.message}</div>;
+  }
+
+  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
+  if (query.isSuccess) {
+    console.log(query.data.organization);
+  }
+  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
 ## ListPhaseTemplates
 You can execute the `ListPhaseTemplates` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
 
@@ -1558,606 +1647,6 @@ export default function GetDefaultTemplatesComponent() {
   // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
   if (query.isSuccess) {
     console.log(query.data.phaseTemplates);
-  }
-  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## ListPrograms
-You can execute the `ListPrograms` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
-
-```javascript
-useListPrograms(dc: DataConnect, vars: ListProgramsVariables, options?: useDataConnectQueryOptions<ListProgramsData>): UseDataConnectQueryResult<ListProgramsData, ListProgramsVariables>;
-```
-You can also pass in a `DataConnect` instance to the Query hook function.
-```javascript
-useListPrograms(vars: ListProgramsVariables, options?: useDataConnectQueryOptions<ListProgramsData>): UseDataConnectQueryResult<ListProgramsData, ListProgramsVariables>;
-```
-
-### Variables
-The `ListPrograms` Query requires an argument of type `ListProgramsVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface ListProgramsVariables {
-  portfolioId: UUIDString;
-}
-```
-### Return Type
-Recall that calling the `ListPrograms` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
-
-To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
-
-To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `ListPrograms` Query is of type `ListProgramsData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface ListProgramsData {
-  programs: ({
-    id: UUIDString;
-    name: string;
-    description?: string | null;
-    ownerId?: UUIDString | null;
-    createdAt: TimestampString;
-    updatedAt: TimestampString;
-    owner?: {
-      id: UUIDString;
-      name: string;
-      email: string;
-    } & User_Key;
-  } & Program_Key)[];
-}
-```
-
-To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
-
-### Using `ListPrograms`'s Query hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, ListProgramsVariables } from '@firebasegen/default-connector';
-import { useListPrograms } from '@firebasegen/default-connector/react'
-
-export default function ListProgramsComponent() {
-  // The `useListPrograms` Query hook requires an argument of type `ListProgramsVariables`:
-  const listProgramsVars: ListProgramsVariables = {
-    portfolioId: ..., 
-  };
-
-  // You don't have to do anything to "execute" the Query.
-  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
-  const query = useListPrograms(listProgramsVars);
-  // Variables can be defined inline as well.
-  const query = useListPrograms({ portfolioId: ..., });
-
-  // You can also pass in a `DataConnect` instance to the Query hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const query = useListPrograms(dataConnect, listProgramsVars);
-
-  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
-  const options = { staleTime: 5 * 1000 };
-  const query = useListPrograms(listProgramsVars, options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = { staleTime: 5 * 1000 };
-  const query = useListPrograms(dataConnect, listProgramsVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Query.
-  if (query.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (query.isError) {
-    return <div>Error: {query.error.message}</div>;
-  }
-
-  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
-  if (query.isSuccess) {
-    console.log(query.data.programs);
-  }
-  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## GetProgram
-You can execute the `GetProgram` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
-
-```javascript
-useGetProgram(dc: DataConnect, vars: GetProgramVariables, options?: useDataConnectQueryOptions<GetProgramData>): UseDataConnectQueryResult<GetProgramData, GetProgramVariables>;
-```
-You can also pass in a `DataConnect` instance to the Query hook function.
-```javascript
-useGetProgram(vars: GetProgramVariables, options?: useDataConnectQueryOptions<GetProgramData>): UseDataConnectQueryResult<GetProgramData, GetProgramVariables>;
-```
-
-### Variables
-The `GetProgram` Query requires an argument of type `GetProgramVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface GetProgramVariables {
-  id: UUIDString;
-}
-```
-### Return Type
-Recall that calling the `GetProgram` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
-
-To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
-
-To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `GetProgram` Query is of type `GetProgramData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface GetProgramData {
-  program?: {
-    id: UUIDString;
-    portfolioId: UUIDString;
-    name: string;
-    description?: string | null;
-    ownerId?: UUIDString | null;
-    createdAt: TimestampString;
-    updatedAt: TimestampString;
-    owner?: {
-      id: UUIDString;
-      name: string;
-      email: string;
-      role: UserRole;
-    } & User_Key;
-      portfolio: {
-        id: UUIDString;
-        name: string;
-        organizationId: UUIDString;
-      } & Portfolio_Key;
-  } & Program_Key;
-}
-```
-
-To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
-
-### Using `GetProgram`'s Query hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, GetProgramVariables } from '@firebasegen/default-connector';
-import { useGetProgram } from '@firebasegen/default-connector/react'
-
-export default function GetProgramComponent() {
-  // The `useGetProgram` Query hook requires an argument of type `GetProgramVariables`:
-  const getProgramVars: GetProgramVariables = {
-    id: ..., 
-  };
-
-  // You don't have to do anything to "execute" the Query.
-  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
-  const query = useGetProgram(getProgramVars);
-  // Variables can be defined inline as well.
-  const query = useGetProgram({ id: ..., });
-
-  // You can also pass in a `DataConnect` instance to the Query hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const query = useGetProgram(dataConnect, getProgramVars);
-
-  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
-  const options = { staleTime: 5 * 1000 };
-  const query = useGetProgram(getProgramVars, options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = { staleTime: 5 * 1000 };
-  const query = useGetProgram(dataConnect, getProgramVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Query.
-  if (query.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (query.isError) {
-    return <div>Error: {query.error.message}</div>;
-  }
-
-  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
-  if (query.isSuccess) {
-    console.log(query.data.program);
-  }
-  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## ListProjects
-You can execute the `ListProjects` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
-
-```javascript
-useListProjects(dc: DataConnect, vars: ListProjectsVariables, options?: useDataConnectQueryOptions<ListProjectsData>): UseDataConnectQueryResult<ListProjectsData, ListProjectsVariables>;
-```
-You can also pass in a `DataConnect` instance to the Query hook function.
-```javascript
-useListProjects(vars: ListProjectsVariables, options?: useDataConnectQueryOptions<ListProjectsData>): UseDataConnectQueryResult<ListProjectsData, ListProjectsVariables>;
-```
-
-### Variables
-The `ListProjects` Query requires an argument of type `ListProjectsVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface ListProjectsVariables {
-  programId: UUIDString;
-}
-```
-### Return Type
-Recall that calling the `ListProjects` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
-
-To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
-
-To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `ListProjects` Query is of type `ListProjectsData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface ListProjectsData {
-  projects: ({
-    id: UUIDString;
-    name: string;
-    description?: string | null;
-    status: ProjectStatus;
-    startDate?: DateString | null;
-    targetCompletionDate?: DateString | null;
-    actualCompletionDate?: DateString | null;
-    ownerId?: UUIDString | null;
-    productTypeId?: UUIDString | null;
-    createdAt: TimestampString;
-    updatedAt: TimestampString;
-    owner?: {
-      id: UUIDString;
-      name: string;
-      email: string;
-    } & User_Key;
-      productType?: {
-        id: UUIDString;
-        name: string;
-      } & ProductType_Key;
-  } & Project_Key)[];
-}
-```
-
-To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
-
-### Using `ListProjects`'s Query hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, ListProjectsVariables } from '@firebasegen/default-connector';
-import { useListProjects } from '@firebasegen/default-connector/react'
-
-export default function ListProjectsComponent() {
-  // The `useListProjects` Query hook requires an argument of type `ListProjectsVariables`:
-  const listProjectsVars: ListProjectsVariables = {
-    programId: ..., 
-  };
-
-  // You don't have to do anything to "execute" the Query.
-  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
-  const query = useListProjects(listProjectsVars);
-  // Variables can be defined inline as well.
-  const query = useListProjects({ programId: ..., });
-
-  // You can also pass in a `DataConnect` instance to the Query hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const query = useListProjects(dataConnect, listProjectsVars);
-
-  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
-  const options = { staleTime: 5 * 1000 };
-  const query = useListProjects(listProjectsVars, options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = { staleTime: 5 * 1000 };
-  const query = useListProjects(dataConnect, listProjectsVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Query.
-  if (query.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (query.isError) {
-    return <div>Error: {query.error.message}</div>;
-  }
-
-  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
-  if (query.isSuccess) {
-    console.log(query.data.projects);
-  }
-  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## GetProject
-You can execute the `GetProject` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
-
-```javascript
-useGetProject(dc: DataConnect, vars: GetProjectVariables, options?: useDataConnectQueryOptions<GetProjectData>): UseDataConnectQueryResult<GetProjectData, GetProjectVariables>;
-```
-You can also pass in a `DataConnect` instance to the Query hook function.
-```javascript
-useGetProject(vars: GetProjectVariables, options?: useDataConnectQueryOptions<GetProjectData>): UseDataConnectQueryResult<GetProjectData, GetProjectVariables>;
-```
-
-### Variables
-The `GetProject` Query requires an argument of type `GetProjectVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface GetProjectVariables {
-  id: UUIDString;
-}
-```
-### Return Type
-Recall that calling the `GetProject` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
-
-To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
-
-To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `GetProject` Query is of type `GetProjectData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface GetProjectData {
-  project?: {
-    id: UUIDString;
-    programId: UUIDString;
-    productTypeId?: UUIDString | null;
-    name: string;
-    description?: string | null;
-    status: ProjectStatus;
-    startDate?: DateString | null;
-    targetCompletionDate?: DateString | null;
-    actualCompletionDate?: DateString | null;
-    ownerId?: UUIDString | null;
-    createdAt: TimestampString;
-    updatedAt: TimestampString;
-    owner?: {
-      id: UUIDString;
-      name: string;
-      email: string;
-      role: UserRole;
-    } & User_Key;
-      program: {
-        id: UUIDString;
-        name: string;
-        portfolioId: UUIDString;
-        portfolio: {
-          id: UUIDString;
-          name: string;
-          organizationId: UUIDString;
-        } & Portfolio_Key;
-      } & Program_Key;
-        productType?: {
-          id: UUIDString;
-          name: string;
-          description?: string | null;
-        } & ProductType_Key;
-  } & Project_Key;
-}
-```
-
-To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
-
-### Using `GetProject`'s Query hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, GetProjectVariables } from '@firebasegen/default-connector';
-import { useGetProject } from '@firebasegen/default-connector/react'
-
-export default function GetProjectComponent() {
-  // The `useGetProject` Query hook requires an argument of type `GetProjectVariables`:
-  const getProjectVars: GetProjectVariables = {
-    id: ..., 
-  };
-
-  // You don't have to do anything to "execute" the Query.
-  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
-  const query = useGetProject(getProjectVars);
-  // Variables can be defined inline as well.
-  const query = useGetProject({ id: ..., });
-
-  // You can also pass in a `DataConnect` instance to the Query hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const query = useGetProject(dataConnect, getProjectVars);
-
-  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
-  const options = { staleTime: 5 * 1000 };
-  const query = useGetProject(getProjectVars, options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = { staleTime: 5 * 1000 };
-  const query = useGetProject(dataConnect, getProjectVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Query.
-  if (query.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (query.isError) {
-    return <div>Error: {query.error.message}</div>;
-  }
-
-  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
-  if (query.isSuccess) {
-    console.log(query.data.project);
-  }
-  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## ListProjectsByStatus
-You can execute the `ListProjectsByStatus` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
-
-```javascript
-useListProjectsByStatus(dc: DataConnect, vars: ListProjectsByStatusVariables, options?: useDataConnectQueryOptions<ListProjectsByStatusData>): UseDataConnectQueryResult<ListProjectsByStatusData, ListProjectsByStatusVariables>;
-```
-You can also pass in a `DataConnect` instance to the Query hook function.
-```javascript
-useListProjectsByStatus(vars: ListProjectsByStatusVariables, options?: useDataConnectQueryOptions<ListProjectsByStatusData>): UseDataConnectQueryResult<ListProjectsByStatusData, ListProjectsByStatusVariables>;
-```
-
-### Variables
-The `ListProjectsByStatus` Query requires an argument of type `ListProjectsByStatusVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface ListProjectsByStatusVariables {
-  status: ProjectStatus;
-}
-```
-### Return Type
-Recall that calling the `ListProjectsByStatus` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
-
-To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
-
-To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `ListProjectsByStatus` Query is of type `ListProjectsByStatusData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface ListProjectsByStatusData {
-  projects: ({
-    id: UUIDString;
-    name: string;
-    description?: string | null;
-    status: ProjectStatus;
-    startDate?: DateString | null;
-    targetCompletionDate?: DateString | null;
-    programId: UUIDString;
-    program: {
-      id: UUIDString;
-      name: string;
-      portfolio: {
-        id: UUIDString;
-        name: string;
-      } & Portfolio_Key;
-    } & Program_Key;
-  } & Project_Key)[];
-}
-```
-
-To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
-
-### Using `ListProjectsByStatus`'s Query hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, ListProjectsByStatusVariables } from '@firebasegen/default-connector';
-import { useListProjectsByStatus } from '@firebasegen/default-connector/react'
-
-export default function ListProjectsByStatusComponent() {
-  // The `useListProjectsByStatus` Query hook requires an argument of type `ListProjectsByStatusVariables`:
-  const listProjectsByStatusVars: ListProjectsByStatusVariables = {
-    status: ..., 
-  };
-
-  // You don't have to do anything to "execute" the Query.
-  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
-  const query = useListProjectsByStatus(listProjectsByStatusVars);
-  // Variables can be defined inline as well.
-  const query = useListProjectsByStatus({ status: ..., });
-
-  // You can also pass in a `DataConnect` instance to the Query hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const query = useListProjectsByStatus(dataConnect, listProjectsByStatusVars);
-
-  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
-  const options = { staleTime: 5 * 1000 };
-  const query = useListProjectsByStatus(listProjectsByStatusVars, options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = { staleTime: 5 * 1000 };
-  const query = useListProjectsByStatus(dataConnect, listProjectsByStatusVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Query.
-  if (query.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (query.isError) {
-    return <div>Error: {query.error.message}</div>;
-  }
-
-  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
-  if (query.isSuccess) {
-    console.log(query.data.projects);
-  }
-  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## GetOrganization
-You can execute the `GetOrganization` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
-
-```javascript
-useGetOrganization(dc: DataConnect, vars: GetOrganizationVariables, options?: useDataConnectQueryOptions<GetOrganizationData>): UseDataConnectQueryResult<GetOrganizationData, GetOrganizationVariables>;
-```
-You can also pass in a `DataConnect` instance to the Query hook function.
-```javascript
-useGetOrganization(vars: GetOrganizationVariables, options?: useDataConnectQueryOptions<GetOrganizationData>): UseDataConnectQueryResult<GetOrganizationData, GetOrganizationVariables>;
-```
-
-### Variables
-The `GetOrganization` Query requires an argument of type `GetOrganizationVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface GetOrganizationVariables {
-  id: UUIDString;
-}
-```
-### Return Type
-Recall that calling the `GetOrganization` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
-
-To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
-
-To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `GetOrganization` Query is of type `GetOrganizationData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface GetOrganizationData {
-  organization?: {
-    id: UUIDString;
-    name: string;
-    fiscalYearStartMonth: number;
-    createdAt: TimestampString;
-    updatedAt: TimestampString;
-  } & Organization_Key;
-}
-```
-
-To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
-
-### Using `GetOrganization`'s Query hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, GetOrganizationVariables } from '@firebasegen/default-connector';
-import { useGetOrganization } from '@firebasegen/default-connector/react'
-
-export default function GetOrganizationComponent() {
-  // The `useGetOrganization` Query hook requires an argument of type `GetOrganizationVariables`:
-  const getOrganizationVars: GetOrganizationVariables = {
-    id: ..., 
-  };
-
-  // You don't have to do anything to "execute" the Query.
-  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
-  const query = useGetOrganization(getOrganizationVars);
-  // Variables can be defined inline as well.
-  const query = useGetOrganization({ id: ..., });
-
-  // You can also pass in a `DataConnect` instance to the Query hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const query = useGetOrganization(dataConnect, getOrganizationVars);
-
-  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
-  const options = { staleTime: 5 * 1000 };
-  const query = useGetOrganization(getOrganizationVars, options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = { staleTime: 5 * 1000 };
-  const query = useGetOrganization(dataConnect, getOrganizationVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Query.
-  if (query.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (query.isError) {
-    return <div>Error: {query.error.message}</div>;
-  }
-
-  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
-  if (query.isSuccess) {
-    console.log(query.data.organization);
   }
   return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
 }
@@ -2530,6 +2019,517 @@ export default function GetProductTypeComponent() {
 }
 ```
 
+## ListProjects
+You can execute the `ListProjects` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
+
+```javascript
+useListProjects(dc: DataConnect, vars: ListProjectsVariables, options?: useDataConnectQueryOptions<ListProjectsData>): UseDataConnectQueryResult<ListProjectsData, ListProjectsVariables>;
+```
+You can also pass in a `DataConnect` instance to the Query hook function.
+```javascript
+useListProjects(vars: ListProjectsVariables, options?: useDataConnectQueryOptions<ListProjectsData>): UseDataConnectQueryResult<ListProjectsData, ListProjectsVariables>;
+```
+
+### Variables
+The `ListProjects` Query requires an argument of type `ListProjectsVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface ListProjectsVariables {
+  programId: UUIDString;
+}
+```
+### Return Type
+Recall that calling the `ListProjects` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
+
+To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
+
+To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `ListProjects` Query is of type `ListProjectsData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface ListProjectsData {
+  projects: ({
+    id: UUIDString;
+    name: string;
+    description?: string | null;
+    status: ProjectStatus;
+    startDate?: DateString | null;
+    targetCompletionDate?: DateString | null;
+    actualCompletionDate?: DateString | null;
+    ownerId?: UUIDString | null;
+    productTypeId?: UUIDString | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+    owner?: {
+      id: UUIDString;
+      name: string;
+      email: string;
+    } & User_Key;
+      productType?: {
+        id: UUIDString;
+        name: string;
+      } & ProductType_Key;
+  } & Project_Key)[];
+}
+```
+
+To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
+
+### Using `ListProjects`'s Query hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, ListProjectsVariables } from '@firebasegen/default-connector';
+import { useListProjects } from '@firebasegen/default-connector/react'
+
+export default function ListProjectsComponent() {
+  // The `useListProjects` Query hook requires an argument of type `ListProjectsVariables`:
+  const listProjectsVars: ListProjectsVariables = {
+    programId: ..., 
+  };
+
+  // You don't have to do anything to "execute" the Query.
+  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
+  const query = useListProjects(listProjectsVars);
+  // Variables can be defined inline as well.
+  const query = useListProjects({ programId: ..., });
+
+  // You can also pass in a `DataConnect` instance to the Query hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const query = useListProjects(dataConnect, listProjectsVars);
+
+  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
+  const options = { staleTime: 5 * 1000 };
+  const query = useListProjects(listProjectsVars, options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = { staleTime: 5 * 1000 };
+  const query = useListProjects(dataConnect, listProjectsVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Query.
+  if (query.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (query.isError) {
+    return <div>Error: {query.error.message}</div>;
+  }
+
+  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
+  if (query.isSuccess) {
+    console.log(query.data.projects);
+  }
+  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## GetProject
+You can execute the `GetProject` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
+
+```javascript
+useGetProject(dc: DataConnect, vars: GetProjectVariables, options?: useDataConnectQueryOptions<GetProjectData>): UseDataConnectQueryResult<GetProjectData, GetProjectVariables>;
+```
+You can also pass in a `DataConnect` instance to the Query hook function.
+```javascript
+useGetProject(vars: GetProjectVariables, options?: useDataConnectQueryOptions<GetProjectData>): UseDataConnectQueryResult<GetProjectData, GetProjectVariables>;
+```
+
+### Variables
+The `GetProject` Query requires an argument of type `GetProjectVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface GetProjectVariables {
+  id: UUIDString;
+}
+```
+### Return Type
+Recall that calling the `GetProject` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
+
+To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
+
+To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `GetProject` Query is of type `GetProjectData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface GetProjectData {
+  project?: {
+    id: UUIDString;
+    programId: UUIDString;
+    productTypeId?: UUIDString | null;
+    name: string;
+    description?: string | null;
+    status: ProjectStatus;
+    startDate?: DateString | null;
+    targetCompletionDate?: DateString | null;
+    actualCompletionDate?: DateString | null;
+    ownerId?: UUIDString | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+    owner?: {
+      id: UUIDString;
+      name: string;
+      email: string;
+      role: UserRole;
+    } & User_Key;
+      program: {
+        id: UUIDString;
+        name: string;
+        portfolioId: UUIDString;
+        portfolio: {
+          id: UUIDString;
+          name: string;
+          organizationId: UUIDString;
+        } & Portfolio_Key;
+      } & Program_Key;
+        productType?: {
+          id: UUIDString;
+          name: string;
+          description?: string | null;
+        } & ProductType_Key;
+  } & Project_Key;
+}
+```
+
+To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
+
+### Using `GetProject`'s Query hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, GetProjectVariables } from '@firebasegen/default-connector';
+import { useGetProject } from '@firebasegen/default-connector/react'
+
+export default function GetProjectComponent() {
+  // The `useGetProject` Query hook requires an argument of type `GetProjectVariables`:
+  const getProjectVars: GetProjectVariables = {
+    id: ..., 
+  };
+
+  // You don't have to do anything to "execute" the Query.
+  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
+  const query = useGetProject(getProjectVars);
+  // Variables can be defined inline as well.
+  const query = useGetProject({ id: ..., });
+
+  // You can also pass in a `DataConnect` instance to the Query hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const query = useGetProject(dataConnect, getProjectVars);
+
+  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
+  const options = { staleTime: 5 * 1000 };
+  const query = useGetProject(getProjectVars, options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = { staleTime: 5 * 1000 };
+  const query = useGetProject(dataConnect, getProjectVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Query.
+  if (query.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (query.isError) {
+    return <div>Error: {query.error.message}</div>;
+  }
+
+  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
+  if (query.isSuccess) {
+    console.log(query.data.project);
+  }
+  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## ListProjectsByStatus
+You can execute the `ListProjectsByStatus` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
+
+```javascript
+useListProjectsByStatus(dc: DataConnect, vars: ListProjectsByStatusVariables, options?: useDataConnectQueryOptions<ListProjectsByStatusData>): UseDataConnectQueryResult<ListProjectsByStatusData, ListProjectsByStatusVariables>;
+```
+You can also pass in a `DataConnect` instance to the Query hook function.
+```javascript
+useListProjectsByStatus(vars: ListProjectsByStatusVariables, options?: useDataConnectQueryOptions<ListProjectsByStatusData>): UseDataConnectQueryResult<ListProjectsByStatusData, ListProjectsByStatusVariables>;
+```
+
+### Variables
+The `ListProjectsByStatus` Query requires an argument of type `ListProjectsByStatusVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface ListProjectsByStatusVariables {
+  status: ProjectStatus;
+}
+```
+### Return Type
+Recall that calling the `ListProjectsByStatus` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
+
+To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
+
+To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `ListProjectsByStatus` Query is of type `ListProjectsByStatusData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface ListProjectsByStatusData {
+  projects: ({
+    id: UUIDString;
+    name: string;
+    description?: string | null;
+    status: ProjectStatus;
+    startDate?: DateString | null;
+    targetCompletionDate?: DateString | null;
+    programId: UUIDString;
+    program: {
+      id: UUIDString;
+      name: string;
+      portfolio: {
+        id: UUIDString;
+        name: string;
+      } & Portfolio_Key;
+    } & Program_Key;
+  } & Project_Key)[];
+}
+```
+
+To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
+
+### Using `ListProjectsByStatus`'s Query hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, ListProjectsByStatusVariables } from '@firebasegen/default-connector';
+import { useListProjectsByStatus } from '@firebasegen/default-connector/react'
+
+export default function ListProjectsByStatusComponent() {
+  // The `useListProjectsByStatus` Query hook requires an argument of type `ListProjectsByStatusVariables`:
+  const listProjectsByStatusVars: ListProjectsByStatusVariables = {
+    status: ..., 
+  };
+
+  // You don't have to do anything to "execute" the Query.
+  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
+  const query = useListProjectsByStatus(listProjectsByStatusVars);
+  // Variables can be defined inline as well.
+  const query = useListProjectsByStatus({ status: ..., });
+
+  // You can also pass in a `DataConnect` instance to the Query hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const query = useListProjectsByStatus(dataConnect, listProjectsByStatusVars);
+
+  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
+  const options = { staleTime: 5 * 1000 };
+  const query = useListProjectsByStatus(listProjectsByStatusVars, options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = { staleTime: 5 * 1000 };
+  const query = useListProjectsByStatus(dataConnect, listProjectsByStatusVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Query.
+  if (query.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (query.isError) {
+    return <div>Error: {query.error.message}</div>;
+  }
+
+  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
+  if (query.isSuccess) {
+    console.log(query.data.projects);
+  }
+  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## ListProjectPhases
+You can execute the `ListProjectPhases` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
+
+```javascript
+useListProjectPhases(dc: DataConnect, vars: ListProjectPhasesVariables, options?: useDataConnectQueryOptions<ListProjectPhasesData>): UseDataConnectQueryResult<ListProjectPhasesData, ListProjectPhasesVariables>;
+```
+You can also pass in a `DataConnect` instance to the Query hook function.
+```javascript
+useListProjectPhases(vars: ListProjectPhasesVariables, options?: useDataConnectQueryOptions<ListProjectPhasesData>): UseDataConnectQueryResult<ListProjectPhasesData, ListProjectPhasesVariables>;
+```
+
+### Variables
+The `ListProjectPhases` Query requires an argument of type `ListProjectPhasesVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface ListProjectPhasesVariables {
+  projectId: UUIDString;
+}
+```
+### Return Type
+Recall that calling the `ListProjectPhases` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
+
+To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
+
+To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `ListProjectPhases` Query is of type `ListProjectPhasesData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface ListProjectPhasesData {
+  projectPhases: ({
+    id: UUIDString;
+    name: string;
+    description?: string | null;
+    status: PhaseStatus;
+    startDate?: DateString | null;
+    targetEndDate?: DateString | null;
+    actualEndDate?: DateString | null;
+    order: number;
+    percentComplete?: number | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+  } & ProjectPhase_Key)[];
+}
+```
+
+To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
+
+### Using `ListProjectPhases`'s Query hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, ListProjectPhasesVariables } from '@firebasegen/default-connector';
+import { useListProjectPhases } from '@firebasegen/default-connector/react'
+
+export default function ListProjectPhasesComponent() {
+  // The `useListProjectPhases` Query hook requires an argument of type `ListProjectPhasesVariables`:
+  const listProjectPhasesVars: ListProjectPhasesVariables = {
+    projectId: ..., 
+  };
+
+  // You don't have to do anything to "execute" the Query.
+  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
+  const query = useListProjectPhases(listProjectPhasesVars);
+  // Variables can be defined inline as well.
+  const query = useListProjectPhases({ projectId: ..., });
+
+  // You can also pass in a `DataConnect` instance to the Query hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const query = useListProjectPhases(dataConnect, listProjectPhasesVars);
+
+  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
+  const options = { staleTime: 5 * 1000 };
+  const query = useListProjectPhases(listProjectPhasesVars, options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = { staleTime: 5 * 1000 };
+  const query = useListProjectPhases(dataConnect, listProjectPhasesVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Query.
+  if (query.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (query.isError) {
+    return <div>Error: {query.error.message}</div>;
+  }
+
+  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
+  if (query.isSuccess) {
+    console.log(query.data.projectPhases);
+  }
+  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## GetProjectPhase
+You can execute the `GetProjectPhase` Query using the following Query hook function, which is defined in [default-connector/react/index.d.ts](./index.d.ts):
+
+```javascript
+useGetProjectPhase(dc: DataConnect, vars: GetProjectPhaseVariables, options?: useDataConnectQueryOptions<GetProjectPhaseData>): UseDataConnectQueryResult<GetProjectPhaseData, GetProjectPhaseVariables>;
+```
+You can also pass in a `DataConnect` instance to the Query hook function.
+```javascript
+useGetProjectPhase(vars: GetProjectPhaseVariables, options?: useDataConnectQueryOptions<GetProjectPhaseData>): UseDataConnectQueryResult<GetProjectPhaseData, GetProjectPhaseVariables>;
+```
+
+### Variables
+The `GetProjectPhase` Query requires an argument of type `GetProjectPhaseVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface GetProjectPhaseVariables {
+  id: UUIDString;
+}
+```
+### Return Type
+Recall that calling the `GetProjectPhase` Query hook function returns a `UseQueryResult` object. This object holds the state of your Query, including whether the Query is loading, has completed, or has succeeded/failed, and any data returned by the Query, among other things.
+
+To check the status of a Query, use the `UseQueryResult.status` field. You can also check for pending / success / error status using the `UseQueryResult.isPending`, `UseQueryResult.isSuccess`, and `UseQueryResult.isError` fields.
+
+To access the data returned by a Query, use the `UseQueryResult.data` field. The data for the `GetProjectPhase` Query is of type `GetProjectPhaseData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface GetProjectPhaseData {
+  projectPhase?: {
+    id: UUIDString;
+    projectId: UUIDString;
+    name: string;
+    description?: string | null;
+    status: PhaseStatus;
+    startDate?: DateString | null;
+    targetEndDate?: DateString | null;
+    actualEndDate?: DateString | null;
+    order: number;
+    percentComplete?: number | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+    project: {
+      id: UUIDString;
+      name: string;
+      status: ProjectStatus;
+    } & Project_Key;
+  } & ProjectPhase_Key;
+}
+```
+
+To learn more about the `UseQueryResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery).
+
+### Using `GetProjectPhase`'s Query hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, GetProjectPhaseVariables } from '@firebasegen/default-connector';
+import { useGetProjectPhase } from '@firebasegen/default-connector/react'
+
+export default function GetProjectPhaseComponent() {
+  // The `useGetProjectPhase` Query hook requires an argument of type `GetProjectPhaseVariables`:
+  const getProjectPhaseVars: GetProjectPhaseVariables = {
+    id: ..., 
+  };
+
+  // You don't have to do anything to "execute" the Query.
+  // Call the Query hook function to get a `UseQueryResult` object which holds the state of your Query.
+  const query = useGetProjectPhase(getProjectPhaseVars);
+  // Variables can be defined inline as well.
+  const query = useGetProjectPhase({ id: ..., });
+
+  // You can also pass in a `DataConnect` instance to the Query hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const query = useGetProjectPhase(dataConnect, getProjectPhaseVars);
+
+  // You can also pass in a `useDataConnectQueryOptions` object to the Query hook function.
+  const options = { staleTime: 5 * 1000 };
+  const query = useGetProjectPhase(getProjectPhaseVars, options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectQueryOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = { staleTime: 5 * 1000 };
+  const query = useGetProjectPhase(dataConnect, getProjectPhaseVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Query.
+  if (query.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (query.isError) {
+    return <div>Error: {query.error.message}</div>;
+  }
+
+  // If the Query is successful, you can access the data returned using the `UseQueryResult.data` field.
+  if (query.isSuccess) {
+    console.log(query.data.projectPhase);
+  }
+  return <div>Query execution {query.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
 # Mutations
 
 The React generated SDK provides Mutations hook functions that call and return [`useDataConnectMutation`](https://react-query-firebase.invertase.dev/react/data-connect/mutations) hooks from TanStack Query Firebase.
@@ -2554,6 +2554,300 @@ Here's a general overview of how to use the generated Mutation hooks in your cod
   - ***Special case:*** If the Mutation has no arguments (or all optional arguments and you wish to provide none), and you want to pass `options` to `UseMutationResult.mutate()`, you must pass `undefined` where you would normally pass the Mutation's arguments, and then may provide the options argument.
 
 Below are examples of how to use the `default` connector's generated Mutation hook functions to execute each Mutation. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#operations-react-angular).
+
+## CreateProgram
+You can execute the `CreateProgram` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
+```javascript
+useCreateProgram(options?: useDataConnectMutationOptions<CreateProgramData, FirebaseError, CreateProgramVariables>): UseDataConnectMutationResult<CreateProgramData, CreateProgramVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useCreateProgram(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProgramData, FirebaseError, CreateProgramVariables>): UseDataConnectMutationResult<CreateProgramData, CreateProgramVariables>;
+```
+
+### Variables
+The `CreateProgram` Mutation requires an argument of type `CreateProgramVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface CreateProgramVariables {
+  portfolioId: UUIDString;
+  name: string;
+  description?: string | null;
+  ownerId?: UUIDString | null;
+}
+```
+### Return Type
+Recall that calling the `CreateProgram` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `CreateProgram` Mutation is of type `CreateProgramData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface CreateProgramData {
+  program_insert: Program_Key;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `CreateProgram`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, CreateProgramVariables } from '@firebasegen/default-connector';
+import { useCreateProgram } from '@firebasegen/default-connector/react'
+
+export default function CreateProgramComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useCreateProgram();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useCreateProgram(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useCreateProgram(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useCreateProgram(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useCreateProgram` Mutation requires an argument of type `CreateProgramVariables`:
+  const createProgramVars: CreateProgramVariables = {
+    portfolioId: ..., 
+    name: ..., 
+    description: ..., // optional
+    ownerId: ..., // optional
+  };
+  mutation.mutate(createProgramVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ portfolioId: ..., name: ..., description: ..., ownerId: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(createProgramVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.program_insert);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## UpdateProgram
+You can execute the `UpdateProgram` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
+```javascript
+useUpdateProgram(options?: useDataConnectMutationOptions<UpdateProgramData, FirebaseError, UpdateProgramVariables>): UseDataConnectMutationResult<UpdateProgramData, UpdateProgramVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useUpdateProgram(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProgramData, FirebaseError, UpdateProgramVariables>): UseDataConnectMutationResult<UpdateProgramData, UpdateProgramVariables>;
+```
+
+### Variables
+The `UpdateProgram` Mutation requires an argument of type `UpdateProgramVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface UpdateProgramVariables {
+  id: UUIDString;
+  name?: string | null;
+  description?: string | null;
+  ownerId?: UUIDString | null;
+}
+```
+### Return Type
+Recall that calling the `UpdateProgram` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `UpdateProgram` Mutation is of type `UpdateProgramData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface UpdateProgramData {
+  program_update?: Program_Key | null;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `UpdateProgram`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, UpdateProgramVariables } from '@firebasegen/default-connector';
+import { useUpdateProgram } from '@firebasegen/default-connector/react'
+
+export default function UpdateProgramComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useUpdateProgram();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useUpdateProgram(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useUpdateProgram(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useUpdateProgram(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useUpdateProgram` Mutation requires an argument of type `UpdateProgramVariables`:
+  const updateProgramVars: UpdateProgramVariables = {
+    id: ..., 
+    name: ..., // optional
+    description: ..., // optional
+    ownerId: ..., // optional
+  };
+  mutation.mutate(updateProgramVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ id: ..., name: ..., description: ..., ownerId: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(updateProgramVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.program_update);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## DeleteProgram
+You can execute the `DeleteProgram` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
+```javascript
+useDeleteProgram(options?: useDataConnectMutationOptions<DeleteProgramData, FirebaseError, DeleteProgramVariables>): UseDataConnectMutationResult<DeleteProgramData, DeleteProgramVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useDeleteProgram(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProgramData, FirebaseError, DeleteProgramVariables>): UseDataConnectMutationResult<DeleteProgramData, DeleteProgramVariables>;
+```
+
+### Variables
+The `DeleteProgram` Mutation requires an argument of type `DeleteProgramVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface DeleteProgramVariables {
+  id: UUIDString;
+}
+```
+### Return Type
+Recall that calling the `DeleteProgram` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `DeleteProgram` Mutation is of type `DeleteProgramData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface DeleteProgramData {
+  program_delete?: Program_Key | null;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `DeleteProgram`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, DeleteProgramVariables } from '@firebasegen/default-connector';
+import { useDeleteProgram } from '@firebasegen/default-connector/react'
+
+export default function DeleteProgramComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useDeleteProgram();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useDeleteProgram(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useDeleteProgram(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useDeleteProgram(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useDeleteProgram` Mutation requires an argument of type `DeleteProgramVariables`:
+  const deleteProgramVars: DeleteProgramVariables = {
+    id: ..., 
+  };
+  mutation.mutate(deleteProgramVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ id: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(deleteProgramVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.program_delete);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
 
 ## CreateProjectAssignment
 You can execute the `CreateProjectAssignment` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
@@ -2850,316 +3144,6 @@ export default function DeleteProjectAssignmentComponent() {
   // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
   if (mutation.isSuccess) {
     console.log(mutation.data.projectAssignment_delete);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## CreateProjectPhase
-You can execute the `CreateProjectPhase` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
-```javascript
-useCreateProjectPhase(options?: useDataConnectMutationOptions<CreateProjectPhaseData, FirebaseError, CreateProjectPhaseVariables>): UseDataConnectMutationResult<CreateProjectPhaseData, CreateProjectPhaseVariables>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useCreateProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProjectPhaseData, FirebaseError, CreateProjectPhaseVariables>): UseDataConnectMutationResult<CreateProjectPhaseData, CreateProjectPhaseVariables>;
-```
-
-### Variables
-The `CreateProjectPhase` Mutation requires an argument of type `CreateProjectPhaseVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface CreateProjectPhaseVariables {
-  projectId: UUIDString;
-  name: string;
-  description?: string | null;
-  status?: PhaseStatus | null;
-  startDate?: DateString | null;
-  targetEndDate?: DateString | null;
-  order: number;
-  percentComplete?: number | null;
-}
-```
-### Return Type
-Recall that calling the `CreateProjectPhase` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `CreateProjectPhase` Mutation is of type `CreateProjectPhaseData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface CreateProjectPhaseData {
-  projectPhase_insert: ProjectPhase_Key;
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `CreateProjectPhase`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, CreateProjectPhaseVariables } from '@firebasegen/default-connector';
-import { useCreateProjectPhase } from '@firebasegen/default-connector/react'
-
-export default function CreateProjectPhaseComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useCreateProjectPhase();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useCreateProjectPhase(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useCreateProjectPhase(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useCreateProjectPhase(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useCreateProjectPhase` Mutation requires an argument of type `CreateProjectPhaseVariables`:
-  const createProjectPhaseVars: CreateProjectPhaseVariables = {
-    projectId: ..., 
-    name: ..., 
-    description: ..., // optional
-    status: ..., // optional
-    startDate: ..., // optional
-    targetEndDate: ..., // optional
-    order: ..., 
-    percentComplete: ..., // optional
-  };
-  mutation.mutate(createProjectPhaseVars);
-  // Variables can be defined inline as well.
-  mutation.mutate({ projectId: ..., name: ..., description: ..., status: ..., startDate: ..., targetEndDate: ..., order: ..., percentComplete: ..., });
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(createProjectPhaseVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.projectPhase_insert);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## UpdateProjectPhase
-You can execute the `UpdateProjectPhase` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
-```javascript
-useUpdateProjectPhase(options?: useDataConnectMutationOptions<UpdateProjectPhaseData, FirebaseError, UpdateProjectPhaseVariables>): UseDataConnectMutationResult<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useUpdateProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProjectPhaseData, FirebaseError, UpdateProjectPhaseVariables>): UseDataConnectMutationResult<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
-```
-
-### Variables
-The `UpdateProjectPhase` Mutation requires an argument of type `UpdateProjectPhaseVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface UpdateProjectPhaseVariables {
-  id: UUIDString;
-  name?: string | null;
-  description?: string | null;
-  status?: PhaseStatus | null;
-  startDate?: DateString | null;
-  targetEndDate?: DateString | null;
-  actualEndDate?: DateString | null;
-  percentComplete?: number | null;
-}
-```
-### Return Type
-Recall that calling the `UpdateProjectPhase` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `UpdateProjectPhase` Mutation is of type `UpdateProjectPhaseData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface UpdateProjectPhaseData {
-  projectPhase_update?: ProjectPhase_Key | null;
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `UpdateProjectPhase`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, UpdateProjectPhaseVariables } from '@firebasegen/default-connector';
-import { useUpdateProjectPhase } from '@firebasegen/default-connector/react'
-
-export default function UpdateProjectPhaseComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useUpdateProjectPhase();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useUpdateProjectPhase(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useUpdateProjectPhase(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useUpdateProjectPhase(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useUpdateProjectPhase` Mutation requires an argument of type `UpdateProjectPhaseVariables`:
-  const updateProjectPhaseVars: UpdateProjectPhaseVariables = {
-    id: ..., 
-    name: ..., // optional
-    description: ..., // optional
-    status: ..., // optional
-    startDate: ..., // optional
-    targetEndDate: ..., // optional
-    actualEndDate: ..., // optional
-    percentComplete: ..., // optional
-  };
-  mutation.mutate(updateProjectPhaseVars);
-  // Variables can be defined inline as well.
-  mutation.mutate({ id: ..., name: ..., description: ..., status: ..., startDate: ..., targetEndDate: ..., actualEndDate: ..., percentComplete: ..., });
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(updateProjectPhaseVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.projectPhase_update);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## DeleteProjectPhase
-You can execute the `DeleteProjectPhase` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
-```javascript
-useDeleteProjectPhase(options?: useDataConnectMutationOptions<DeleteProjectPhaseData, FirebaseError, DeleteProjectPhaseVariables>): UseDataConnectMutationResult<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useDeleteProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProjectPhaseData, FirebaseError, DeleteProjectPhaseVariables>): UseDataConnectMutationResult<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
-```
-
-### Variables
-The `DeleteProjectPhase` Mutation requires an argument of type `DeleteProjectPhaseVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface DeleteProjectPhaseVariables {
-  id: UUIDString;
-}
-```
-### Return Type
-Recall that calling the `DeleteProjectPhase` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `DeleteProjectPhase` Mutation is of type `DeleteProjectPhaseData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface DeleteProjectPhaseData {
-  projectPhase_delete?: ProjectPhase_Key | null;
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `DeleteProjectPhase`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, DeleteProjectPhaseVariables } from '@firebasegen/default-connector';
-import { useDeleteProjectPhase } from '@firebasegen/default-connector/react'
-
-export default function DeleteProjectPhaseComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useDeleteProjectPhase();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useDeleteProjectPhase(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useDeleteProjectPhase(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useDeleteProjectPhase(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useDeleteProjectPhase` Mutation requires an argument of type `DeleteProjectPhaseVariables`:
-  const deleteProjectPhaseVars: DeleteProjectPhaseVariables = {
-    id: ..., 
-  };
-  mutation.mutate(deleteProjectPhaseVars);
-  // Variables can be defined inline as well.
-  mutation.mutate({ id: ..., });
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(deleteProjectPhaseVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.projectPhase_delete);
   }
   return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
 }
@@ -4041,6 +4025,200 @@ export default function DeleteUserComponent() {
 }
 ```
 
+## CreateOrganization
+You can execute the `CreateOrganization` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
+```javascript
+useCreateOrganization(options?: useDataConnectMutationOptions<CreateOrganizationData, FirebaseError, CreateOrganizationVariables>): UseDataConnectMutationResult<CreateOrganizationData, CreateOrganizationVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useCreateOrganization(dc: DataConnect, options?: useDataConnectMutationOptions<CreateOrganizationData, FirebaseError, CreateOrganizationVariables>): UseDataConnectMutationResult<CreateOrganizationData, CreateOrganizationVariables>;
+```
+
+### Variables
+The `CreateOrganization` Mutation requires an argument of type `CreateOrganizationVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface CreateOrganizationVariables {
+  name: string;
+  fiscalYearStartMonth?: number | null;
+}
+```
+### Return Type
+Recall that calling the `CreateOrganization` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `CreateOrganization` Mutation is of type `CreateOrganizationData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface CreateOrganizationData {
+  organization_insert: Organization_Key;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `CreateOrganization`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, CreateOrganizationVariables } from '@firebasegen/default-connector';
+import { useCreateOrganization } from '@firebasegen/default-connector/react'
+
+export default function CreateOrganizationComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useCreateOrganization();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useCreateOrganization(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useCreateOrganization(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useCreateOrganization(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useCreateOrganization` Mutation requires an argument of type `CreateOrganizationVariables`:
+  const createOrganizationVars: CreateOrganizationVariables = {
+    name: ..., 
+    fiscalYearStartMonth: ..., // optional
+  };
+  mutation.mutate(createOrganizationVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ name: ..., fiscalYearStartMonth: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(createOrganizationVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.organization_insert);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## UpdateOrganization
+You can execute the `UpdateOrganization` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
+```javascript
+useUpdateOrganization(options?: useDataConnectMutationOptions<UpdateOrganizationData, FirebaseError, UpdateOrganizationVariables>): UseDataConnectMutationResult<UpdateOrganizationData, UpdateOrganizationVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useUpdateOrganization(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateOrganizationData, FirebaseError, UpdateOrganizationVariables>): UseDataConnectMutationResult<UpdateOrganizationData, UpdateOrganizationVariables>;
+```
+
+### Variables
+The `UpdateOrganization` Mutation requires an argument of type `UpdateOrganizationVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface UpdateOrganizationVariables {
+  id: UUIDString;
+  name?: string | null;
+  fiscalYearStartMonth?: number | null;
+}
+```
+### Return Type
+Recall that calling the `UpdateOrganization` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `UpdateOrganization` Mutation is of type `UpdateOrganizationData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface UpdateOrganizationData {
+  organization_update?: Organization_Key | null;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `UpdateOrganization`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, UpdateOrganizationVariables } from '@firebasegen/default-connector';
+import { useUpdateOrganization } from '@firebasegen/default-connector/react'
+
+export default function UpdateOrganizationComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useUpdateOrganization();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useUpdateOrganization(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useUpdateOrganization(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useUpdateOrganization(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useUpdateOrganization` Mutation requires an argument of type `UpdateOrganizationVariables`:
+  const updateOrganizationVars: UpdateOrganizationVariables = {
+    id: ..., 
+    name: ..., // optional
+    fiscalYearStartMonth: ..., // optional
+  };
+  mutation.mutate(updateOrganizationVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ id: ..., name: ..., fiscalYearStartMonth: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(updateOrganizationVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.organization_update);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
 ## CreatePhaseTemplate
 You can execute the `CreatePhaseTemplate` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
 ```javascript
@@ -4628,806 +4806,6 @@ export default function DeletePhaseTemplatePhaseComponent() {
   // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
   if (mutation.isSuccess) {
     console.log(mutation.data.phaseTemplatePhase_delete);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## CreateProgram
-You can execute the `CreateProgram` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
-```javascript
-useCreateProgram(options?: useDataConnectMutationOptions<CreateProgramData, FirebaseError, CreateProgramVariables>): UseDataConnectMutationResult<CreateProgramData, CreateProgramVariables>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useCreateProgram(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProgramData, FirebaseError, CreateProgramVariables>): UseDataConnectMutationResult<CreateProgramData, CreateProgramVariables>;
-```
-
-### Variables
-The `CreateProgram` Mutation requires an argument of type `CreateProgramVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface CreateProgramVariables {
-  portfolioId: UUIDString;
-  name: string;
-  description?: string | null;
-  ownerId?: UUIDString | null;
-}
-```
-### Return Type
-Recall that calling the `CreateProgram` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `CreateProgram` Mutation is of type `CreateProgramData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface CreateProgramData {
-  program_insert: Program_Key;
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `CreateProgram`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, CreateProgramVariables } from '@firebasegen/default-connector';
-import { useCreateProgram } from '@firebasegen/default-connector/react'
-
-export default function CreateProgramComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useCreateProgram();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useCreateProgram(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useCreateProgram(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useCreateProgram(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useCreateProgram` Mutation requires an argument of type `CreateProgramVariables`:
-  const createProgramVars: CreateProgramVariables = {
-    portfolioId: ..., 
-    name: ..., 
-    description: ..., // optional
-    ownerId: ..., // optional
-  };
-  mutation.mutate(createProgramVars);
-  // Variables can be defined inline as well.
-  mutation.mutate({ portfolioId: ..., name: ..., description: ..., ownerId: ..., });
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(createProgramVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.program_insert);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## UpdateProgram
-You can execute the `UpdateProgram` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
-```javascript
-useUpdateProgram(options?: useDataConnectMutationOptions<UpdateProgramData, FirebaseError, UpdateProgramVariables>): UseDataConnectMutationResult<UpdateProgramData, UpdateProgramVariables>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useUpdateProgram(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProgramData, FirebaseError, UpdateProgramVariables>): UseDataConnectMutationResult<UpdateProgramData, UpdateProgramVariables>;
-```
-
-### Variables
-The `UpdateProgram` Mutation requires an argument of type `UpdateProgramVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface UpdateProgramVariables {
-  id: UUIDString;
-  name?: string | null;
-  description?: string | null;
-  ownerId?: UUIDString | null;
-}
-```
-### Return Type
-Recall that calling the `UpdateProgram` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `UpdateProgram` Mutation is of type `UpdateProgramData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface UpdateProgramData {
-  program_update?: Program_Key | null;
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `UpdateProgram`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, UpdateProgramVariables } from '@firebasegen/default-connector';
-import { useUpdateProgram } from '@firebasegen/default-connector/react'
-
-export default function UpdateProgramComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useUpdateProgram();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useUpdateProgram(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useUpdateProgram(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useUpdateProgram(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useUpdateProgram` Mutation requires an argument of type `UpdateProgramVariables`:
-  const updateProgramVars: UpdateProgramVariables = {
-    id: ..., 
-    name: ..., // optional
-    description: ..., // optional
-    ownerId: ..., // optional
-  };
-  mutation.mutate(updateProgramVars);
-  // Variables can be defined inline as well.
-  mutation.mutate({ id: ..., name: ..., description: ..., ownerId: ..., });
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(updateProgramVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.program_update);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## DeleteProgram
-You can execute the `DeleteProgram` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
-```javascript
-useDeleteProgram(options?: useDataConnectMutationOptions<DeleteProgramData, FirebaseError, DeleteProgramVariables>): UseDataConnectMutationResult<DeleteProgramData, DeleteProgramVariables>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useDeleteProgram(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProgramData, FirebaseError, DeleteProgramVariables>): UseDataConnectMutationResult<DeleteProgramData, DeleteProgramVariables>;
-```
-
-### Variables
-The `DeleteProgram` Mutation requires an argument of type `DeleteProgramVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface DeleteProgramVariables {
-  id: UUIDString;
-}
-```
-### Return Type
-Recall that calling the `DeleteProgram` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `DeleteProgram` Mutation is of type `DeleteProgramData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface DeleteProgramData {
-  program_delete?: Program_Key | null;
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `DeleteProgram`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, DeleteProgramVariables } from '@firebasegen/default-connector';
-import { useDeleteProgram } from '@firebasegen/default-connector/react'
-
-export default function DeleteProgramComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useDeleteProgram();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useDeleteProgram(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useDeleteProgram(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useDeleteProgram(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useDeleteProgram` Mutation requires an argument of type `DeleteProgramVariables`:
-  const deleteProgramVars: DeleteProgramVariables = {
-    id: ..., 
-  };
-  mutation.mutate(deleteProgramVars);
-  // Variables can be defined inline as well.
-  mutation.mutate({ id: ..., });
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(deleteProgramVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.program_delete);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## CreateProject
-You can execute the `CreateProject` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
-```javascript
-useCreateProject(options?: useDataConnectMutationOptions<CreateProjectData, FirebaseError, CreateProjectVariables>): UseDataConnectMutationResult<CreateProjectData, CreateProjectVariables>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useCreateProject(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProjectData, FirebaseError, CreateProjectVariables>): UseDataConnectMutationResult<CreateProjectData, CreateProjectVariables>;
-```
-
-### Variables
-The `CreateProject` Mutation requires an argument of type `CreateProjectVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface CreateProjectVariables {
-  programId: UUIDString;
-  name: string;
-  description?: string | null;
-  status?: ProjectStatus | null;
-  startDate?: DateString | null;
-  targetCompletionDate?: DateString | null;
-  ownerId?: UUIDString | null;
-  productTypeId?: UUIDString | null;
-}
-```
-### Return Type
-Recall that calling the `CreateProject` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `CreateProject` Mutation is of type `CreateProjectData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface CreateProjectData {
-  project_insert: Project_Key;
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `CreateProject`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, CreateProjectVariables } from '@firebasegen/default-connector';
-import { useCreateProject } from '@firebasegen/default-connector/react'
-
-export default function CreateProjectComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useCreateProject();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useCreateProject(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useCreateProject(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useCreateProject(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useCreateProject` Mutation requires an argument of type `CreateProjectVariables`:
-  const createProjectVars: CreateProjectVariables = {
-    programId: ..., 
-    name: ..., 
-    description: ..., // optional
-    status: ..., // optional
-    startDate: ..., // optional
-    targetCompletionDate: ..., // optional
-    ownerId: ..., // optional
-    productTypeId: ..., // optional
-  };
-  mutation.mutate(createProjectVars);
-  // Variables can be defined inline as well.
-  mutation.mutate({ programId: ..., name: ..., description: ..., status: ..., startDate: ..., targetCompletionDate: ..., ownerId: ..., productTypeId: ..., });
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(createProjectVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.project_insert);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## UpdateProject
-You can execute the `UpdateProject` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
-```javascript
-useUpdateProject(options?: useDataConnectMutationOptions<UpdateProjectData, FirebaseError, UpdateProjectVariables>): UseDataConnectMutationResult<UpdateProjectData, UpdateProjectVariables>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useUpdateProject(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProjectData, FirebaseError, UpdateProjectVariables>): UseDataConnectMutationResult<UpdateProjectData, UpdateProjectVariables>;
-```
-
-### Variables
-The `UpdateProject` Mutation requires an argument of type `UpdateProjectVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface UpdateProjectVariables {
-  id: UUIDString;
-  name?: string | null;
-  description?: string | null;
-  status?: ProjectStatus | null;
-  startDate?: DateString | null;
-  targetCompletionDate?: DateString | null;
-  actualCompletionDate?: DateString | null;
-  ownerId?: UUIDString | null;
-  productTypeId?: UUIDString | null;
-}
-```
-### Return Type
-Recall that calling the `UpdateProject` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `UpdateProject` Mutation is of type `UpdateProjectData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface UpdateProjectData {
-  project_update?: Project_Key | null;
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `UpdateProject`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, UpdateProjectVariables } from '@firebasegen/default-connector';
-import { useUpdateProject } from '@firebasegen/default-connector/react'
-
-export default function UpdateProjectComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useUpdateProject();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useUpdateProject(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useUpdateProject(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useUpdateProject(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useUpdateProject` Mutation requires an argument of type `UpdateProjectVariables`:
-  const updateProjectVars: UpdateProjectVariables = {
-    id: ..., 
-    name: ..., // optional
-    description: ..., // optional
-    status: ..., // optional
-    startDate: ..., // optional
-    targetCompletionDate: ..., // optional
-    actualCompletionDate: ..., // optional
-    ownerId: ..., // optional
-    productTypeId: ..., // optional
-  };
-  mutation.mutate(updateProjectVars);
-  // Variables can be defined inline as well.
-  mutation.mutate({ id: ..., name: ..., description: ..., status: ..., startDate: ..., targetCompletionDate: ..., actualCompletionDate: ..., ownerId: ..., productTypeId: ..., });
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(updateProjectVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.project_update);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## DeleteProject
-You can execute the `DeleteProject` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
-```javascript
-useDeleteProject(options?: useDataConnectMutationOptions<DeleteProjectData, FirebaseError, DeleteProjectVariables>): UseDataConnectMutationResult<DeleteProjectData, DeleteProjectVariables>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useDeleteProject(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProjectData, FirebaseError, DeleteProjectVariables>): UseDataConnectMutationResult<DeleteProjectData, DeleteProjectVariables>;
-```
-
-### Variables
-The `DeleteProject` Mutation requires an argument of type `DeleteProjectVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface DeleteProjectVariables {
-  id: UUIDString;
-}
-```
-### Return Type
-Recall that calling the `DeleteProject` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `DeleteProject` Mutation is of type `DeleteProjectData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface DeleteProjectData {
-  project_delete?: Project_Key | null;
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `DeleteProject`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, DeleteProjectVariables } from '@firebasegen/default-connector';
-import { useDeleteProject } from '@firebasegen/default-connector/react'
-
-export default function DeleteProjectComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useDeleteProject();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useDeleteProject(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useDeleteProject(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useDeleteProject(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useDeleteProject` Mutation requires an argument of type `DeleteProjectVariables`:
-  const deleteProjectVars: DeleteProjectVariables = {
-    id: ..., 
-  };
-  mutation.mutate(deleteProjectVars);
-  // Variables can be defined inline as well.
-  mutation.mutate({ id: ..., });
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(deleteProjectVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.project_delete);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## CreateOrganization
-You can execute the `CreateOrganization` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
-```javascript
-useCreateOrganization(options?: useDataConnectMutationOptions<CreateOrganizationData, FirebaseError, CreateOrganizationVariables>): UseDataConnectMutationResult<CreateOrganizationData, CreateOrganizationVariables>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useCreateOrganization(dc: DataConnect, options?: useDataConnectMutationOptions<CreateOrganizationData, FirebaseError, CreateOrganizationVariables>): UseDataConnectMutationResult<CreateOrganizationData, CreateOrganizationVariables>;
-```
-
-### Variables
-The `CreateOrganization` Mutation requires an argument of type `CreateOrganizationVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface CreateOrganizationVariables {
-  name: string;
-  fiscalYearStartMonth?: number | null;
-}
-```
-### Return Type
-Recall that calling the `CreateOrganization` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `CreateOrganization` Mutation is of type `CreateOrganizationData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface CreateOrganizationData {
-  organization_insert: Organization_Key;
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `CreateOrganization`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, CreateOrganizationVariables } from '@firebasegen/default-connector';
-import { useCreateOrganization } from '@firebasegen/default-connector/react'
-
-export default function CreateOrganizationComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useCreateOrganization();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useCreateOrganization(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useCreateOrganization(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useCreateOrganization(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useCreateOrganization` Mutation requires an argument of type `CreateOrganizationVariables`:
-  const createOrganizationVars: CreateOrganizationVariables = {
-    name: ..., 
-    fiscalYearStartMonth: ..., // optional
-  };
-  mutation.mutate(createOrganizationVars);
-  // Variables can be defined inline as well.
-  mutation.mutate({ name: ..., fiscalYearStartMonth: ..., });
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(createOrganizationVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.organization_insert);
-  }
-  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
-}
-```
-
-## UpdateOrganization
-You can execute the `UpdateOrganization` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
-```javascript
-useUpdateOrganization(options?: useDataConnectMutationOptions<UpdateOrganizationData, FirebaseError, UpdateOrganizationVariables>): UseDataConnectMutationResult<UpdateOrganizationData, UpdateOrganizationVariables>;
-```
-You can also pass in a `DataConnect` instance to the Mutation hook function.
-```javascript
-useUpdateOrganization(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateOrganizationData, FirebaseError, UpdateOrganizationVariables>): UseDataConnectMutationResult<UpdateOrganizationData, UpdateOrganizationVariables>;
-```
-
-### Variables
-The `UpdateOrganization` Mutation requires an argument of type `UpdateOrganizationVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-
-```javascript
-export interface UpdateOrganizationVariables {
-  id: UUIDString;
-  name?: string | null;
-  fiscalYearStartMonth?: number | null;
-}
-```
-### Return Type
-Recall that calling the `UpdateOrganization` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
-
-To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
-
-To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
-
-To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `UpdateOrganization` Mutation is of type `UpdateOrganizationData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
-```javascript
-export interface UpdateOrganizationData {
-  organization_update?: Organization_Key | null;
-}
-```
-
-To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
-
-### Using `UpdateOrganization`'s Mutation hook function
-
-```javascript
-import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, UpdateOrganizationVariables } from '@firebasegen/default-connector';
-import { useUpdateOrganization } from '@firebasegen/default-connector/react'
-
-export default function UpdateOrganizationComponent() {
-  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
-  const mutation = useUpdateOrganization();
-
-  // You can also pass in a `DataConnect` instance to the Mutation hook function.
-  const dataConnect = getDataConnect(connectorConfig);
-  const mutation = useUpdateOrganization(dataConnect);
-
-  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useUpdateOrganization(options);
-
-  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
-  const dataConnect = getDataConnect(connectorConfig);
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  const mutation = useUpdateOrganization(dataConnect, options);
-
-  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
-  // The `useUpdateOrganization` Mutation requires an argument of type `UpdateOrganizationVariables`:
-  const updateOrganizationVars: UpdateOrganizationVariables = {
-    id: ..., 
-    name: ..., // optional
-    fiscalYearStartMonth: ..., // optional
-  };
-  mutation.mutate(updateOrganizationVars);
-  // Variables can be defined inline as well.
-  mutation.mutate({ id: ..., name: ..., fiscalYearStartMonth: ..., });
-
-  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
-  const options = {
-    onSuccess: () => { console.log('Mutation succeeded!'); }
-  };
-  mutation.mutate(updateOrganizationVars, options);
-
-  // Then, you can render your component dynamically based on the status of the Mutation.
-  if (mutation.isPending) {
-    return <div>Loading...</div>;
-  }
-
-  if (mutation.isError) {
-    return <div>Error: {mutation.error.message}</div>;
-  }
-
-  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
-  if (mutation.isSuccess) {
-    console.log(mutation.data.organization_update);
   }
   return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
 }
@@ -6202,6 +5580,628 @@ export default function DeleteProductTypePhaseConfigComponent() {
   // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
   if (mutation.isSuccess) {
     console.log(mutation.data.productTypePhaseConfig_delete);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## CreateProject
+You can execute the `CreateProject` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
+```javascript
+useCreateProject(options?: useDataConnectMutationOptions<CreateProjectData, FirebaseError, CreateProjectVariables>): UseDataConnectMutationResult<CreateProjectData, CreateProjectVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useCreateProject(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProjectData, FirebaseError, CreateProjectVariables>): UseDataConnectMutationResult<CreateProjectData, CreateProjectVariables>;
+```
+
+### Variables
+The `CreateProject` Mutation requires an argument of type `CreateProjectVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface CreateProjectVariables {
+  programId: UUIDString;
+  name: string;
+  description?: string | null;
+  status?: ProjectStatus | null;
+  startDate?: DateString | null;
+  targetCompletionDate?: DateString | null;
+  ownerId?: UUIDString | null;
+  productTypeId?: UUIDString | null;
+}
+```
+### Return Type
+Recall that calling the `CreateProject` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `CreateProject` Mutation is of type `CreateProjectData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface CreateProjectData {
+  project_insert: Project_Key;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `CreateProject`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, CreateProjectVariables } from '@firebasegen/default-connector';
+import { useCreateProject } from '@firebasegen/default-connector/react'
+
+export default function CreateProjectComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useCreateProject();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useCreateProject(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useCreateProject(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useCreateProject(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useCreateProject` Mutation requires an argument of type `CreateProjectVariables`:
+  const createProjectVars: CreateProjectVariables = {
+    programId: ..., 
+    name: ..., 
+    description: ..., // optional
+    status: ..., // optional
+    startDate: ..., // optional
+    targetCompletionDate: ..., // optional
+    ownerId: ..., // optional
+    productTypeId: ..., // optional
+  };
+  mutation.mutate(createProjectVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ programId: ..., name: ..., description: ..., status: ..., startDate: ..., targetCompletionDate: ..., ownerId: ..., productTypeId: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(createProjectVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.project_insert);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## UpdateProject
+You can execute the `UpdateProject` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
+```javascript
+useUpdateProject(options?: useDataConnectMutationOptions<UpdateProjectData, FirebaseError, UpdateProjectVariables>): UseDataConnectMutationResult<UpdateProjectData, UpdateProjectVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useUpdateProject(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProjectData, FirebaseError, UpdateProjectVariables>): UseDataConnectMutationResult<UpdateProjectData, UpdateProjectVariables>;
+```
+
+### Variables
+The `UpdateProject` Mutation requires an argument of type `UpdateProjectVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface UpdateProjectVariables {
+  id: UUIDString;
+  name?: string | null;
+  description?: string | null;
+  status?: ProjectStatus | null;
+  startDate?: DateString | null;
+  targetCompletionDate?: DateString | null;
+  actualCompletionDate?: DateString | null;
+  ownerId?: UUIDString | null;
+  productTypeId?: UUIDString | null;
+}
+```
+### Return Type
+Recall that calling the `UpdateProject` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `UpdateProject` Mutation is of type `UpdateProjectData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface UpdateProjectData {
+  project_update?: Project_Key | null;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `UpdateProject`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, UpdateProjectVariables } from '@firebasegen/default-connector';
+import { useUpdateProject } from '@firebasegen/default-connector/react'
+
+export default function UpdateProjectComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useUpdateProject();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useUpdateProject(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useUpdateProject(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useUpdateProject(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useUpdateProject` Mutation requires an argument of type `UpdateProjectVariables`:
+  const updateProjectVars: UpdateProjectVariables = {
+    id: ..., 
+    name: ..., // optional
+    description: ..., // optional
+    status: ..., // optional
+    startDate: ..., // optional
+    targetCompletionDate: ..., // optional
+    actualCompletionDate: ..., // optional
+    ownerId: ..., // optional
+    productTypeId: ..., // optional
+  };
+  mutation.mutate(updateProjectVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ id: ..., name: ..., description: ..., status: ..., startDate: ..., targetCompletionDate: ..., actualCompletionDate: ..., ownerId: ..., productTypeId: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(updateProjectVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.project_update);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## DeleteProject
+You can execute the `DeleteProject` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
+```javascript
+useDeleteProject(options?: useDataConnectMutationOptions<DeleteProjectData, FirebaseError, DeleteProjectVariables>): UseDataConnectMutationResult<DeleteProjectData, DeleteProjectVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useDeleteProject(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProjectData, FirebaseError, DeleteProjectVariables>): UseDataConnectMutationResult<DeleteProjectData, DeleteProjectVariables>;
+```
+
+### Variables
+The `DeleteProject` Mutation requires an argument of type `DeleteProjectVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface DeleteProjectVariables {
+  id: UUIDString;
+}
+```
+### Return Type
+Recall that calling the `DeleteProject` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `DeleteProject` Mutation is of type `DeleteProjectData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface DeleteProjectData {
+  project_delete?: Project_Key | null;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `DeleteProject`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, DeleteProjectVariables } from '@firebasegen/default-connector';
+import { useDeleteProject } from '@firebasegen/default-connector/react'
+
+export default function DeleteProjectComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useDeleteProject();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useDeleteProject(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useDeleteProject(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useDeleteProject(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useDeleteProject` Mutation requires an argument of type `DeleteProjectVariables`:
+  const deleteProjectVars: DeleteProjectVariables = {
+    id: ..., 
+  };
+  mutation.mutate(deleteProjectVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ id: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(deleteProjectVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.project_delete);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## CreateProjectPhase
+You can execute the `CreateProjectPhase` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
+```javascript
+useCreateProjectPhase(options?: useDataConnectMutationOptions<CreateProjectPhaseData, FirebaseError, CreateProjectPhaseVariables>): UseDataConnectMutationResult<CreateProjectPhaseData, CreateProjectPhaseVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useCreateProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProjectPhaseData, FirebaseError, CreateProjectPhaseVariables>): UseDataConnectMutationResult<CreateProjectPhaseData, CreateProjectPhaseVariables>;
+```
+
+### Variables
+The `CreateProjectPhase` Mutation requires an argument of type `CreateProjectPhaseVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface CreateProjectPhaseVariables {
+  projectId: UUIDString;
+  name: string;
+  description?: string | null;
+  status?: PhaseStatus | null;
+  startDate?: DateString | null;
+  targetEndDate?: DateString | null;
+  order: number;
+  percentComplete?: number | null;
+}
+```
+### Return Type
+Recall that calling the `CreateProjectPhase` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `CreateProjectPhase` Mutation is of type `CreateProjectPhaseData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface CreateProjectPhaseData {
+  projectPhase_insert: ProjectPhase_Key;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `CreateProjectPhase`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, CreateProjectPhaseVariables } from '@firebasegen/default-connector';
+import { useCreateProjectPhase } from '@firebasegen/default-connector/react'
+
+export default function CreateProjectPhaseComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useCreateProjectPhase();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useCreateProjectPhase(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useCreateProjectPhase(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useCreateProjectPhase(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useCreateProjectPhase` Mutation requires an argument of type `CreateProjectPhaseVariables`:
+  const createProjectPhaseVars: CreateProjectPhaseVariables = {
+    projectId: ..., 
+    name: ..., 
+    description: ..., // optional
+    status: ..., // optional
+    startDate: ..., // optional
+    targetEndDate: ..., // optional
+    order: ..., 
+    percentComplete: ..., // optional
+  };
+  mutation.mutate(createProjectPhaseVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ projectId: ..., name: ..., description: ..., status: ..., startDate: ..., targetEndDate: ..., order: ..., percentComplete: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(createProjectPhaseVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.projectPhase_insert);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## UpdateProjectPhase
+You can execute the `UpdateProjectPhase` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
+```javascript
+useUpdateProjectPhase(options?: useDataConnectMutationOptions<UpdateProjectPhaseData, FirebaseError, UpdateProjectPhaseVariables>): UseDataConnectMutationResult<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useUpdateProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProjectPhaseData, FirebaseError, UpdateProjectPhaseVariables>): UseDataConnectMutationResult<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
+```
+
+### Variables
+The `UpdateProjectPhase` Mutation requires an argument of type `UpdateProjectPhaseVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface UpdateProjectPhaseVariables {
+  id: UUIDString;
+  name?: string | null;
+  description?: string | null;
+  status?: PhaseStatus | null;
+  startDate?: DateString | null;
+  targetEndDate?: DateString | null;
+  actualEndDate?: DateString | null;
+  percentComplete?: number | null;
+}
+```
+### Return Type
+Recall that calling the `UpdateProjectPhase` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `UpdateProjectPhase` Mutation is of type `UpdateProjectPhaseData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface UpdateProjectPhaseData {
+  projectPhase_update?: ProjectPhase_Key | null;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `UpdateProjectPhase`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, UpdateProjectPhaseVariables } from '@firebasegen/default-connector';
+import { useUpdateProjectPhase } from '@firebasegen/default-connector/react'
+
+export default function UpdateProjectPhaseComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useUpdateProjectPhase();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useUpdateProjectPhase(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useUpdateProjectPhase(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useUpdateProjectPhase(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useUpdateProjectPhase` Mutation requires an argument of type `UpdateProjectPhaseVariables`:
+  const updateProjectPhaseVars: UpdateProjectPhaseVariables = {
+    id: ..., 
+    name: ..., // optional
+    description: ..., // optional
+    status: ..., // optional
+    startDate: ..., // optional
+    targetEndDate: ..., // optional
+    actualEndDate: ..., // optional
+    percentComplete: ..., // optional
+  };
+  mutation.mutate(updateProjectPhaseVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ id: ..., name: ..., description: ..., status: ..., startDate: ..., targetEndDate: ..., actualEndDate: ..., percentComplete: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(updateProjectPhaseVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.projectPhase_update);
+  }
+  return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
+}
+```
+
+## DeleteProjectPhase
+You can execute the `DeleteProjectPhase` Mutation using the `UseMutationResult` object returned by the following Mutation hook function (which is defined in [default-connector/react/index.d.ts](./index.d.ts)):
+```javascript
+useDeleteProjectPhase(options?: useDataConnectMutationOptions<DeleteProjectPhaseData, FirebaseError, DeleteProjectPhaseVariables>): UseDataConnectMutationResult<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
+```
+You can also pass in a `DataConnect` instance to the Mutation hook function.
+```javascript
+useDeleteProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProjectPhaseData, FirebaseError, DeleteProjectPhaseVariables>): UseDataConnectMutationResult<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
+```
+
+### Variables
+The `DeleteProjectPhase` Mutation requires an argument of type `DeleteProjectPhaseVariables`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+
+```javascript
+export interface DeleteProjectPhaseVariables {
+  id: UUIDString;
+}
+```
+### Return Type
+Recall that calling the `DeleteProjectPhase` Mutation hook function returns a `UseMutationResult` object. This object holds the state of your Mutation, including whether the Mutation is loading, has completed, or has succeeded/failed, among other things.
+
+To check the status of a Mutation, use the `UseMutationResult.status` field. You can also check for pending / success / error status using the `UseMutationResult.isPending`, `UseMutationResult.isSuccess`, and `UseMutationResult.isError` fields.
+
+To execute the Mutation, call `UseMutationResult.mutate()`. This function executes the Mutation, but does not return the data from the Mutation.
+
+To access the data returned by a Mutation, use the `UseMutationResult.data` field. The data for the `DeleteProjectPhase` Mutation is of type `DeleteProjectPhaseData`, which is defined in [default-connector/index.d.ts](../index.d.ts). It has the following fields:
+```javascript
+export interface DeleteProjectPhaseData {
+  projectPhase_delete?: ProjectPhase_Key | null;
+}
+```
+
+To learn more about the `UseMutationResult` object, see the [TanStack React Query documentation](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation).
+
+### Using `DeleteProjectPhase`'s Mutation hook function
+
+```javascript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, DeleteProjectPhaseVariables } from '@firebasegen/default-connector';
+import { useDeleteProjectPhase } from '@firebasegen/default-connector/react'
+
+export default function DeleteProjectPhaseComponent() {
+  // Call the Mutation hook function to get a `UseMutationResult` object which holds the state of your Mutation.
+  const mutation = useDeleteProjectPhase();
+
+  // You can also pass in a `DataConnect` instance to the Mutation hook function.
+  const dataConnect = getDataConnect(connectorConfig);
+  const mutation = useDeleteProjectPhase(dataConnect);
+
+  // You can also pass in a `useDataConnectMutationOptions` object to the Mutation hook function.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useDeleteProjectPhase(options);
+
+  // You can also pass both a `DataConnect` instance and a `useDataConnectMutationOptions` object.
+  const dataConnect = getDataConnect(connectorConfig);
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  const mutation = useDeleteProjectPhase(dataConnect, options);
+
+  // After calling the Mutation hook function, you must call `UseMutationResult.mutate()` to execute the Mutation.
+  // The `useDeleteProjectPhase` Mutation requires an argument of type `DeleteProjectPhaseVariables`:
+  const deleteProjectPhaseVars: DeleteProjectPhaseVariables = {
+    id: ..., 
+  };
+  mutation.mutate(deleteProjectPhaseVars);
+  // Variables can be defined inline as well.
+  mutation.mutate({ id: ..., });
+
+  // You can also pass in a `useDataConnectMutationOptions` object to `UseMutationResult.mutate()`.
+  const options = {
+    onSuccess: () => { console.log('Mutation succeeded!'); }
+  };
+  mutation.mutate(deleteProjectPhaseVars, options);
+
+  // Then, you can render your component dynamically based on the status of the Mutation.
+  if (mutation.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (mutation.isError) {
+    return <div>Error: {mutation.error.message}</div>;
+  }
+
+  // If the Mutation is successful, you can access the data returned using the `UseMutationResult.data` field.
+  if (mutation.isSuccess) {
+    console.log(mutation.data.projectPhase_delete);
   }
   return <div>Mutation execution {mutation.isSuccess ? 'successful' : 'failed'}!</div>;
 }

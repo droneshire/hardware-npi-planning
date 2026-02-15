@@ -1,9 +1,6 @@
-"use client"
-
 import { useState, useMemo } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { AppLayout } from "@/components/layout/app-layout"
-import { AuthProtection } from "@/components/auth-protection"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Table,
@@ -25,7 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Search, Users, AlertTriangle, MoreVertical, Edit, Trash2 } from "lucide-react"
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import { CapacityBadge } from "@/components/resources/capacity-badge"
 import { CreateUserDialog } from "@/components/resources/create-user-dialog"
 import { EditUserDialog } from "@/components/resources/edit-user-dialog"
@@ -122,13 +119,7 @@ export default function ResourcesPage() {
   // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: async (userId: string) => {
-      const response = await fetch(`/api/users/${userId}`, {
-        method: "DELETE",
-      })
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || "Failed to delete user")
-      }
+      await userService.deleteUser(userId)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] })
@@ -171,8 +162,7 @@ export default function ResourcesPage() {
   const isLoading = isLoadingUsers
 
   return (
-    <AuthProtection>
-      <AppLayout
+    <AppLayout
         title="Resources"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Resources" }]}
       >
@@ -282,7 +272,7 @@ export default function ResourcesPage() {
                       <TableRow key={resource.id}>
                         <TableCell className="font-medium">
                           <Link
-                            href={`/resources/people/${resource.id}`}
+                            to={`/resources/people/${resource.id}`}
                             className="hover:underline"
                           >
                             {resource.name}
@@ -349,6 +339,5 @@ export default function ResourcesPage() {
           }}
         />
       </AppLayout>
-    </AuthProtection>
   )
 }

@@ -1,5 +1,3 @@
-"use client"
-
 import React, { useMemo, useState, useCallback, useRef, useEffect } from "react"
 import { Project, ProjectPhase, ProjectStatus } from "@/types"
 import {
@@ -14,7 +12,7 @@ import {
   addDays,
   parseISO,
 } from "date-fns"
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { dataConnect } from "@/lib/firebase"
 import { updateProjectPhase } from "@firebasegen/default-connector"
@@ -476,7 +474,7 @@ export function GanttChart({
                         title={project.status}
                       />
                       <Link
-                        href={`/projects/${project.id}` as any}
+                        to={`/projects/${project.id}`}
                         className="font-medium hover:underline"
                         onClick={(e) => {
                           if (onProjectClick) {

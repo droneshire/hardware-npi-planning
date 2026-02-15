@@ -1,9 +1,6 @@
-"use client"
-
 import { useState, useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { AppLayout } from "@/components/layout/app-layout"
-import { AuthProtection } from "@/components/auth-protection"
 import { GanttChart } from "@/components/visualizations/gantt-chart"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -147,11 +144,10 @@ export default function TimelinePage() {
   }, [projects])
 
   return (
-    <AuthProtection>
-      <AppLayout
-        title="Timeline"
-        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Timeline" }]}
-      >
+    <AppLayout
+      title="Timeline"
+      breadcrumbs={[{ label: "Home", href: "/" }, { label: "Timeline" }]}
+    >
         <div className="space-y-6">
           {/* Filters and Controls */}
           <Card>
@@ -282,6 +278,5 @@ export default function TimelinePage() {
           </Card>
         </div>
       </AppLayout>
-    </AuthProtection>
   )
 }

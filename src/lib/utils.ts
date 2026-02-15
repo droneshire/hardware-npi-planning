@@ -9,11 +9,24 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Parse date-only ISO string (YYYY-MM-DD) as local date to avoid UTC midnight timezone issues
+ */
+function parseLocalDate(date: Date | string): Date {
+  if (typeof date !== "string") return date
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(date)
+  if (match) {
+    const [, y, m, d] = match
+    return new Date(parseInt(y, 10), parseInt(m, 10) - 1, parseInt(d, 10))
+  }
+  return new Date(date)
+}
+
+/**
  * Formats a date to a locale string
  */
 export function formatDate(date: Date | string | null | undefined): string {
   if (!date) return "—"
-  const d = typeof date === "string" ? new Date(date) : date
+  const d = parseLocalDate(typeof date === "string" ? date : date)
   return d.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -22,7 +35,8 @@ export function formatDate(date: Date | string | null | undefined): string {
 }
 
 /**
- * Calculates fiscal year from a date and fiscal year start month
+ * Calculates fiscal year from a date and fiscal year start month (1-12).
+ * Uses local date parts so date-only values are interpreted consistently.
  */
 export function getFiscalYear(date: Date, fiscalYearStartMonth: number): number {
   const year = date.getFullYear()
@@ -59,10 +73,11 @@ export function isOverAllocated(totalAllocation: number): boolean {
 
 /**
  * Gets capacity badge status
+ * normal: 0-100%, warning: 101-120%, critical: >120%
  */
 export function getCapacityStatus(totalAllocation: number): "normal" | "warning" | "critical" {
-  if (totalAllocation > 100) return "critical"
-  if (totalAllocation > 90) return "warning"
+  if (totalAllocation > 120) return "critical"
+  if (totalAllocation > 100) return "warning"
   return "normal"
 }
 

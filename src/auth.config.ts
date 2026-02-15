@@ -1,102 +1,21 @@
-import type { NextAuthConfig } from "next-auth"
-import Google from "next-auth/providers/google"
-import Credentials from "next-auth/providers/credentials"
+// This file is no longer used - we're using Firebase Auth directly via hooks/use-auth.ts
+// Keeping this stub to prevent import errors from old code
+// TODO: Remove this file once all NextAuth references are removed
+
 import { AUTH_PAGES, AUTH_REDIRECTS } from "@/constants/auth"
 import { ROUTE_PREFIXES, DEFAULT_REDIRECT } from "@/constants/routes"
 
-export const authConfig: NextAuthConfig = {
+// Stub config - not actually used
+export const authConfig = {
   pages: {
     signIn: AUTH_PAGES.SIGNIN,
     signOut: AUTH_PAGES.SIGNOUT,
     error: AUTH_PAGES.ERROR,
   },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user
-      const isOnDashboard = nextUrl.pathname.startsWith(ROUTE_PREFIXES.DASHBOARD)
-      const isOnAuth = nextUrl.pathname.startsWith(ROUTE_PREFIXES.AUTH)
-
-      if (isOnDashboard) {
-        if (isLoggedIn) return true
-        return false // Redirect unauthenticated users to login page
-      } else if (isLoggedIn && isOnAuth) {
-        return Response.redirect(new URL(DEFAULT_REDIRECT, nextUrl))
-      }
+    authorized() {
       return true
     },
-    async jwt({ token, user, account }) {
-      if (user) {
-        token.id = user.id
-        token.role = user.role
-        token.firebaseUid = user.firebaseUid || user.id
-      }
-      if (account?.provider === "google") {
-        token.firebaseUid = user.firebaseUid || user.id
-      }
-      return token
-    },
-    async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id as string
-        session.user.role = token.role as string
-        session.user.firebaseUid = token.firebaseUid as string
-      }
-      return session
-    },
   },
-  providers: [
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-    Credentials({
-      credentials: {
-        idToken: { label: "ID Token", type: "text" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.idToken) {
-          return null
-        }
-
-        try {
-          // Verify the Firebase ID token
-          // Note: For production, use Firebase Admin SDK to verify the token server-side
-          // For now, we trust the client-provided token (not secure for production)
-          // TODO: Implement Firebase Admin SDK verification
-          const response = await fetch(
-            `https://www.googleapis.com/identitytoolkit/v3/relyingparty/getAccountInfo?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ idToken: credentials.idToken }),
-            }
-          )
-
-          if (!response.ok) {
-            return null
-          }
-
-          const data = await response.json()
-          const user = data.users?.[0]
-
-          if (!user) {
-            return null
-          }
-
-          // TODO: Fetch user from Data Connect to get role and organization
-          // For now, return basic user info
-          return {
-            id: user.localId,
-            email: user.email || "",
-            name: user.displayName || user.email?.split("@")[0] || "User",
-            firebaseUid: user.localId,
-            role: "MEMBER", // Default role, should be fetched from database
-          }
-        } catch (error) {
-          console.error("Auth verification error:", error)
-          return null
-        }
-      },
-    }),
-  ],
+  providers: [],
 }

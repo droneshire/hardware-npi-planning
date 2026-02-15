@@ -1,10 +1,9 @@
-"use client"
 
-import { useParams } from "next/navigation"
+
+import { useParams } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { AppLayout } from "@/components/layout/app-layout"
-import { AuthProtection } from "@/components/auth-protection"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -44,7 +43,7 @@ import {
   parseISO,
 } from "date-fns"
 import { ArrowLeft, AlertTriangle, Calendar, Users } from "lucide-react"
-import Link from "next/link"
+import { Link } from "react-router-dom"
 
 interface QuarterlyAllocation {
   quarter: string
@@ -222,7 +221,7 @@ export default function PersonViewPage() {
 
   if (isLoadingUser || isLoadingAssignments) {
     return (
-      <AuthProtection>
+
         <AppLayout
           title="Person View"
           breadcrumbs={[
@@ -236,13 +235,13 @@ export default function PersonViewPage() {
             <Skeleton className="h-64 w-full" />
           </div>
         </AppLayout>
-      </AuthProtection>
+
     )
   }
 
   if (!user) {
     return (
-      <AuthProtection>
+
         <AppLayout
           title="User Not Found"
           breadcrumbs={[
@@ -256,12 +255,12 @@ export default function PersonViewPage() {
             description="The user you're looking for doesn't exist."
             action={
               <Button asChild>
-                <Link href="/resources">Back to Resources</Link>
+                <Link to="/resources">Back to Resources</Link>
               </Button>
             }
           />
         </AppLayout>
-      </AuthProtection>
+
     )
   }
 
@@ -269,7 +268,7 @@ export default function PersonViewPage() {
     currentTotalAllocation > 100 ? "critical" : currentTotalAllocation > 90 ? "warning" : "normal"
 
   return (
-    <AuthProtection>
+
       <AppLayout
         title={`${user.name} - Allocations`}
         breadcrumbs={[
@@ -282,7 +281,7 @@ export default function PersonViewPage() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <Button variant="outline" asChild>
-              <Link href="/resources">
+              <Link to="/resources">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Resources
               </Link>
@@ -449,7 +448,7 @@ export default function PersonViewPage() {
                           <TableRow key={assignment.id}>
                             <TableCell className="font-medium">
                               <Link
-                                href={`/projects/${assignment.projectId}` as any}
+                                to={`/projects/${assignment.projectId}`}
                                 className="hover:underline"
                               >
                                 {assignment.project.name}
@@ -493,6 +492,6 @@ export default function PersonViewPage() {
           </Card>
         </div>
       </AppLayout>
-    </AuthProtection>
+
   )
 }

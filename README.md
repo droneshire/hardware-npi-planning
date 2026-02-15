@@ -50,8 +50,8 @@ _Resource allocation view with capacity indicators_
    ```
 
    Edit `.env.local` with your Firebase credentials:
-   - `NEXT_PUBLIC_FIREBASE_API_KEY`
-   - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
+   - `VITE_FIREBASE_API_KEY`
+   - `VITE_FIREBASE_PROJECT_ID`
    - `NEXTAUTH_SECRET` (generate with: `openssl rand -base64 32`)
    - `NEXTAUTH_URL`
 

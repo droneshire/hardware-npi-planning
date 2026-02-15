@@ -1,7 +1,4 @@
-"use client"
-
-import { useSearchParams } from "next/navigation"
-import Link from "next/link"
+import { useSearchParams, Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle } from "lucide-react"
@@ -15,7 +12,7 @@ const errorMessages: Record<string, string> = {
 }
 
 export default function AuthErrorPage() {
-  const searchParams = useSearchParams()
+  const [searchParams] = useSearchParams()
   const error = searchParams.get("error") || "Default"
   const message = errorMessages[error] || errorMessages.Default
 
@@ -35,7 +32,7 @@ export default function AuthErrorPage() {
               If this problem persists, please contact support.
             </p>
             <Button asChild className="w-full">
-              <Link href={ROUTES.AUTH.SIGNIN}>Return to Sign In</Link>
+              <Link to={ROUTES.AUTH.SIGNIN}>Return to Sign In</Link>
             </Button>
           </div>
         </CardContent>

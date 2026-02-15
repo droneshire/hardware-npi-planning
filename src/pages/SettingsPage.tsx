@@ -1,9 +1,8 @@
-"use client"
+
 
 import { useState, useEffect } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { AppLayout } from "@/components/layout/app-layout"
-import { AuthProtection } from "@/components/auth-protection"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -36,12 +35,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { dataConnect } from "@/lib/firebase"
+import { dataConnect, getFirebaseIdToken, storage } from "@/lib/firebase"
+import { runSeed } from "@/lib/seedClient"
 import {
   listPhaseTemplates,
   createPhaseTemplate,
   updatePhaseTemplate,
   deletePhaseTemplate,
+  getOrganization,
+  createOrganization,
+  updateOrganization,
 } from "@firebasegen/default-connector"
 import { phaseTemplateService } from "@/services/phaseTemplate.service"
 import { portfolioService } from "@/services/portfolio.service"
@@ -50,11 +53,10 @@ import { projectService } from "@/services/project.service"
 import { Calendar, FileText, Plus, Edit, Trash2, Database, Upload, X } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useAuthStateWatcher } from "@/hooks/use-auth"
-import { getUserDocument } from "@/hooks/use-firestore"
+import { getUserDocument, createOrUpdateUserDocument } from "@/hooks/use-firestore"
 import { useOrganizationId } from "@/hooks/use-organization-id"
-import { storage, getFirebaseIdToken } from "@/lib/firebase"
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
-import Image from "next/image"
+// Image component removed - use img tag instead
 
 // Mock organization ID for development (must be valid UUID format)
 const MOCK_ORGANIZATION_ID = "00000000-0000-0000-0000-000000000001"
@@ -70,6 +72,7 @@ export default function SettingsPage() {
   const [isSavingSettings, setIsSavingSettings] = useState(false)
   const [logoUrl, setLogoUrl] = useState<string | null>(null)
   const [isUploadingLogo, setIsUploadingLogo] = useState(false)
+  const [isSeeding, setIsSeeding] = useState(false)
   const {
     organizationName: orgNameFromHook,
     organizationId: orgIdFromHook,
@@ -92,23 +95,12 @@ export default function SettingsPage() {
       }
 
       try {
-        const idToken = await getFirebaseIdToken()
-        const headers: HeadersInit = {}
-        if (idToken) {
-          headers.Authorization = `Bearer ${idToken}`
-        }
-
-        const response = await fetch(`/api/settings?userEmail=${encodeURIComponent(user.email)}`, {
-          headers,
-        })
-        if (!response.ok) {
-          throw new Error("Failed to load settings")
-        }
-        const data = await response.json()
-        console.log("Settings API response:", data)
-        console.log("Logo URL from API:", data.settings?.organization?.logoUrl)
+        const userDoc = await getUserDocument(user.email)
+        const settings = userDoc?.settings || null
+        console.log("Settings from Firestore:", settings)
+        console.log("Logo URL from Firestore:", settings?.organization?.logoUrl)
         setIsLoadingSettings(false)
-        return data.settings
+        return settings
       } catch (error) {
         console.error("Error loading user settings:", error)
         setIsLoadingSettings(false)
@@ -155,12 +147,15 @@ export default function SettingsPage() {
     }
   }, [orgNameFromHook])
 
-  // Fetch phase templates
+  // Resolved organization ID: user's org from settings, or mock for legacy/seed
+  const effectiveOrgId = orgIdFromHook || MOCK_ORGANIZATION_ID
+
+  // Fetch phase templates (only when we have an org ID)
   const { data: templates = [], isLoading: isLoadingTemplates } = useQuery({
-    queryKey: ["phase-templates", MOCK_ORGANIZATION_ID],
+    queryKey: ["phase-templates", effectiveOrgId],
     queryFn: async () => {
       const result = await listPhaseTemplates(dataConnect, {
-        organizationId: MOCK_ORGANIZATION_ID,
+        organizationId: effectiveOrgId,
       })
       return result.data.phaseTemplates.map((t) => ({
         id: t.id,
@@ -171,17 +166,21 @@ export default function SettingsPage() {
         updatedAt: t.updatedAt,
       }))
     },
+    enabled: !!effectiveOrgId,
   })
 
-  // Create template mutation
+  // Create template mutation (requires user's org to exist in Data Connect)
   const createMutation = useMutation({
     mutationFn: async () => {
       if (!formData.name.trim()) {
         throw new Error("Template name is required")
       }
+      if (!orgIdFromHook) {
+        throw new Error("Set your organization in the Organization Settings tab first, then save.")
+      }
 
       await createPhaseTemplate(dataConnect, {
-        organizationId: MOCK_ORGANIZATION_ID,
+        organizationId: orgIdFromHook,
         name: formData.name,
         description: formData.description || null,
         isDefault: formData.isDefault || null,
@@ -290,7 +289,10 @@ export default function SettingsPage() {
   // Initialize default templates mutation
   const initializeDefaultsMutation = useMutation({
     mutationFn: async () => {
-      return await phaseTemplateService.initializeDefaultTemplates(MOCK_ORGANIZATION_ID)
+      if (!orgIdFromHook) {
+        throw new Error("Set your organization in the Organization Settings tab first, then save.")
+      }
+      return await phaseTemplateService.initializeDefaultTemplates(orgIdFromHook)
     },
     onSuccess: (templates) => {
       queryClient.invalidateQueries({ queryKey: ["phase-templates"] })
@@ -319,7 +321,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <AuthProtection>
+
       <AppLayout
         title="Settings"
         breadcrumbs={[{ label: "Home", href: "/" }, { label: "Settings" }]}
@@ -367,7 +369,7 @@ export default function SettingsPage() {
                   <div className="space-y-2">
                     <Label>Company Logo</Label>
                     {/* Debug info */}
-                    {process.env.NODE_ENV === "development" && (
+                    {import.meta.env.DEV && (
                       <div className="mb-2 text-xs text-muted-foreground">
                         Debug: logoUrl = {logoUrl ? `"${logoUrl.substring(0, 50)}..."` : "null"}
                       </div>
@@ -375,13 +377,12 @@ export default function SettingsPage() {
                     <div className="flex items-center gap-4">
                       {logoUrl ? (
                         <div className="relative">
-                          <Image
+                          <img
                             src={logoUrl}
                             alt="Company Logo"
                             width={80}
                             height={80}
                             className="rounded border object-contain"
-                            unoptimized
                           />
                           <Button
                             variant="ghost"
@@ -390,25 +391,18 @@ export default function SettingsPage() {
                             onClick={async () => {
                               if (!user?.email) return
                               try {
-                                const idToken = await getFirebaseIdToken()
-                                const headers: HeadersInit = { "Content-Type": "application/json" }
-                                if (idToken) {
-                                  headers.Authorization = `Bearer ${idToken}`
-                                }
-
-                                const response = await fetch("/api/logo", {
-                                  method: "POST",
-                                  headers,
-                                  body: JSON.stringify({
-                                    userEmail: user.email,
-                                    logoUrl: null, // Set to null to remove
-                                  }),
+                                // Get existing settings and update logo URL
+                                const userDoc = await getUserDocument(user.email)
+                                const existingSettings = userDoc?.settings || {}
+                                await createOrUpdateUserDocument(user.email, {
+                                  settings: {
+                                    ...existingSettings,
+                                    organization: {
+                                      ...existingSettings.organization,
+                                      logoUrl: null,
+                                    },
+                                  },
                                 })
-
-                                if (!response.ok) {
-                                  const error = await response.json()
-                                  throw new Error(error.error || "Failed to remove logo")
-                                }
 
                                 setLogoUrl(null)
                                 queryClient.invalidateQueries({ queryKey: ["company-logo"] })
@@ -490,22 +484,19 @@ export default function SettingsPage() {
                                 headers.Authorization = `Bearer ${idToken}`
                               }
 
-                              const response = await fetch("/api/logo", {
-                                method: "POST",
-                                headers,
-                                body: JSON.stringify({
-                                  userEmail: user.email,
-                                  logoUrl: downloadURL,
-                                }),
+                              // Get existing settings and update logo URL
+                              const userDoc = await getUserDocument(user.email)
+                              const existingSettings = userDoc?.settings || {}
+                              await createOrUpdateUserDocument(user.email, {
+                                settings: {
+                                  ...existingSettings,
+                                  organization: {
+                                    ...existingSettings.organization,
+                                    logoUrl: downloadURL,
+                                  },
+                                },
                               })
-
-                              if (!response.ok) {
-                                const error = await response.json()
-                                throw new Error(error.error || "Failed to save logo URL")
-                              }
-
-                              const responseData = await response.json()
-                              console.log("Logo save API response:", responseData)
+                              console.log("Logo URL saved to Firestore:", downloadURL)
 
                               // Set logo URL immediately for instant feedback
                               setLogoUrl(downloadURL)
@@ -597,35 +588,57 @@ export default function SettingsPage() {
 
                       setIsSavingSettings(true)
                       try {
-                        // Generate UUID if it doesn't exist
-                        const organizationId = orgIdFromHook || crypto.randomUUID()
+                        const name = organizationName?.trim() || "My Organization"
 
-                        const idToken = await getFirebaseIdToken()
-                        const headers: HeadersInit = { "Content-Type": "application/json" }
-                        if (idToken) {
-                          headers.Authorization = `Bearer ${idToken}`
-                        }
-
-                        const response = await fetch("/api/settings", {
-                          method: "POST",
-                          headers,
-                          body: JSON.stringify({
-                            userEmail: user.email,
-                            settings: {
-                              organization: {
-                                organizationName: organizationName || undefined,
-                                organizationId: organizationId, // UUID used as key in database
+                        // Ensure organization exists in Data Connect (satisfies phase_template FK)
+                        let organizationId: string
+                        if (orgIdFromHook) {
+                          try {
+                            const res = await getOrganization(dataConnect, { id: orgIdFromHook })
+                            if (res.data.organization) {
+                              organizationId = orgIdFromHook
+                              await updateOrganization(dataConnect, {
+                                id: organizationId,
+                                name,
                                 fiscalYearStartMonth: fiscalYearStart,
-                                logoUrl: logoUrl || undefined,
-                              },
-                            },
-                          }),
-                        })
-
-                        if (!response.ok) {
-                          const error = await response.json()
-                          throw new Error(error.error || "Failed to save settings")
+                              })
+                            } else {
+                              const created = await createOrganization(dataConnect, {
+                                name,
+                                fiscalYearStartMonth: fiscalYearStart,
+                              })
+                              organizationId = created.data.organization_insert.id
+                            }
+                          } catch {
+                            const created = await createOrganization(dataConnect, {
+                              name,
+                              fiscalYearStartMonth: fiscalYearStart,
+                            })
+                            organizationId = created.data.organization_insert.id
+                          }
+                        } else {
+                          const created = await createOrganization(dataConnect, {
+                            name,
+                            fiscalYearStartMonth: fiscalYearStart,
+                          })
+                          organizationId = created.data.organization_insert.id
                         }
+
+                        // Get existing settings and merge with new organization settings
+                        const userDoc = await getUserDocument(user.email)
+                        const existingSettings = userDoc?.settings || {}
+                        await createOrUpdateUserDocument(user.email, {
+                          settings: {
+                            ...existingSettings,
+                            organization: {
+                              ...existingSettings.organization,
+                              organizationName: name,
+                              organizationId,
+                              fiscalYearStartMonth: fiscalYearStart,
+                              logoUrl: logoUrl || undefined,
+                            },
+                          },
+                        })
 
                         // Invalidate queries to refresh organization ID
                         queryClient.invalidateQueries({ queryKey: ["organization-id"] })
@@ -664,67 +677,59 @@ export default function SettingsPage() {
                 <CardContent>
                   <Button
                     variant="outline"
+                    disabled={isSeeding}
                     onClick={async () => {
                       if (
-                        confirm(
+                        !confirm(
                           "This will create sample portfolios, programs, and projects. Continue?"
                         )
                       ) {
-                        try {
-                          const response = await fetch("/api/seed", {
-                            method: "POST",
-                          })
-                          const data = await response.json()
-                          if (data.success) {
-                            const summary = data.summary || {}
-                            const created = summary.created || {}
-                            const errors = summary.errors || {}
-
-                            const createdCount =
-                              (created.templates || 0) +
-                              (created.portfolios || 0) +
-                              (created.programs || 0) +
-                              (created.projects || 0)
-
-                            const errorCount =
-                              (errors.templates || 0) +
-                              (errors.portfolios || 0) +
-                              (errors.programs || 0) +
-                              (errors.projects || 0)
-
-                            if (errorCount > 0) {
-                              toast({
-                                title: "Seeding completed with errors",
-                                description: `Created ${createdCount} items. ${errorCount} errors occurred. Check console for details.`,
-                                variant: "destructive",
-                              })
-                              console.log("Seed results:", data.results)
-                            } else {
-                              toast({
-                                title: "Sample data created",
-                                description: `Created ${created.templates || 0} templates, ${created.portfolios || 0} portfolios, ${created.programs || 0} programs, and ${created.projects || 0} projects.`,
-                              })
-                            }
-                            // Invalidate queries to refresh data
-                            queryClient.invalidateQueries({ queryKey: ["projects"] })
-                            queryClient.invalidateQueries({ queryKey: ["portfolios"] })
-                            queryClient.invalidateQueries({ queryKey: ["programs"] })
-                            queryClient.invalidateQueries({ queryKey: ["phase-templates"] })
+                        return
+                      }
+                      const organizationId = orgIdFromHook || MOCK_ORGANIZATION_ID
+                      setIsSeeding(true)
+                      try {
+                        const data = await runSeed(organizationId)
+                        if (data.success) {
+                          const created = data.summary.created
+                          const errors = data.summary.errors
+                          const createdCount =
+                            created.templates + created.portfolios + created.programs + created.projects
+                          const errorCount =
+                            errors.templates + errors.portfolios + errors.programs + errors.projects
+                          if (errorCount > 0) {
+                            toast({
+                              title: "Seeding completed with errors",
+                              description: `Created ${createdCount} items. ${errorCount} errors occurred. Check console for details.`,
+                              variant: "destructive",
+                            })
                           } else {
-                            throw new Error(data.error || "Failed to seed data")
+                            toast({
+                              title: "Sample data created",
+                              description: `Created ${created.templates} templates, ${created.portfolios} portfolios, ${created.programs} programs, and ${created.projects} projects.`,
+                            })
                           }
-                        } catch (error: any) {
-                          toast({
-                            title: "Error",
-                            description: error.message || "Failed to seed sample data",
-                            variant: "destructive",
-                          })
+                          queryClient.invalidateQueries({ queryKey: ["projects"] })
+                          queryClient.invalidateQueries({ queryKey: ["portfolios"] })
+                          queryClient.invalidateQueries({ queryKey: ["programs"] })
+                          queryClient.invalidateQueries({ queryKey: ["phase-templates"] })
+                        } else {
+                          throw new Error(data.error || "Failed to seed data")
                         }
+                      } catch (error: unknown) {
+                        const message = error instanceof Error ? error.message : "Failed to seed sample data"
+                        toast({
+                          title: "Error",
+                          description: message,
+                          variant: "destructive",
+                        })
+                      } finally {
+                        setIsSeeding(false)
                       }
                     }}
                   >
                     <Database className="mr-2 h-4 w-4" />
-                    Seed Sample Data
+                    {isSeeding ? "Seeding..." : "Seed Sample Data"}
                   </Button>
                   <p className="mt-2 text-xs text-muted-foreground">
                     Creates 3 portfolios, 4 programs, and 5 projects with phases for testing.
@@ -921,6 +926,6 @@ export default function SettingsPage() {
           </Tabs>
         </div>
       </AppLayout>
-    </AuthProtection>
+
   )
 }

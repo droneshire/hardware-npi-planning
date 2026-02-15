@@ -1,9 +1,24 @@
-import { ListProjectAssignmentsData, ListProjectAssignmentsVariables, ListUserAssignmentsData, ListUserAssignmentsVariables, ListAssignmentsByDateRangeData, ListAssignmentsByDateRangeVariables, CreateProjectAssignmentData, CreateProjectAssignmentVariables, UpdateProjectAssignmentData, UpdateProjectAssignmentVariables, DeleteProjectAssignmentData, DeleteProjectAssignmentVariables, ListProjectPhasesData, ListProjectPhasesVariables, GetProjectPhaseData, GetProjectPhaseVariables, CreateProjectPhaseData, CreateProjectPhaseVariables, UpdateProjectPhaseData, UpdateProjectPhaseVariables, DeleteProjectPhaseData, DeleteProjectPhaseVariables, ListTeamsData, ListTeamsVariables, GetTeamData, GetTeamVariables, CreateTeamData, CreateTeamVariables, UpdateTeamData, UpdateTeamVariables, DeleteTeamData, DeleteTeamVariables, AddTeamMemberData, AddTeamMemberVariables, RemoveTeamMemberData, RemoveTeamMemberVariables, UpdateTeamMemberRoleData, UpdateTeamMemberRoleVariables, ListUsersData, ListUsersVariables, GetUserData, GetUserVariables, GetUserByEmailData, GetUserByEmailVariables, GetUserByFirebaseUidData, GetUserByFirebaseUidVariables, CreateUserData, CreateUserVariables, UpdateUserData, UpdateUserVariables, DeleteUserData, DeleteUserVariables, ListPhaseTemplatesData, ListPhaseTemplatesVariables, GetPhaseTemplateData, GetPhaseTemplateVariables, ListPhaseTemplatePhasesData, ListPhaseTemplatePhasesVariables, GetDefaultTemplatesData, GetDefaultTemplatesVariables, CreatePhaseTemplateData, CreatePhaseTemplateVariables, UpdatePhaseTemplateData, UpdatePhaseTemplateVariables, DeletePhaseTemplateData, DeletePhaseTemplateVariables, CreatePhaseTemplatePhaseData, CreatePhaseTemplatePhaseVariables, UpdatePhaseTemplatePhaseData, UpdatePhaseTemplatePhaseVariables, DeletePhaseTemplatePhaseData, DeletePhaseTemplatePhaseVariables, ListProgramsData, ListProgramsVariables, GetProgramData, GetProgramVariables, CreateProgramData, CreateProgramVariables, UpdateProgramData, UpdateProgramVariables, DeleteProgramData, DeleteProgramVariables, ListProjectsData, ListProjectsVariables, GetProjectData, GetProjectVariables, ListProjectsByStatusData, ListProjectsByStatusVariables, CreateProjectData, CreateProjectVariables, UpdateProjectData, UpdateProjectVariables, DeleteProjectData, DeleteProjectVariables, GetOrganizationData, GetOrganizationVariables, CreateOrganizationData, CreateOrganizationVariables, UpdateOrganizationData, UpdateOrganizationVariables, ListPortfoliosData, ListPortfoliosVariables, GetPortfolioData, GetPortfolioVariables, CreatePortfolioData, CreatePortfolioVariables, UpdatePortfolioData, UpdatePortfolioVariables, DeletePortfolioData, DeletePortfolioVariables, ListProductTypesData, ListProductTypesVariables, GetProductTypeData, GetProductTypeVariables, CreateProductTypeData, CreateProductTypeVariables, UpdateProductTypeData, UpdateProductTypeVariables, DeleteProductTypeData, DeleteProductTypeVariables, CreateProductTypePhaseConfigData, CreateProductTypePhaseConfigVariables, DeleteProductTypePhaseConfigData, DeleteProductTypePhaseConfigVariables } from '../';
+import { ListProgramsData, ListProgramsVariables, GetProgramData, GetProgramVariables, CreateProgramData, CreateProgramVariables, UpdateProgramData, UpdateProgramVariables, DeleteProgramData, DeleteProgramVariables, ListProjectAssignmentsData, ListProjectAssignmentsVariables, ListUserAssignmentsData, ListUserAssignmentsVariables, ListAssignmentsByDateRangeData, ListAssignmentsByDateRangeVariables, CreateProjectAssignmentData, CreateProjectAssignmentVariables, UpdateProjectAssignmentData, UpdateProjectAssignmentVariables, DeleteProjectAssignmentData, DeleteProjectAssignmentVariables, ListTeamsData, ListTeamsVariables, GetTeamData, GetTeamVariables, CreateTeamData, CreateTeamVariables, UpdateTeamData, UpdateTeamVariables, DeleteTeamData, DeleteTeamVariables, AddTeamMemberData, AddTeamMemberVariables, RemoveTeamMemberData, RemoveTeamMemberVariables, UpdateTeamMemberRoleData, UpdateTeamMemberRoleVariables, ListUsersData, ListUsersVariables, GetUserData, GetUserVariables, GetUserByEmailData, GetUserByEmailVariables, GetUserByFirebaseUidData, GetUserByFirebaseUidVariables, CreateUserData, CreateUserVariables, UpdateUserData, UpdateUserVariables, DeleteUserData, DeleteUserVariables, GetOrganizationData, GetOrganizationVariables, CreateOrganizationData, CreateOrganizationVariables, UpdateOrganizationData, UpdateOrganizationVariables, ListPhaseTemplatesData, ListPhaseTemplatesVariables, GetPhaseTemplateData, GetPhaseTemplateVariables, ListPhaseTemplatePhasesData, ListPhaseTemplatePhasesVariables, GetDefaultTemplatesData, GetDefaultTemplatesVariables, CreatePhaseTemplateData, CreatePhaseTemplateVariables, UpdatePhaseTemplateData, UpdatePhaseTemplateVariables, DeletePhaseTemplateData, DeletePhaseTemplateVariables, CreatePhaseTemplatePhaseData, CreatePhaseTemplatePhaseVariables, UpdatePhaseTemplatePhaseData, UpdatePhaseTemplatePhaseVariables, DeletePhaseTemplatePhaseData, DeletePhaseTemplatePhaseVariables, ListPortfoliosData, ListPortfoliosVariables, GetPortfolioData, GetPortfolioVariables, CreatePortfolioData, CreatePortfolioVariables, UpdatePortfolioData, UpdatePortfolioVariables, DeletePortfolioData, DeletePortfolioVariables, ListProductTypesData, ListProductTypesVariables, GetProductTypeData, GetProductTypeVariables, CreateProductTypeData, CreateProductTypeVariables, UpdateProductTypeData, UpdateProductTypeVariables, DeleteProductTypeData, DeleteProductTypeVariables, CreateProductTypePhaseConfigData, CreateProductTypePhaseConfigVariables, DeleteProductTypePhaseConfigData, DeleteProductTypePhaseConfigVariables, ListProjectsData, ListProjectsVariables, GetProjectData, GetProjectVariables, ListProjectsByStatusData, ListProjectsByStatusVariables, CreateProjectData, CreateProjectVariables, UpdateProjectData, UpdateProjectVariables, DeleteProjectData, DeleteProjectVariables, ListProjectPhasesData, ListProjectPhasesVariables, GetProjectPhaseData, GetProjectPhaseVariables, CreateProjectPhaseData, CreateProjectPhaseVariables, UpdateProjectPhaseData, UpdateProjectPhaseVariables, DeleteProjectPhaseData, DeleteProjectPhaseVariables } from '../';
 import { UseDataConnectQueryResult, useDataConnectQueryOptions, UseDataConnectMutationResult, useDataConnectMutationOptions} from '@tanstack-query-firebase/react/data-connect';
 import { UseQueryResult, UseMutationResult} from '@tanstack/react-query';
 import { DataConnect } from 'firebase/data-connect';
 import { FirebaseError } from 'firebase/app';
 
+
+export function useListPrograms(vars: ListProgramsVariables, options?: useDataConnectQueryOptions<ListProgramsData>): UseDataConnectQueryResult<ListProgramsData, ListProgramsVariables>;
+export function useListPrograms(dc: DataConnect, vars: ListProgramsVariables, options?: useDataConnectQueryOptions<ListProgramsData>): UseDataConnectQueryResult<ListProgramsData, ListProgramsVariables>;
+
+export function useGetProgram(vars: GetProgramVariables, options?: useDataConnectQueryOptions<GetProgramData>): UseDataConnectQueryResult<GetProgramData, GetProgramVariables>;
+export function useGetProgram(dc: DataConnect, vars: GetProgramVariables, options?: useDataConnectQueryOptions<GetProgramData>): UseDataConnectQueryResult<GetProgramData, GetProgramVariables>;
+
+export function useCreateProgram(options?: useDataConnectMutationOptions<CreateProgramData, FirebaseError, CreateProgramVariables>): UseDataConnectMutationResult<CreateProgramData, CreateProgramVariables>;
+export function useCreateProgram(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProgramData, FirebaseError, CreateProgramVariables>): UseDataConnectMutationResult<CreateProgramData, CreateProgramVariables>;
+
+export function useUpdateProgram(options?: useDataConnectMutationOptions<UpdateProgramData, FirebaseError, UpdateProgramVariables>): UseDataConnectMutationResult<UpdateProgramData, UpdateProgramVariables>;
+export function useUpdateProgram(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProgramData, FirebaseError, UpdateProgramVariables>): UseDataConnectMutationResult<UpdateProgramData, UpdateProgramVariables>;
+
+export function useDeleteProgram(options?: useDataConnectMutationOptions<DeleteProgramData, FirebaseError, DeleteProgramVariables>): UseDataConnectMutationResult<DeleteProgramData, DeleteProgramVariables>;
+export function useDeleteProgram(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProgramData, FirebaseError, DeleteProgramVariables>): UseDataConnectMutationResult<DeleteProgramData, DeleteProgramVariables>;
 
 export function useListProjectAssignments(vars: ListProjectAssignmentsVariables, options?: useDataConnectQueryOptions<ListProjectAssignmentsData>): UseDataConnectQueryResult<ListProjectAssignmentsData, ListProjectAssignmentsVariables>;
 export function useListProjectAssignments(dc: DataConnect, vars: ListProjectAssignmentsVariables, options?: useDataConnectQueryOptions<ListProjectAssignmentsData>): UseDataConnectQueryResult<ListProjectAssignmentsData, ListProjectAssignmentsVariables>;
@@ -22,21 +37,6 @@ export function useUpdateProjectAssignment(dc: DataConnect, options?: useDataCon
 
 export function useDeleteProjectAssignment(options?: useDataConnectMutationOptions<DeleteProjectAssignmentData, FirebaseError, DeleteProjectAssignmentVariables>): UseDataConnectMutationResult<DeleteProjectAssignmentData, DeleteProjectAssignmentVariables>;
 export function useDeleteProjectAssignment(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProjectAssignmentData, FirebaseError, DeleteProjectAssignmentVariables>): UseDataConnectMutationResult<DeleteProjectAssignmentData, DeleteProjectAssignmentVariables>;
-
-export function useListProjectPhases(vars: ListProjectPhasesVariables, options?: useDataConnectQueryOptions<ListProjectPhasesData>): UseDataConnectQueryResult<ListProjectPhasesData, ListProjectPhasesVariables>;
-export function useListProjectPhases(dc: DataConnect, vars: ListProjectPhasesVariables, options?: useDataConnectQueryOptions<ListProjectPhasesData>): UseDataConnectQueryResult<ListProjectPhasesData, ListProjectPhasesVariables>;
-
-export function useGetProjectPhase(vars: GetProjectPhaseVariables, options?: useDataConnectQueryOptions<GetProjectPhaseData>): UseDataConnectQueryResult<GetProjectPhaseData, GetProjectPhaseVariables>;
-export function useGetProjectPhase(dc: DataConnect, vars: GetProjectPhaseVariables, options?: useDataConnectQueryOptions<GetProjectPhaseData>): UseDataConnectQueryResult<GetProjectPhaseData, GetProjectPhaseVariables>;
-
-export function useCreateProjectPhase(options?: useDataConnectMutationOptions<CreateProjectPhaseData, FirebaseError, CreateProjectPhaseVariables>): UseDataConnectMutationResult<CreateProjectPhaseData, CreateProjectPhaseVariables>;
-export function useCreateProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProjectPhaseData, FirebaseError, CreateProjectPhaseVariables>): UseDataConnectMutationResult<CreateProjectPhaseData, CreateProjectPhaseVariables>;
-
-export function useUpdateProjectPhase(options?: useDataConnectMutationOptions<UpdateProjectPhaseData, FirebaseError, UpdateProjectPhaseVariables>): UseDataConnectMutationResult<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
-export function useUpdateProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProjectPhaseData, FirebaseError, UpdateProjectPhaseVariables>): UseDataConnectMutationResult<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
-
-export function useDeleteProjectPhase(options?: useDataConnectMutationOptions<DeleteProjectPhaseData, FirebaseError, DeleteProjectPhaseVariables>): UseDataConnectMutationResult<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
-export function useDeleteProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProjectPhaseData, FirebaseError, DeleteProjectPhaseVariables>): UseDataConnectMutationResult<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
 
 export function useListTeams(vars: ListTeamsVariables, options?: useDataConnectQueryOptions<ListTeamsData>): UseDataConnectQueryResult<ListTeamsData, ListTeamsVariables>;
 export function useListTeams(dc: DataConnect, vars: ListTeamsVariables, options?: useDataConnectQueryOptions<ListTeamsData>): UseDataConnectQueryResult<ListTeamsData, ListTeamsVariables>;
@@ -83,6 +83,15 @@ export function useUpdateUser(dc: DataConnect, options?: useDataConnectMutationO
 export function useDeleteUser(options?: useDataConnectMutationOptions<DeleteUserData, FirebaseError, DeleteUserVariables>): UseDataConnectMutationResult<DeleteUserData, DeleteUserVariables>;
 export function useDeleteUser(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteUserData, FirebaseError, DeleteUserVariables>): UseDataConnectMutationResult<DeleteUserData, DeleteUserVariables>;
 
+export function useGetOrganization(vars: GetOrganizationVariables, options?: useDataConnectQueryOptions<GetOrganizationData>): UseDataConnectQueryResult<GetOrganizationData, GetOrganizationVariables>;
+export function useGetOrganization(dc: DataConnect, vars: GetOrganizationVariables, options?: useDataConnectQueryOptions<GetOrganizationData>): UseDataConnectQueryResult<GetOrganizationData, GetOrganizationVariables>;
+
+export function useCreateOrganization(options?: useDataConnectMutationOptions<CreateOrganizationData, FirebaseError, CreateOrganizationVariables>): UseDataConnectMutationResult<CreateOrganizationData, CreateOrganizationVariables>;
+export function useCreateOrganization(dc: DataConnect, options?: useDataConnectMutationOptions<CreateOrganizationData, FirebaseError, CreateOrganizationVariables>): UseDataConnectMutationResult<CreateOrganizationData, CreateOrganizationVariables>;
+
+export function useUpdateOrganization(options?: useDataConnectMutationOptions<UpdateOrganizationData, FirebaseError, UpdateOrganizationVariables>): UseDataConnectMutationResult<UpdateOrganizationData, UpdateOrganizationVariables>;
+export function useUpdateOrganization(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateOrganizationData, FirebaseError, UpdateOrganizationVariables>): UseDataConnectMutationResult<UpdateOrganizationData, UpdateOrganizationVariables>;
+
 export function useListPhaseTemplates(vars: ListPhaseTemplatesVariables, options?: useDataConnectQueryOptions<ListPhaseTemplatesData>): UseDataConnectQueryResult<ListPhaseTemplatesData, ListPhaseTemplatesVariables>;
 export function useListPhaseTemplates(dc: DataConnect, vars: ListPhaseTemplatesVariables, options?: useDataConnectQueryOptions<ListPhaseTemplatesData>): UseDataConnectQueryResult<ListPhaseTemplatesData, ListPhaseTemplatesVariables>;
 
@@ -112,48 +121,6 @@ export function useUpdatePhaseTemplatePhase(dc: DataConnect, options?: useDataCo
 
 export function useDeletePhaseTemplatePhase(options?: useDataConnectMutationOptions<DeletePhaseTemplatePhaseData, FirebaseError, DeletePhaseTemplatePhaseVariables>): UseDataConnectMutationResult<DeletePhaseTemplatePhaseData, DeletePhaseTemplatePhaseVariables>;
 export function useDeletePhaseTemplatePhase(dc: DataConnect, options?: useDataConnectMutationOptions<DeletePhaseTemplatePhaseData, FirebaseError, DeletePhaseTemplatePhaseVariables>): UseDataConnectMutationResult<DeletePhaseTemplatePhaseData, DeletePhaseTemplatePhaseVariables>;
-
-export function useListPrograms(vars: ListProgramsVariables, options?: useDataConnectQueryOptions<ListProgramsData>): UseDataConnectQueryResult<ListProgramsData, ListProgramsVariables>;
-export function useListPrograms(dc: DataConnect, vars: ListProgramsVariables, options?: useDataConnectQueryOptions<ListProgramsData>): UseDataConnectQueryResult<ListProgramsData, ListProgramsVariables>;
-
-export function useGetProgram(vars: GetProgramVariables, options?: useDataConnectQueryOptions<GetProgramData>): UseDataConnectQueryResult<GetProgramData, GetProgramVariables>;
-export function useGetProgram(dc: DataConnect, vars: GetProgramVariables, options?: useDataConnectQueryOptions<GetProgramData>): UseDataConnectQueryResult<GetProgramData, GetProgramVariables>;
-
-export function useCreateProgram(options?: useDataConnectMutationOptions<CreateProgramData, FirebaseError, CreateProgramVariables>): UseDataConnectMutationResult<CreateProgramData, CreateProgramVariables>;
-export function useCreateProgram(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProgramData, FirebaseError, CreateProgramVariables>): UseDataConnectMutationResult<CreateProgramData, CreateProgramVariables>;
-
-export function useUpdateProgram(options?: useDataConnectMutationOptions<UpdateProgramData, FirebaseError, UpdateProgramVariables>): UseDataConnectMutationResult<UpdateProgramData, UpdateProgramVariables>;
-export function useUpdateProgram(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProgramData, FirebaseError, UpdateProgramVariables>): UseDataConnectMutationResult<UpdateProgramData, UpdateProgramVariables>;
-
-export function useDeleteProgram(options?: useDataConnectMutationOptions<DeleteProgramData, FirebaseError, DeleteProgramVariables>): UseDataConnectMutationResult<DeleteProgramData, DeleteProgramVariables>;
-export function useDeleteProgram(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProgramData, FirebaseError, DeleteProgramVariables>): UseDataConnectMutationResult<DeleteProgramData, DeleteProgramVariables>;
-
-export function useListProjects(vars: ListProjectsVariables, options?: useDataConnectQueryOptions<ListProjectsData>): UseDataConnectQueryResult<ListProjectsData, ListProjectsVariables>;
-export function useListProjects(dc: DataConnect, vars: ListProjectsVariables, options?: useDataConnectQueryOptions<ListProjectsData>): UseDataConnectQueryResult<ListProjectsData, ListProjectsVariables>;
-
-export function useGetProject(vars: GetProjectVariables, options?: useDataConnectQueryOptions<GetProjectData>): UseDataConnectQueryResult<GetProjectData, GetProjectVariables>;
-export function useGetProject(dc: DataConnect, vars: GetProjectVariables, options?: useDataConnectQueryOptions<GetProjectData>): UseDataConnectQueryResult<GetProjectData, GetProjectVariables>;
-
-export function useListProjectsByStatus(vars: ListProjectsByStatusVariables, options?: useDataConnectQueryOptions<ListProjectsByStatusData>): UseDataConnectQueryResult<ListProjectsByStatusData, ListProjectsByStatusVariables>;
-export function useListProjectsByStatus(dc: DataConnect, vars: ListProjectsByStatusVariables, options?: useDataConnectQueryOptions<ListProjectsByStatusData>): UseDataConnectQueryResult<ListProjectsByStatusData, ListProjectsByStatusVariables>;
-
-export function useCreateProject(options?: useDataConnectMutationOptions<CreateProjectData, FirebaseError, CreateProjectVariables>): UseDataConnectMutationResult<CreateProjectData, CreateProjectVariables>;
-export function useCreateProject(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProjectData, FirebaseError, CreateProjectVariables>): UseDataConnectMutationResult<CreateProjectData, CreateProjectVariables>;
-
-export function useUpdateProject(options?: useDataConnectMutationOptions<UpdateProjectData, FirebaseError, UpdateProjectVariables>): UseDataConnectMutationResult<UpdateProjectData, UpdateProjectVariables>;
-export function useUpdateProject(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProjectData, FirebaseError, UpdateProjectVariables>): UseDataConnectMutationResult<UpdateProjectData, UpdateProjectVariables>;
-
-export function useDeleteProject(options?: useDataConnectMutationOptions<DeleteProjectData, FirebaseError, DeleteProjectVariables>): UseDataConnectMutationResult<DeleteProjectData, DeleteProjectVariables>;
-export function useDeleteProject(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProjectData, FirebaseError, DeleteProjectVariables>): UseDataConnectMutationResult<DeleteProjectData, DeleteProjectVariables>;
-
-export function useGetOrganization(vars: GetOrganizationVariables, options?: useDataConnectQueryOptions<GetOrganizationData>): UseDataConnectQueryResult<GetOrganizationData, GetOrganizationVariables>;
-export function useGetOrganization(dc: DataConnect, vars: GetOrganizationVariables, options?: useDataConnectQueryOptions<GetOrganizationData>): UseDataConnectQueryResult<GetOrganizationData, GetOrganizationVariables>;
-
-export function useCreateOrganization(options?: useDataConnectMutationOptions<CreateOrganizationData, FirebaseError, CreateOrganizationVariables>): UseDataConnectMutationResult<CreateOrganizationData, CreateOrganizationVariables>;
-export function useCreateOrganization(dc: DataConnect, options?: useDataConnectMutationOptions<CreateOrganizationData, FirebaseError, CreateOrganizationVariables>): UseDataConnectMutationResult<CreateOrganizationData, CreateOrganizationVariables>;
-
-export function useUpdateOrganization(options?: useDataConnectMutationOptions<UpdateOrganizationData, FirebaseError, UpdateOrganizationVariables>): UseDataConnectMutationResult<UpdateOrganizationData, UpdateOrganizationVariables>;
-export function useUpdateOrganization(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateOrganizationData, FirebaseError, UpdateOrganizationVariables>): UseDataConnectMutationResult<UpdateOrganizationData, UpdateOrganizationVariables>;
 
 export function useListPortfolios(vars: ListPortfoliosVariables, options?: useDataConnectQueryOptions<ListPortfoliosData>): UseDataConnectQueryResult<ListPortfoliosData, ListPortfoliosVariables>;
 export function useListPortfolios(dc: DataConnect, vars: ListPortfoliosVariables, options?: useDataConnectQueryOptions<ListPortfoliosData>): UseDataConnectQueryResult<ListPortfoliosData, ListPortfoliosVariables>;
@@ -190,3 +157,36 @@ export function useCreateProductTypePhaseConfig(dc: DataConnect, options?: useDa
 
 export function useDeleteProductTypePhaseConfig(options?: useDataConnectMutationOptions<DeleteProductTypePhaseConfigData, FirebaseError, DeleteProductTypePhaseConfigVariables>): UseDataConnectMutationResult<DeleteProductTypePhaseConfigData, DeleteProductTypePhaseConfigVariables>;
 export function useDeleteProductTypePhaseConfig(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProductTypePhaseConfigData, FirebaseError, DeleteProductTypePhaseConfigVariables>): UseDataConnectMutationResult<DeleteProductTypePhaseConfigData, DeleteProductTypePhaseConfigVariables>;
+
+export function useListProjects(vars: ListProjectsVariables, options?: useDataConnectQueryOptions<ListProjectsData>): UseDataConnectQueryResult<ListProjectsData, ListProjectsVariables>;
+export function useListProjects(dc: DataConnect, vars: ListProjectsVariables, options?: useDataConnectQueryOptions<ListProjectsData>): UseDataConnectQueryResult<ListProjectsData, ListProjectsVariables>;
+
+export function useGetProject(vars: GetProjectVariables, options?: useDataConnectQueryOptions<GetProjectData>): UseDataConnectQueryResult<GetProjectData, GetProjectVariables>;
+export function useGetProject(dc: DataConnect, vars: GetProjectVariables, options?: useDataConnectQueryOptions<GetProjectData>): UseDataConnectQueryResult<GetProjectData, GetProjectVariables>;
+
+export function useListProjectsByStatus(vars: ListProjectsByStatusVariables, options?: useDataConnectQueryOptions<ListProjectsByStatusData>): UseDataConnectQueryResult<ListProjectsByStatusData, ListProjectsByStatusVariables>;
+export function useListProjectsByStatus(dc: DataConnect, vars: ListProjectsByStatusVariables, options?: useDataConnectQueryOptions<ListProjectsByStatusData>): UseDataConnectQueryResult<ListProjectsByStatusData, ListProjectsByStatusVariables>;
+
+export function useCreateProject(options?: useDataConnectMutationOptions<CreateProjectData, FirebaseError, CreateProjectVariables>): UseDataConnectMutationResult<CreateProjectData, CreateProjectVariables>;
+export function useCreateProject(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProjectData, FirebaseError, CreateProjectVariables>): UseDataConnectMutationResult<CreateProjectData, CreateProjectVariables>;
+
+export function useUpdateProject(options?: useDataConnectMutationOptions<UpdateProjectData, FirebaseError, UpdateProjectVariables>): UseDataConnectMutationResult<UpdateProjectData, UpdateProjectVariables>;
+export function useUpdateProject(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProjectData, FirebaseError, UpdateProjectVariables>): UseDataConnectMutationResult<UpdateProjectData, UpdateProjectVariables>;
+
+export function useDeleteProject(options?: useDataConnectMutationOptions<DeleteProjectData, FirebaseError, DeleteProjectVariables>): UseDataConnectMutationResult<DeleteProjectData, DeleteProjectVariables>;
+export function useDeleteProject(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProjectData, FirebaseError, DeleteProjectVariables>): UseDataConnectMutationResult<DeleteProjectData, DeleteProjectVariables>;
+
+export function useListProjectPhases(vars: ListProjectPhasesVariables, options?: useDataConnectQueryOptions<ListProjectPhasesData>): UseDataConnectQueryResult<ListProjectPhasesData, ListProjectPhasesVariables>;
+export function useListProjectPhases(dc: DataConnect, vars: ListProjectPhasesVariables, options?: useDataConnectQueryOptions<ListProjectPhasesData>): UseDataConnectQueryResult<ListProjectPhasesData, ListProjectPhasesVariables>;
+
+export function useGetProjectPhase(vars: GetProjectPhaseVariables, options?: useDataConnectQueryOptions<GetProjectPhaseData>): UseDataConnectQueryResult<GetProjectPhaseData, GetProjectPhaseVariables>;
+export function useGetProjectPhase(dc: DataConnect, vars: GetProjectPhaseVariables, options?: useDataConnectQueryOptions<GetProjectPhaseData>): UseDataConnectQueryResult<GetProjectPhaseData, GetProjectPhaseVariables>;
+
+export function useCreateProjectPhase(options?: useDataConnectMutationOptions<CreateProjectPhaseData, FirebaseError, CreateProjectPhaseVariables>): UseDataConnectMutationResult<CreateProjectPhaseData, CreateProjectPhaseVariables>;
+export function useCreateProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<CreateProjectPhaseData, FirebaseError, CreateProjectPhaseVariables>): UseDataConnectMutationResult<CreateProjectPhaseData, CreateProjectPhaseVariables>;
+
+export function useUpdateProjectPhase(options?: useDataConnectMutationOptions<UpdateProjectPhaseData, FirebaseError, UpdateProjectPhaseVariables>): UseDataConnectMutationResult<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
+export function useUpdateProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<UpdateProjectPhaseData, FirebaseError, UpdateProjectPhaseVariables>): UseDataConnectMutationResult<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
+
+export function useDeleteProjectPhase(options?: useDataConnectMutationOptions<DeleteProjectPhaseData, FirebaseError, DeleteProjectPhaseVariables>): UseDataConnectMutationResult<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
+export function useDeleteProjectPhase(dc: DataConnect, options?: useDataConnectMutationOptions<DeleteProjectPhaseData, FirebaseError, DeleteProjectPhaseVariables>): UseDataConnectMutationResult<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;

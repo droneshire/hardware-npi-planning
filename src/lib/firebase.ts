@@ -1,17 +1,17 @@
 import { initializeApp, getApps, getApp } from "firebase/app"
-import { getAuth } from "firebase/auth"
+import { getAuth, connectAuthEmulator } from "firebase/auth"
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore"
 import { getStorage, connectStorageEmulator } from "firebase/storage"
 import { connectDataConnectEmulator, getDataConnect } from "firebase/data-connect"
 import { connectorConfig } from "@firebasegen/default-connector"
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
 // Validate Firebase config
@@ -29,43 +29,55 @@ const storage = getStorage(app)
 export const dataConnect = getDataConnect(connectorConfig)
 
 // Connect to emulator if in development
-if (process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST) {
+if (import.meta.env.VITE_FIREBASE_EMULATOR_HOST) {
+  const host = import.meta.env.VITE_FIREBASE_EMULATOR_HOST
+  const authPort = import.meta.env.VITE_FIREBASE_AUTH_EMULATOR_PORT || "9099"
+
+  try {
+    connectAuthEmulator(auth, `http://${host}:${authPort}`, { disableWarnings: true })
+    console.log("Connected to Auth emulator")
+  } catch (error: any) {
+    if (error?.message?.includes("already been called")) {
+      console.log("Auth emulator already connected")
+    } else {
+      console.log("Auth emulator connection:", error?.message || error)
+    }
+  }
+
   console.log(
     "Connecting to Data Connect emulator",
-    process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST,
-    process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_PORT || "9399"
+    host,
+    import.meta.env.VITE_FIREBASE_EMULATOR_PORT || "9399"
   )
   connectDataConnectEmulator(
     dataConnect,
-    process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST,
-    parseInt(process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_PORT || "9399")
+    host,
+    parseInt(import.meta.env.VITE_FIREBASE_EMULATOR_PORT || "9399")
   )
 
-  // Connect Firestore and Storage emulators if configured (server-side only)
-  if (typeof window === "undefined") {
-    // Connect Firestore emulator
-    try {
-      connectFirestoreEmulator(db, process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST, 8080)
-      console.log("Connected to Firestore emulator")
-    } catch (error: any) {
-      // Emulator might already be connected or not available
-      if (error?.message?.includes("already been called")) {
-        console.log("Firestore emulator already connected")
-      } else {
-        console.log("Firestore emulator connection:", error?.message || error)
-      }
+  // Connect Firestore and Storage emulators
+  try {
+    connectFirestoreEmulator(db, host, 8080)
+    console.log("Connected to Firestore emulator")
+  } catch (error: any) {
+    // Emulator might already be connected or not available
+    if (error?.message?.includes("already been called")) {
+      console.log("Firestore emulator already connected")
+    } else {
+      console.log("Firestore emulator connection:", error?.message || error)
     }
+  }
 
-    // Connect Storage emulator
-    try {
-      connectStorageEmulator(storage, process.env.NEXT_PUBLIC_FIREBASE_EMULATOR_HOST, 9199)
-    } catch (error: any) {
-      // Emulator might already be connected
-      if (error?.message?.includes("already been called")) {
-        console.log("Storage emulator already connected")
-      } else {
-        console.log("Storage emulator connection:", error?.message || error)
-      }
+  // Connect Storage emulator
+  try {
+    connectStorageEmulator(storage, host, 9199)
+    console.log("Connected to Storage emulator")
+  } catch (error: any) {
+    // Emulator might already be connected
+    if (error?.message?.includes("already been called")) {
+      console.log("Storage emulator already connected")
+    } else {
+      console.log("Storage emulator connection:", error?.message || error)
     }
   }
 }
@@ -77,10 +89,6 @@ export { app, auth, db, storage }
  * Returns null if no user is authenticated
  */
 export async function getFirebaseIdToken(): Promise<string | null> {
-  if (typeof window === "undefined") {
-    return null // Server-side, no token available
-  }
-
   try {
     const currentUser = auth.currentUser
     if (!currentUser) {

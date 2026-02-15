@@ -1,7 +1,4 @@
-"use client"
-
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { Link, useLocation } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { ChevronLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -11,10 +8,10 @@ import { NAVIGATION_ITEMS } from "@/constants/navigation"
 import { ROUTES } from "@/constants/routes"
 import { useAuthStateWatcher } from "@/hooks/use-auth"
 import { useQuery } from "@tanstack/react-query"
-import Image from "next/image"
 
 export function Sidebar() {
-  const pathname = usePathname()
+  const location = useLocation()
+  const pathname = location.pathname
   const [collapsed, setCollapsed] = useState(false)
   const { user } = useAuthStateWatcher()
 
@@ -24,9 +21,9 @@ export function Sidebar() {
     queryFn: async () => {
       if (!user?.email) return null
       try {
-        const response = await fetch(`/api/logo?userEmail=${encodeURIComponent(user.email)}`)
-        const data = await response.json()
-        return data.logoUrl || null
+        const { getUserDocument } = await import("@/hooks/use-firestore")
+        const userDoc = await getUserDocument(user.email)
+        return userDoc?.settings?.organization?.logoUrl || null
       } catch (error) {
         console.error("Error fetching logo:", error)
         return null
@@ -45,16 +42,15 @@ export function Sidebar() {
       {/* Header */}
       <div className="flex h-16 items-center justify-between px-4">
         {!collapsed ? (
-          <Link href={ROUTES.DASHBOARD} className="flex items-center gap-2">
+          <Link to={ROUTES.DASHBOARD} className="flex items-center gap-2">
             {logoUrl ? (
               <div className="flex items-center gap-2">
-                <Image
+                <img
                   src={logoUrl}
                   alt="Company Logo"
                   width={32}
                   height={32}
                   className="rounded object-contain"
-                  unoptimized
                 />
                 <span className="text-lg font-semibold">NPI Planning</span>
               </div>
@@ -64,14 +60,13 @@ export function Sidebar() {
           </Link>
         ) : (
           logoUrl && (
-            <Link href={ROUTES.DASHBOARD} className="flex items-center justify-center">
-              <Image
+            <Link to={ROUTES.DASHBOARD} className="flex items-center justify-center">
+              <img
                 src={logoUrl}
                 alt="Company Logo"
                 width={32}
                 height={32}
                 className="rounded object-contain"
-                unoptimized
               />
             </Link>
           )
@@ -95,7 +90,7 @@ export function Sidebar() {
           return (
             <Link
               key={item.name}
-              href={item.href}
+              to={item.href}
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 isActive

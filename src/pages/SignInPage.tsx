@@ -1,7 +1,5 @@
-"use client"
-
 import { useState, useEffect, useRef } from "react"
-import { useRouter, useSearchParams, usePathname } from "next/navigation"
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -16,9 +14,9 @@ import {
 import { DEFAULT_SIGNIN_REDIRECT, ROUTES } from "@/constants/routes"
 
 export default function SignInPage() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [searchParams] = useSearchParams()
   const { user, isLoading: authLoading } = useAuthStateWatcher()
   const hasRedirected = useRef(false)
 
@@ -32,7 +30,7 @@ export default function SignInPage() {
   const getValidCallbackUrl = () => {
     const rawCallbackUrl = searchParams.get("callbackUrl") || DEFAULT_SIGNIN_REDIRECT
     // Prevent redirecting to auth pages or current page
-    if (rawCallbackUrl.startsWith(ROUTES.AUTH.BASE) || rawCallbackUrl === pathname) {
+    if (rawCallbackUrl.startsWith(ROUTES.AUTH.BASE) || rawCallbackUrl === location.pathname) {
       return DEFAULT_SIGNIN_REDIRECT
     }
     return rawCallbackUrl
@@ -66,9 +64,9 @@ export default function SignInPage() {
       console.log("User authenticated, redirecting to:", callbackUrl)
       hasRedirected.current = true
       // Use replace instead of push to avoid adding to history
-      router.replace(callbackUrl)
+      navigate(callbackUrl, { replace: true })
     }
-  }, [user, authLoading, router, pathname, searchParams])
+  }, [user, authLoading, navigate, location.pathname, searchParams])
 
   const handleGoogleSignIn = async () => {
     if (isLoading) return
@@ -159,6 +157,7 @@ export default function SignInPage() {
               </label>
               <input
                 id="email"
+                data-testid="signin-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -175,6 +174,7 @@ export default function SignInPage() {
               </label>
               <input
                 id="password"
+                data-testid="signin-password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

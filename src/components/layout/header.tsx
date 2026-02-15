@@ -1,7 +1,5 @@
-"use client"
-
 import { User, LogOut } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useNavigate } from "react-router-dom"
 import { logout } from "@/hooks/use-auth"
 import { Button } from "@/components/ui/button"
 import { AUTH_REDIRECTS } from "@/constants/auth"
@@ -20,11 +18,11 @@ interface HeaderProps {
 }
 
 export function Header({ title, actions }: HeaderProps) {
-  const router = useRouter()
+  const navigate = useNavigate()
 
   const handleSignOut = () => {
     logout()
-    router.push(AUTH_REDIRECTS.AFTER_SIGNOUT)
+    navigate(AUTH_REDIRECTS.AFTER_SIGNOUT)
   }
 
   return (

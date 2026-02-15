@@ -17,4 +17,4 @@ export const AUTH_REDIRECTS = {
 } as const
 
 // Admin users (can be moved to environment variables if needed)
-export const ADMIN_USERS: string[] = process.env.NEXT_PUBLIC_ADMIN_USERS?.split(",") || []
+export const ADMIN_USERS: string[] = import.meta.env.VITE_ADMIN_USERS?.split(",") || []

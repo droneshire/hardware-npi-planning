@@ -987,6 +987,66 @@ export interface User_Key {
   __typename?: 'User_Key';
 }
 
+interface ListProgramsRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: ListProgramsVariables): QueryRef<ListProgramsData, ListProgramsVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: ListProgramsVariables): QueryRef<ListProgramsData, ListProgramsVariables>;
+  operationName: string;
+}
+export const listProgramsRef: ListProgramsRef;
+
+export function listPrograms(vars: ListProgramsVariables): QueryPromise<ListProgramsData, ListProgramsVariables>;
+export function listPrograms(dc: DataConnect, vars: ListProgramsVariables): QueryPromise<ListProgramsData, ListProgramsVariables>;
+
+interface GetProgramRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: GetProgramVariables): QueryRef<GetProgramData, GetProgramVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: GetProgramVariables): QueryRef<GetProgramData, GetProgramVariables>;
+  operationName: string;
+}
+export const getProgramRef: GetProgramRef;
+
+export function getProgram(vars: GetProgramVariables): QueryPromise<GetProgramData, GetProgramVariables>;
+export function getProgram(dc: DataConnect, vars: GetProgramVariables): QueryPromise<GetProgramData, GetProgramVariables>;
+
+interface CreateProgramRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreateProgramVariables): MutationRef<CreateProgramData, CreateProgramVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: CreateProgramVariables): MutationRef<CreateProgramData, CreateProgramVariables>;
+  operationName: string;
+}
+export const createProgramRef: CreateProgramRef;
+
+export function createProgram(vars: CreateProgramVariables): MutationPromise<CreateProgramData, CreateProgramVariables>;
+export function createProgram(dc: DataConnect, vars: CreateProgramVariables): MutationPromise<CreateProgramData, CreateProgramVariables>;
+
+interface UpdateProgramRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdateProgramVariables): MutationRef<UpdateProgramData, UpdateProgramVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: UpdateProgramVariables): MutationRef<UpdateProgramData, UpdateProgramVariables>;
+  operationName: string;
+}
+export const updateProgramRef: UpdateProgramRef;
+
+export function updateProgram(vars: UpdateProgramVariables): MutationPromise<UpdateProgramData, UpdateProgramVariables>;
+export function updateProgram(dc: DataConnect, vars: UpdateProgramVariables): MutationPromise<UpdateProgramData, UpdateProgramVariables>;
+
+interface DeleteProgramRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: DeleteProgramVariables): MutationRef<DeleteProgramData, DeleteProgramVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: DeleteProgramVariables): MutationRef<DeleteProgramData, DeleteProgramVariables>;
+  operationName: string;
+}
+export const deleteProgramRef: DeleteProgramRef;
+
+export function deleteProgram(vars: DeleteProgramVariables): MutationPromise<DeleteProgramData, DeleteProgramVariables>;
+export function deleteProgram(dc: DataConnect, vars: DeleteProgramVariables): MutationPromise<DeleteProgramData, DeleteProgramVariables>;
+
 interface ListProjectAssignmentsRef {
   /* Allow users to create refs without passing in DataConnect */
   (vars: ListProjectAssignmentsVariables): QueryRef<ListProjectAssignmentsData, ListProjectAssignmentsVariables>;
@@ -1058,66 +1118,6 @@ export const deleteProjectAssignmentRef: DeleteProjectAssignmentRef;
 
 export function deleteProjectAssignment(vars: DeleteProjectAssignmentVariables): MutationPromise<DeleteProjectAssignmentData, DeleteProjectAssignmentVariables>;
 export function deleteProjectAssignment(dc: DataConnect, vars: DeleteProjectAssignmentVariables): MutationPromise<DeleteProjectAssignmentData, DeleteProjectAssignmentVariables>;
-
-interface ListProjectPhasesRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: ListProjectPhasesVariables): QueryRef<ListProjectPhasesData, ListProjectPhasesVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: ListProjectPhasesVariables): QueryRef<ListProjectPhasesData, ListProjectPhasesVariables>;
-  operationName: string;
-}
-export const listProjectPhasesRef: ListProjectPhasesRef;
-
-export function listProjectPhases(vars: ListProjectPhasesVariables): QueryPromise<ListProjectPhasesData, ListProjectPhasesVariables>;
-export function listProjectPhases(dc: DataConnect, vars: ListProjectPhasesVariables): QueryPromise<ListProjectPhasesData, ListProjectPhasesVariables>;
-
-interface GetProjectPhaseRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: GetProjectPhaseVariables): QueryRef<GetProjectPhaseData, GetProjectPhaseVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: GetProjectPhaseVariables): QueryRef<GetProjectPhaseData, GetProjectPhaseVariables>;
-  operationName: string;
-}
-export const getProjectPhaseRef: GetProjectPhaseRef;
-
-export function getProjectPhase(vars: GetProjectPhaseVariables): QueryPromise<GetProjectPhaseData, GetProjectPhaseVariables>;
-export function getProjectPhase(dc: DataConnect, vars: GetProjectPhaseVariables): QueryPromise<GetProjectPhaseData, GetProjectPhaseVariables>;
-
-interface CreateProjectPhaseRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: CreateProjectPhaseVariables): MutationRef<CreateProjectPhaseData, CreateProjectPhaseVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: CreateProjectPhaseVariables): MutationRef<CreateProjectPhaseData, CreateProjectPhaseVariables>;
-  operationName: string;
-}
-export const createProjectPhaseRef: CreateProjectPhaseRef;
-
-export function createProjectPhase(vars: CreateProjectPhaseVariables): MutationPromise<CreateProjectPhaseData, CreateProjectPhaseVariables>;
-export function createProjectPhase(dc: DataConnect, vars: CreateProjectPhaseVariables): MutationPromise<CreateProjectPhaseData, CreateProjectPhaseVariables>;
-
-interface UpdateProjectPhaseRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: UpdateProjectPhaseVariables): MutationRef<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: UpdateProjectPhaseVariables): MutationRef<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
-  operationName: string;
-}
-export const updateProjectPhaseRef: UpdateProjectPhaseRef;
-
-export function updateProjectPhase(vars: UpdateProjectPhaseVariables): MutationPromise<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
-export function updateProjectPhase(dc: DataConnect, vars: UpdateProjectPhaseVariables): MutationPromise<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
-
-interface DeleteProjectPhaseRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: DeleteProjectPhaseVariables): MutationRef<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: DeleteProjectPhaseVariables): MutationRef<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
-  operationName: string;
-}
-export const deleteProjectPhaseRef: DeleteProjectPhaseRef;
-
-export function deleteProjectPhase(vars: DeleteProjectPhaseVariables): MutationPromise<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
-export function deleteProjectPhase(dc: DataConnect, vars: DeleteProjectPhaseVariables): MutationPromise<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
 
 interface ListTeamsRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -1299,6 +1299,42 @@ export const deleteUserRef: DeleteUserRef;
 export function deleteUser(vars: DeleteUserVariables): MutationPromise<DeleteUserData, DeleteUserVariables>;
 export function deleteUser(dc: DataConnect, vars: DeleteUserVariables): MutationPromise<DeleteUserData, DeleteUserVariables>;
 
+interface GetOrganizationRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: GetOrganizationVariables): QueryRef<GetOrganizationData, GetOrganizationVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: GetOrganizationVariables): QueryRef<GetOrganizationData, GetOrganizationVariables>;
+  operationName: string;
+}
+export const getOrganizationRef: GetOrganizationRef;
+
+export function getOrganization(vars: GetOrganizationVariables): QueryPromise<GetOrganizationData, GetOrganizationVariables>;
+export function getOrganization(dc: DataConnect, vars: GetOrganizationVariables): QueryPromise<GetOrganizationData, GetOrganizationVariables>;
+
+interface CreateOrganizationRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreateOrganizationVariables): MutationRef<CreateOrganizationData, CreateOrganizationVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: CreateOrganizationVariables): MutationRef<CreateOrganizationData, CreateOrganizationVariables>;
+  operationName: string;
+}
+export const createOrganizationRef: CreateOrganizationRef;
+
+export function createOrganization(vars: CreateOrganizationVariables): MutationPromise<CreateOrganizationData, CreateOrganizationVariables>;
+export function createOrganization(dc: DataConnect, vars: CreateOrganizationVariables): MutationPromise<CreateOrganizationData, CreateOrganizationVariables>;
+
+interface UpdateOrganizationRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdateOrganizationVariables): MutationRef<UpdateOrganizationData, UpdateOrganizationVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: UpdateOrganizationVariables): MutationRef<UpdateOrganizationData, UpdateOrganizationVariables>;
+  operationName: string;
+}
+export const updateOrganizationRef: UpdateOrganizationRef;
+
+export function updateOrganization(vars: UpdateOrganizationVariables): MutationPromise<UpdateOrganizationData, UpdateOrganizationVariables>;
+export function updateOrganization(dc: DataConnect, vars: UpdateOrganizationVariables): MutationPromise<UpdateOrganizationData, UpdateOrganizationVariables>;
+
 interface ListPhaseTemplatesRef {
   /* Allow users to create refs without passing in DataConnect */
   (vars: ListPhaseTemplatesVariables): QueryRef<ListPhaseTemplatesData, ListPhaseTemplatesVariables>;
@@ -1418,174 +1454,6 @@ export const deletePhaseTemplatePhaseRef: DeletePhaseTemplatePhaseRef;
 
 export function deletePhaseTemplatePhase(vars: DeletePhaseTemplatePhaseVariables): MutationPromise<DeletePhaseTemplatePhaseData, DeletePhaseTemplatePhaseVariables>;
 export function deletePhaseTemplatePhase(dc: DataConnect, vars: DeletePhaseTemplatePhaseVariables): MutationPromise<DeletePhaseTemplatePhaseData, DeletePhaseTemplatePhaseVariables>;
-
-interface ListProgramsRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: ListProgramsVariables): QueryRef<ListProgramsData, ListProgramsVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: ListProgramsVariables): QueryRef<ListProgramsData, ListProgramsVariables>;
-  operationName: string;
-}
-export const listProgramsRef: ListProgramsRef;
-
-export function listPrograms(vars: ListProgramsVariables): QueryPromise<ListProgramsData, ListProgramsVariables>;
-export function listPrograms(dc: DataConnect, vars: ListProgramsVariables): QueryPromise<ListProgramsData, ListProgramsVariables>;
-
-interface GetProgramRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: GetProgramVariables): QueryRef<GetProgramData, GetProgramVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: GetProgramVariables): QueryRef<GetProgramData, GetProgramVariables>;
-  operationName: string;
-}
-export const getProgramRef: GetProgramRef;
-
-export function getProgram(vars: GetProgramVariables): QueryPromise<GetProgramData, GetProgramVariables>;
-export function getProgram(dc: DataConnect, vars: GetProgramVariables): QueryPromise<GetProgramData, GetProgramVariables>;
-
-interface CreateProgramRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: CreateProgramVariables): MutationRef<CreateProgramData, CreateProgramVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: CreateProgramVariables): MutationRef<CreateProgramData, CreateProgramVariables>;
-  operationName: string;
-}
-export const createProgramRef: CreateProgramRef;
-
-export function createProgram(vars: CreateProgramVariables): MutationPromise<CreateProgramData, CreateProgramVariables>;
-export function createProgram(dc: DataConnect, vars: CreateProgramVariables): MutationPromise<CreateProgramData, CreateProgramVariables>;
-
-interface UpdateProgramRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: UpdateProgramVariables): MutationRef<UpdateProgramData, UpdateProgramVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: UpdateProgramVariables): MutationRef<UpdateProgramData, UpdateProgramVariables>;
-  operationName: string;
-}
-export const updateProgramRef: UpdateProgramRef;
-
-export function updateProgram(vars: UpdateProgramVariables): MutationPromise<UpdateProgramData, UpdateProgramVariables>;
-export function updateProgram(dc: DataConnect, vars: UpdateProgramVariables): MutationPromise<UpdateProgramData, UpdateProgramVariables>;
-
-interface DeleteProgramRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: DeleteProgramVariables): MutationRef<DeleteProgramData, DeleteProgramVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: DeleteProgramVariables): MutationRef<DeleteProgramData, DeleteProgramVariables>;
-  operationName: string;
-}
-export const deleteProgramRef: DeleteProgramRef;
-
-export function deleteProgram(vars: DeleteProgramVariables): MutationPromise<DeleteProgramData, DeleteProgramVariables>;
-export function deleteProgram(dc: DataConnect, vars: DeleteProgramVariables): MutationPromise<DeleteProgramData, DeleteProgramVariables>;
-
-interface ListProjectsRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: ListProjectsVariables): QueryRef<ListProjectsData, ListProjectsVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: ListProjectsVariables): QueryRef<ListProjectsData, ListProjectsVariables>;
-  operationName: string;
-}
-export const listProjectsRef: ListProjectsRef;
-
-export function listProjects(vars: ListProjectsVariables): QueryPromise<ListProjectsData, ListProjectsVariables>;
-export function listProjects(dc: DataConnect, vars: ListProjectsVariables): QueryPromise<ListProjectsData, ListProjectsVariables>;
-
-interface GetProjectRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: GetProjectVariables): QueryRef<GetProjectData, GetProjectVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: GetProjectVariables): QueryRef<GetProjectData, GetProjectVariables>;
-  operationName: string;
-}
-export const getProjectRef: GetProjectRef;
-
-export function getProject(vars: GetProjectVariables): QueryPromise<GetProjectData, GetProjectVariables>;
-export function getProject(dc: DataConnect, vars: GetProjectVariables): QueryPromise<GetProjectData, GetProjectVariables>;
-
-interface ListProjectsByStatusRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: ListProjectsByStatusVariables): QueryRef<ListProjectsByStatusData, ListProjectsByStatusVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: ListProjectsByStatusVariables): QueryRef<ListProjectsByStatusData, ListProjectsByStatusVariables>;
-  operationName: string;
-}
-export const listProjectsByStatusRef: ListProjectsByStatusRef;
-
-export function listProjectsByStatus(vars: ListProjectsByStatusVariables): QueryPromise<ListProjectsByStatusData, ListProjectsByStatusVariables>;
-export function listProjectsByStatus(dc: DataConnect, vars: ListProjectsByStatusVariables): QueryPromise<ListProjectsByStatusData, ListProjectsByStatusVariables>;
-
-interface CreateProjectRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: CreateProjectVariables): MutationRef<CreateProjectData, CreateProjectVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: CreateProjectVariables): MutationRef<CreateProjectData, CreateProjectVariables>;
-  operationName: string;
-}
-export const createProjectRef: CreateProjectRef;
-
-export function createProject(vars: CreateProjectVariables): MutationPromise<CreateProjectData, CreateProjectVariables>;
-export function createProject(dc: DataConnect, vars: CreateProjectVariables): MutationPromise<CreateProjectData, CreateProjectVariables>;
-
-interface UpdateProjectRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: UpdateProjectVariables): MutationRef<UpdateProjectData, UpdateProjectVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: UpdateProjectVariables): MutationRef<UpdateProjectData, UpdateProjectVariables>;
-  operationName: string;
-}
-export const updateProjectRef: UpdateProjectRef;
-
-export function updateProject(vars: UpdateProjectVariables): MutationPromise<UpdateProjectData, UpdateProjectVariables>;
-export function updateProject(dc: DataConnect, vars: UpdateProjectVariables): MutationPromise<UpdateProjectData, UpdateProjectVariables>;
-
-interface DeleteProjectRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: DeleteProjectVariables): MutationRef<DeleteProjectData, DeleteProjectVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: DeleteProjectVariables): MutationRef<DeleteProjectData, DeleteProjectVariables>;
-  operationName: string;
-}
-export const deleteProjectRef: DeleteProjectRef;
-
-export function deleteProject(vars: DeleteProjectVariables): MutationPromise<DeleteProjectData, DeleteProjectVariables>;
-export function deleteProject(dc: DataConnect, vars: DeleteProjectVariables): MutationPromise<DeleteProjectData, DeleteProjectVariables>;
-
-interface GetOrganizationRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: GetOrganizationVariables): QueryRef<GetOrganizationData, GetOrganizationVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: GetOrganizationVariables): QueryRef<GetOrganizationData, GetOrganizationVariables>;
-  operationName: string;
-}
-export const getOrganizationRef: GetOrganizationRef;
-
-export function getOrganization(vars: GetOrganizationVariables): QueryPromise<GetOrganizationData, GetOrganizationVariables>;
-export function getOrganization(dc: DataConnect, vars: GetOrganizationVariables): QueryPromise<GetOrganizationData, GetOrganizationVariables>;
-
-interface CreateOrganizationRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: CreateOrganizationVariables): MutationRef<CreateOrganizationData, CreateOrganizationVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: CreateOrganizationVariables): MutationRef<CreateOrganizationData, CreateOrganizationVariables>;
-  operationName: string;
-}
-export const createOrganizationRef: CreateOrganizationRef;
-
-export function createOrganization(vars: CreateOrganizationVariables): MutationPromise<CreateOrganizationData, CreateOrganizationVariables>;
-export function createOrganization(dc: DataConnect, vars: CreateOrganizationVariables): MutationPromise<CreateOrganizationData, CreateOrganizationVariables>;
-
-interface UpdateOrganizationRef {
-  /* Allow users to create refs without passing in DataConnect */
-  (vars: UpdateOrganizationVariables): MutationRef<UpdateOrganizationData, UpdateOrganizationVariables>;
-  /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: UpdateOrganizationVariables): MutationRef<UpdateOrganizationData, UpdateOrganizationVariables>;
-  operationName: string;
-}
-export const updateOrganizationRef: UpdateOrganizationRef;
-
-export function updateOrganization(vars: UpdateOrganizationVariables): MutationPromise<UpdateOrganizationData, UpdateOrganizationVariables>;
-export function updateOrganization(dc: DataConnect, vars: UpdateOrganizationVariables): MutationPromise<UpdateOrganizationData, UpdateOrganizationVariables>;
 
 interface ListPortfoliosRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -1730,4 +1598,136 @@ export const deleteProductTypePhaseConfigRef: DeleteProductTypePhaseConfigRef;
 
 export function deleteProductTypePhaseConfig(vars: DeleteProductTypePhaseConfigVariables): MutationPromise<DeleteProductTypePhaseConfigData, DeleteProductTypePhaseConfigVariables>;
 export function deleteProductTypePhaseConfig(dc: DataConnect, vars: DeleteProductTypePhaseConfigVariables): MutationPromise<DeleteProductTypePhaseConfigData, DeleteProductTypePhaseConfigVariables>;
+
+interface ListProjectsRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: ListProjectsVariables): QueryRef<ListProjectsData, ListProjectsVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: ListProjectsVariables): QueryRef<ListProjectsData, ListProjectsVariables>;
+  operationName: string;
+}
+export const listProjectsRef: ListProjectsRef;
+
+export function listProjects(vars: ListProjectsVariables): QueryPromise<ListProjectsData, ListProjectsVariables>;
+export function listProjects(dc: DataConnect, vars: ListProjectsVariables): QueryPromise<ListProjectsData, ListProjectsVariables>;
+
+interface GetProjectRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: GetProjectVariables): QueryRef<GetProjectData, GetProjectVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: GetProjectVariables): QueryRef<GetProjectData, GetProjectVariables>;
+  operationName: string;
+}
+export const getProjectRef: GetProjectRef;
+
+export function getProject(vars: GetProjectVariables): QueryPromise<GetProjectData, GetProjectVariables>;
+export function getProject(dc: DataConnect, vars: GetProjectVariables): QueryPromise<GetProjectData, GetProjectVariables>;
+
+interface ListProjectsByStatusRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: ListProjectsByStatusVariables): QueryRef<ListProjectsByStatusData, ListProjectsByStatusVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: ListProjectsByStatusVariables): QueryRef<ListProjectsByStatusData, ListProjectsByStatusVariables>;
+  operationName: string;
+}
+export const listProjectsByStatusRef: ListProjectsByStatusRef;
+
+export function listProjectsByStatus(vars: ListProjectsByStatusVariables): QueryPromise<ListProjectsByStatusData, ListProjectsByStatusVariables>;
+export function listProjectsByStatus(dc: DataConnect, vars: ListProjectsByStatusVariables): QueryPromise<ListProjectsByStatusData, ListProjectsByStatusVariables>;
+
+interface CreateProjectRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreateProjectVariables): MutationRef<CreateProjectData, CreateProjectVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: CreateProjectVariables): MutationRef<CreateProjectData, CreateProjectVariables>;
+  operationName: string;
+}
+export const createProjectRef: CreateProjectRef;
+
+export function createProject(vars: CreateProjectVariables): MutationPromise<CreateProjectData, CreateProjectVariables>;
+export function createProject(dc: DataConnect, vars: CreateProjectVariables): MutationPromise<CreateProjectData, CreateProjectVariables>;
+
+interface UpdateProjectRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdateProjectVariables): MutationRef<UpdateProjectData, UpdateProjectVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: UpdateProjectVariables): MutationRef<UpdateProjectData, UpdateProjectVariables>;
+  operationName: string;
+}
+export const updateProjectRef: UpdateProjectRef;
+
+export function updateProject(vars: UpdateProjectVariables): MutationPromise<UpdateProjectData, UpdateProjectVariables>;
+export function updateProject(dc: DataConnect, vars: UpdateProjectVariables): MutationPromise<UpdateProjectData, UpdateProjectVariables>;
+
+interface DeleteProjectRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: DeleteProjectVariables): MutationRef<DeleteProjectData, DeleteProjectVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: DeleteProjectVariables): MutationRef<DeleteProjectData, DeleteProjectVariables>;
+  operationName: string;
+}
+export const deleteProjectRef: DeleteProjectRef;
+
+export function deleteProject(vars: DeleteProjectVariables): MutationPromise<DeleteProjectData, DeleteProjectVariables>;
+export function deleteProject(dc: DataConnect, vars: DeleteProjectVariables): MutationPromise<DeleteProjectData, DeleteProjectVariables>;
+
+interface ListProjectPhasesRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: ListProjectPhasesVariables): QueryRef<ListProjectPhasesData, ListProjectPhasesVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: ListProjectPhasesVariables): QueryRef<ListProjectPhasesData, ListProjectPhasesVariables>;
+  operationName: string;
+}
+export const listProjectPhasesRef: ListProjectPhasesRef;
+
+export function listProjectPhases(vars: ListProjectPhasesVariables): QueryPromise<ListProjectPhasesData, ListProjectPhasesVariables>;
+export function listProjectPhases(dc: DataConnect, vars: ListProjectPhasesVariables): QueryPromise<ListProjectPhasesData, ListProjectPhasesVariables>;
+
+interface GetProjectPhaseRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: GetProjectPhaseVariables): QueryRef<GetProjectPhaseData, GetProjectPhaseVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: GetProjectPhaseVariables): QueryRef<GetProjectPhaseData, GetProjectPhaseVariables>;
+  operationName: string;
+}
+export const getProjectPhaseRef: GetProjectPhaseRef;
+
+export function getProjectPhase(vars: GetProjectPhaseVariables): QueryPromise<GetProjectPhaseData, GetProjectPhaseVariables>;
+export function getProjectPhase(dc: DataConnect, vars: GetProjectPhaseVariables): QueryPromise<GetProjectPhaseData, GetProjectPhaseVariables>;
+
+interface CreateProjectPhaseRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreateProjectPhaseVariables): MutationRef<CreateProjectPhaseData, CreateProjectPhaseVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: CreateProjectPhaseVariables): MutationRef<CreateProjectPhaseData, CreateProjectPhaseVariables>;
+  operationName: string;
+}
+export const createProjectPhaseRef: CreateProjectPhaseRef;
+
+export function createProjectPhase(vars: CreateProjectPhaseVariables): MutationPromise<CreateProjectPhaseData, CreateProjectPhaseVariables>;
+export function createProjectPhase(dc: DataConnect, vars: CreateProjectPhaseVariables): MutationPromise<CreateProjectPhaseData, CreateProjectPhaseVariables>;
+
+interface UpdateProjectPhaseRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdateProjectPhaseVariables): MutationRef<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: UpdateProjectPhaseVariables): MutationRef<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
+  operationName: string;
+}
+export const updateProjectPhaseRef: UpdateProjectPhaseRef;
+
+export function updateProjectPhase(vars: UpdateProjectPhaseVariables): MutationPromise<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
+export function updateProjectPhase(dc: DataConnect, vars: UpdateProjectPhaseVariables): MutationPromise<UpdateProjectPhaseData, UpdateProjectPhaseVariables>;
+
+interface DeleteProjectPhaseRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: DeleteProjectPhaseVariables): MutationRef<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: DeleteProjectPhaseVariables): MutationRef<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
+  operationName: string;
+}
+export const deleteProjectPhaseRef: DeleteProjectPhaseRef;
+
+export function deleteProjectPhase(vars: DeleteProjectPhaseVariables): MutationPromise<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
+export function deleteProjectPhase(dc: DataConnect, vars: DeleteProjectPhaseVariables): MutationPromise<DeleteProjectPhaseData, DeleteProjectPhaseVariables>;
 

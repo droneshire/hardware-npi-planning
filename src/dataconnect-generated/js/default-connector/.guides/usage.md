@@ -12,8 +12,18 @@ For each operation, there is a wrapper hook that can be used to call the operati
 
 Here are all of the hooks that get generated:
 ```ts
-import { useListProjectAssignments, useListUserAssignments, useListAssignmentsByDateRange, useCreateProjectAssignment, useUpdateProjectAssignment, useDeleteProjectAssignment, useListProjectPhases, useGetProjectPhase, useCreateProjectPhase, useUpdateProjectPhase } from '@firebasegen/default-connector/react';
+import { useListPrograms, useGetProgram, useCreateProgram, useUpdateProgram, useDeleteProgram, useListProjectAssignments, useListUserAssignments, useListAssignmentsByDateRange, useCreateProjectAssignment, useUpdateProjectAssignment } from '@firebasegen/default-connector/react';
 // The types of these hooks are available in react/index.d.ts
+
+const { data, isPending, isSuccess, isError, error } = useListPrograms(listProgramsVars);
+
+const { data, isPending, isSuccess, isError, error } = useGetProgram(getProgramVars);
+
+const { data, isPending, isSuccess, isError, error } = useCreateProgram(createProgramVars);
+
+const { data, isPending, isSuccess, isError, error } = useUpdateProgram(updateProgramVars);
+
+const { data, isPending, isSuccess, isError, error } = useDeleteProgram(deleteProgramVars);
 
 const { data, isPending, isSuccess, isError, error } = useListProjectAssignments(listProjectAssignmentsVars);
 
@@ -24,16 +34,6 @@ const { data, isPending, isSuccess, isError, error } = useListAssignmentsByDateR
 const { data, isPending, isSuccess, isError, error } = useCreateProjectAssignment(createProjectAssignmentVars);
 
 const { data, isPending, isSuccess, isError, error } = useUpdateProjectAssignment(updateProjectAssignmentVars);
-
-const { data, isPending, isSuccess, isError, error } = useDeleteProjectAssignment(deleteProjectAssignmentVars);
-
-const { data, isPending, isSuccess, isError, error } = useListProjectPhases(listProjectPhasesVars);
-
-const { data, isPending, isSuccess, isError, error } = useGetProjectPhase(getProjectPhaseVars);
-
-const { data, isPending, isSuccess, isError, error } = useCreateProjectPhase(createProjectPhaseVars);
-
-const { data, isPending, isSuccess, isError, error } = useUpdateProjectPhase(updateProjectPhaseVars);
 
 ```
 
@@ -72,8 +72,23 @@ If a user is not using a supported framework, they can use the generated SDK dir
 Here's an example of how to use it with the first 5 operations:
 
 ```js
-import { listProjectAssignments, listUserAssignments, listAssignmentsByDateRange, createProjectAssignment, updateProjectAssignment, deleteProjectAssignment, listProjectPhases, getProjectPhase, createProjectPhase, updateProjectPhase } from '@firebasegen/default-connector';
+import { listPrograms, getProgram, createProgram, updateProgram, deleteProgram, listProjectAssignments, listUserAssignments, listAssignmentsByDateRange, createProjectAssignment, updateProjectAssignment } from '@firebasegen/default-connector';
 
+
+// Operation ListPrograms:  For variables, look at type ListProgramsVars in ../index.d.ts
+const { data } = await ListPrograms(dataConnect, listProgramsVars);
+
+// Operation GetProgram:  For variables, look at type GetProgramVars in ../index.d.ts
+const { data } = await GetProgram(dataConnect, getProgramVars);
+
+// Operation CreateProgram:  For variables, look at type CreateProgramVars in ../index.d.ts
+const { data } = await CreateProgram(dataConnect, createProgramVars);
+
+// Operation UpdateProgram:  For variables, look at type UpdateProgramVars in ../index.d.ts
+const { data } = await UpdateProgram(dataConnect, updateProgramVars);
+
+// Operation DeleteProgram:  For variables, look at type DeleteProgramVars in ../index.d.ts
+const { data } = await DeleteProgram(dataConnect, deleteProgramVars);
 
 // Operation ListProjectAssignments:  For variables, look at type ListProjectAssignmentsVars in ../index.d.ts
 const { data } = await ListProjectAssignments(dataConnect, listProjectAssignmentsVars);
@@ -89,21 +104,6 @@ const { data } = await CreateProjectAssignment(dataConnect, createProjectAssignm
 
 // Operation UpdateProjectAssignment:  For variables, look at type UpdateProjectAssignmentVars in ../index.d.ts
 const { data } = await UpdateProjectAssignment(dataConnect, updateProjectAssignmentVars);
-
-// Operation DeleteProjectAssignment:  For variables, look at type DeleteProjectAssignmentVars in ../index.d.ts
-const { data } = await DeleteProjectAssignment(dataConnect, deleteProjectAssignmentVars);
-
-// Operation ListProjectPhases:  For variables, look at type ListProjectPhasesVars in ../index.d.ts
-const { data } = await ListProjectPhases(dataConnect, listProjectPhasesVars);
-
-// Operation GetProjectPhase:  For variables, look at type GetProjectPhaseVars in ../index.d.ts
-const { data } = await GetProjectPhase(dataConnect, getProjectPhaseVars);
-
-// Operation CreateProjectPhase:  For variables, look at type CreateProjectPhaseVars in ../index.d.ts
-const { data } = await CreateProjectPhase(dataConnect, createProjectPhaseVars);
-
-// Operation UpdateProjectPhase:  For variables, look at type UpdateProjectPhaseVars in ../index.d.ts
-const { data } = await UpdateProjectPhase(dataConnect, updateProjectPhaseVars);
 
 
 ```

@@ -93,19 +93,19 @@ When prompted:
 
 ```env
 # Firebase Configuration
-NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
-NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+VITE_FIREBASE_API_KEY=your-api-key
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+VITE_FIREBASE_APP_ID=your-app-id
 
 # NextAuth Configuration
 NEXTAUTH_SECRET=generate-with-openssl-rand-base64-32
 NEXTAUTH_URL=http://localhost:3000
 
 # Firebase Data Connect
-NEXT_PUBLIC_FIREBASE_DATACONNECT_ENDPOINT=https://your-project-default-rtdb.firebaseio.com
+VITE_FIREBASE_DATACONNECT_ENDPOINT=https://your-project-default-rtdb.firebaseio.com
 ```
 
 ### Generate NextAuth Secret
@@ -178,7 +178,7 @@ npm install -g firebase-tools
 Ensure you've:
 
 - Deployed the Data Connect schema first
-- Set the correct `NEXT_PUBLIC_FIREBASE_DATACONNECT_ENDPOINT` in `.env.local`
+- Set the correct `VITE_FIREBASE_DATACONNECT_ENDPOINT` in `.env.local`
 - Run `firebase login` to authenticate
 
 ### Authentication Not Working

@@ -1,17 +1,15 @@
-"use client"
-
 import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useNavigate } from "react-router-dom"
 import { logout } from "@/hooks/use-auth"
 import { AUTH_REDIRECTS } from "@/constants/auth"
 
 export default function SignOutPage() {
-  const router = useRouter()
+  const navigate = useNavigate()
 
   useEffect(() => {
     logout()
-    router.push(AUTH_REDIRECTS.AFTER_SIGNOUT)
-  }, [router])
+    navigate(AUTH_REDIRECTS.AFTER_SIGNOUT, { replace: true })
+  }, [navigate])
 
   return (
     <div className="flex min-h-screen items-center justify-center">
